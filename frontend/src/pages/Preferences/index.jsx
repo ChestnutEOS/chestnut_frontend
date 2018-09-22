@@ -162,6 +162,16 @@ class Preferences extends Component {
     let account = accounts[0].name;
     let privateKey = accounts[0].privateKey;
     const eos = Eos({ keyProvider: privateKey });
+    const toSend = this.state.eosToSend * 1;
+    const data =
+      this.state.prefTable && this.state.prefTable[0]
+        ? this.state.prefTable[0]
+        : null;
+
+    if (data && data.spend_max && toSend > data.spend_max * 1)
+      return alert(
+        "This exceeds your maximum spend threshold.  Transaction denied."
+      ); // Not the long-term way of doing this
     await eos.transaction(
       {
         // ...headers,
@@ -179,7 +189,7 @@ class Preferences extends Component {
             data: {
               from: account,
               to: accounts[1].name,
-              quantity: `${this.state.eosToSend.toFixed(4)} EOS`,
+              quantity: `${toSend.toFixed(4)} EOS`,
               memo: ""
             }
           }
