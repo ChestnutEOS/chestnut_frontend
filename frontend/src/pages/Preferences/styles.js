@@ -25,6 +25,9 @@ export default theme => ({
 		width: "90%",
 		maxWidth: 300
 	},
+	formControl: {
+		margin: theme.spacing.unit
+	},
 	formButton: {
 		marginTop: theme.spacing.unit
 	},

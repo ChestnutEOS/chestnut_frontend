@@ -9,7 +9,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
@@ -50,7 +52,8 @@ class Preferences extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      prefTable: [] // to store the table rows from smart contract
+      prefTable: [], // to store the table rows from smart contract,
+      spend_max: 100
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -121,7 +124,10 @@ class Preferences extends Component {
       })
       .then(result => {
         console.log(result);
-        this.setState({ prefTable: result.rows });
+        this.setState({
+          prefTable: result.rows,
+          spend_max: result.rows[0].spend_max
+        });
       });
   };
 
@@ -129,8 +135,12 @@ class Preferences extends Component {
     this.getTable();
   }
 
+  valueChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
   render() {
-    const { prefTable } = this.state;
+    const { prefTable, spend_max } = this.state;
     const { classes } = this.props;
 
     // generate each note as a card
@@ -169,12 +179,17 @@ class Preferences extends Component {
             className={classes.formContainer}
             onSubmit={this.handleFormEvent}
           >
-            <TextField
-              name="spend_max"
-              autoComplete="off"
-              label="Spending Max"
-              margin="normal"
-            />
+            <FormControl>
+              <InputLabel htmlFor="name-helper">
+                Max Spend per Transaction
+              </InputLabel>
+              <Input
+                name="spend_max"
+                type="number"
+                onChange={this.valueChange}
+                value={spend_max}
+              />
+            </FormControl>
             <Button
               variant="contained"
               color="primary"
