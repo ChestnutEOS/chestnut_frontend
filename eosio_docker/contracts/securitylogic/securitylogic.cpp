@@ -4,7 +4,7 @@ using namespace eosio;
 
 // Smart Contract Name: securitylogic
 // Table struct:
-//   spend_max_struct: multi index table to store the preferences
+//   pref_struct: multi index table to store the preferences
 //     prim_key(uint64): primary key
 //     user(account_name/uint64): account name for the user
 //     spend_max(uint64): Max amount that can be spent in a single transaction
@@ -18,16 +18,16 @@ using namespace eosio;
 class securitylogic : public eosio::contract {
   private:
     bool isnewuser( account_name user ) {
-      spend_max_table spend_max_obj(_self, _self);
+      pref_table pref_obj(_self, _self);
       // get object by secordary key
-      auto preferences = spend_max_obj.get_index<N(getbyuser)>();
+      auto preferences = pref_obj.get_index<N(getbyuser)>();
       auto spend_max = preferences.find(user);
 
       return spend_max == preferences.end();
     }
 
     /// @abi table
-    struct spend_max_struct {
+    struct pref_struct {
       uint64_t      prim_key;  // primary key
       account_name  user;      // account name for the user
       uint64_t      spend_max; // max amount that can be spent in a single transaction
@@ -40,9 +40,9 @@ class securitylogic : public eosio::contract {
     };
 
     // create a multi-index table and support secondary key
-    typedef eosio::multi_index< N(spend_max_struct), spend_max_struct,
-      indexed_by< N(getbyuser), const_mem_fun<spend_max_struct, account_name, &spend_max_struct::get_by_user> >
-      > spend_max_table;
+    typedef eosio::multi_index< N(pref_struct), pref_struct,
+      indexed_by< N(getbyuser), const_mem_fun<pref_struct, account_name, &pref_struct::get_by_user> >
+      > pref_table;
 
   public:
     using contract::contract;
@@ -52,7 +52,7 @@ class securitylogic : public eosio::contract {
       // to sign the action with the given account
       require_auth( _user );
 
-      spend_max_table obj(_self, _self); // code, scope
+      pref_table obj(_self, _self); // code, scope
 
       // create new / update spend_max depends whether the user account exist or not
       if (isnewuser(_user)) {
