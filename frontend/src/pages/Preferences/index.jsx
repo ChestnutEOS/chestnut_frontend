@@ -54,12 +54,12 @@ const accounts = [
   }
 ];
 
-// Index component
-class Index extends Component {
+// Preferences component
+class Preferences extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      noteTable: [] // to store the table rows from smart contract
+      prefTable: [] // to store the table rows from smart contract
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -72,9 +72,9 @@ class Index extends Component {
 
     // collect form data
     // let account = event.target.account.value;
-    let account = accounts[0];
+    let account = accounts[0].name;
     // let privateKey = event.target.privateKey.value;
-    let privateKey = accounts[1];
+    let privateKey = accounts[0].privateKey;
     let spend_max = event.target.spend_max.value;
 
     // prepare variables for the switch below to send transactions
@@ -117,7 +117,7 @@ class Index extends Component {
   }
 
   // gets table data from the blockchain
-  // and saves it into the component state: "noteTable"
+  // and saves it into the component state: "prefTable"
   getTable = () => {
     const eos = Eos();
     eos
@@ -130,7 +130,7 @@ class Index extends Component {
       })
       .then(result => {
         console.log(result);
-        this.setState({ noteTable: result.rows });
+        this.setState({ prefTable: result.rows });
       });
   };
 
@@ -139,11 +139,11 @@ class Index extends Component {
   }
 
   render() {
-    const { noteTable } = this.state;
+    const { prefTable } = this.state;
     const { classes } = this.props;
 
     // generate each note as a card
-    const generateCard = (key, timestamp, user, note) => (
+    const generateCard = (key, timestamp, user, spend_max) => (
       <Card className={classes.card} key={key}>
         <CardContent>
           <Typography variant="headline" component="h2">
@@ -156,12 +156,12 @@ class Index extends Component {
           >
             {new Date(timestamp * 1000).toString()}
           </Typography>
-          <Typography component="pre">{note}</Typography>
+          <Typography component="pre">Spending Max: ${spend_max}</Typography>
         </CardContent>
       </Card>
     );
-    let noteCards = noteTable.map((row, i) =>
-      generateCard(i, row.timestamp, row.user, row.note)
+    let noteCards = prefTable.map((row, i) =>
+      generateCard(i, row.timestamp, row.user, row.spend_max)
     );
 
     return (
@@ -210,4 +210,4 @@ class Index extends Component {
   }
 }
 
-export default withStyles(styles)(Index);
+export default withStyles(styles)(Preferences);
