@@ -53,7 +53,8 @@ class Preferences extends Component {
     super(props);
     this.state = {
       prefTable: [], // to store the table rows from smart contract,
-      spend_max: 100
+      spend_max: 100,
+      trans_max: 10
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -70,6 +71,7 @@ class Preferences extends Component {
     // let privateKey = event.target.privateKey.value;
     let privateKey = accounts[0].privateKey;
     let spend_max = event.target.spend_max.value;
+    let trans_max = event.target.trans_max.value;
 
     // prepare variables for the switch below to send transactions
     let actionName = "";
@@ -81,7 +83,8 @@ class Preferences extends Component {
         actionName = "update";
         actionData = {
           _user: account,
-          _spend_max: spend_max
+          _spend_max: spend_max,
+          _trans_max: trans_max
         };
         break;
       default:
@@ -126,7 +129,8 @@ class Preferences extends Component {
         console.log(result);
         this.setState({
           prefTable: result.rows,
-          spend_max: result.rows[0].spend_max
+          spend_max: result.rows[0].spend_max,
+          trans_max: result.rows[0].trans_max ? result.rows[0].trans_max : 10
         });
       });
   };
@@ -140,7 +144,7 @@ class Preferences extends Component {
   };
 
   render() {
-    const { prefTable, spend_max } = this.state;
+    const { prefTable, spend_max, trans_max } = this.state;
     const { classes } = this.props;
 
     // generate each note as a card
@@ -181,13 +185,24 @@ class Preferences extends Component {
           >
             <FormControl>
               <InputLabel htmlFor="name-helper">
-                Max Spend per Transaction
+                Max Spend per Transaction (EOS)
               </InputLabel>
               <Input
                 name="spend_max"
                 type="number"
                 onChange={this.valueChange}
                 value={spend_max}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel htmlFor="name-helper">
+                Max Transactions per Time Period
+              </InputLabel>
+              <Input
+                name="trans_max"
+                type="number"
+                onChange={this.valueChange}
+                value={trans_max}
               />
             </FormControl>
             <Button
@@ -200,13 +215,6 @@ class Preferences extends Component {
             </Button>
           </form>
         </Paper>
-        {/*<pre className={classes.pre}>
-          Below is a list of pre-created accounts information for add/update
-          note:
-          <br />
-          <br />
-          accounts = {JSON.stringify(accounts, null, 2)}
-        </pre>*/}
       </div>
     );
   }
