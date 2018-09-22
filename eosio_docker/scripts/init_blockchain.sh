@@ -47,7 +47,7 @@ cleos wallet import -n securitylogicwal --private-key 5JD9AGTuTeD5BXZwGQ5AtwBqHK
 
 # create account for seclogacc with above wallet's public keys
 cleos create account eosio seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
-
+cleos create account eosio tokenacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
 # * Replace "seclogacc" by your own account name when you start your own project
 
 echo "=== deploy smart contract ==="
@@ -55,13 +55,17 @@ echo "=== deploy smart contract ==="
 # $2 account holder name of the smart contract
 # $3 wallet for unlock the account
 # $4 password for unlocking the wallet
-deploy_contract.sh securitylogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
+deploy_contract.sh seclogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
+deploy_token.sh eosio.token tokenacc securitylogicwal $(cat securitylogic_wallet_password.txt)
 
 echo "=== create user accounts ==="
 # script for create data into blockchain
 create_accounts.sh
 
-# * Replace the script with different form of data that you would pushed into the blockchain when you start your own project
+cleos push action -f tokenacc create '[ "eosio", "1000000000.0000 EOS" ]' -p tokenacc
+cleos push action -f tokenacc issue '[ "eosio", "1000000000.0000 EOS", "memo" ]' -p eosio
+cleos push action tokenacc transfer '[ "eosio", "tokenacc", "10000.0000 EOS", "memo"]' -p eosio
+cleos push action tokenacc transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio
 
 echo "=== end of setup blockchain accounts and smart contract ==="
 # create a file to indicate the blockchain has been initialized

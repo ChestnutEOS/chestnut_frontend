@@ -8,7 +8,8 @@
     "moment": "^2.22.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "^1.1.5"
+    "react-scripts": "^1.1.5",
+    "scatter-js": "^2.5.2"
   },
   "scripts": {
     "start": "react-scripts start",

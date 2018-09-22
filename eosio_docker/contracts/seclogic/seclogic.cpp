@@ -2,7 +2,7 @@
 #include <eosiolib/print.hpp>
 using namespace eosio;
 
-// Smart Contract Name: securitylogic
+// Smart Contract Name: seclogic
 // Table struct:
 //   prefstruct: multi index table to store the preferences
 //     prim_key(uint64): primary key
@@ -15,7 +15,7 @@ using namespace eosio;
 //   update => put the spend_max into the multi-index table and sign by the given account
 
 // Replace the contract class name when you start your own project
-class securitylogic : public eosio::contract {
+class seclogic : public eosio::contract {
   private:
     bool isnewuser( account_name user ) {
       pref_table pref_obj(_self, _self);
@@ -102,4 +102,4 @@ class securitylogic : public eosio::contract {
 };
 
 // specify the contract name, and export a public action: update
-EOSIO_ABI( securitylogic, (update) )
+EOSIO_ABI( seclogic, (update) )
