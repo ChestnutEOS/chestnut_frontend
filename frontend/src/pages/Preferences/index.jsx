@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
+import styles from "./styles";
+
 // NEVER store private keys in any source code in your real life development
 // This is for demo purposes only!
 const accounts = [
@@ -52,27 +54,6 @@ const accounts = [
   }
 ];
 
-// set up styling classes using material-ui "withStyles"
-const styles = theme => ({
-  card: {
-    margin: 20
-  },
-  paper: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
-  },
-  formButton: {
-    marginTop: theme.spacing.unit,
-    width: "100%"
-  },
-  pre: {
-    background: "#ccc",
-    padding: 10,
-    marginBottom: 0
-  }
-});
-
 // Index component
 class Index extends Component {
   constructor(props) {
@@ -90,9 +71,11 @@ class Index extends Component {
     event.preventDefault();
 
     // collect form data
-    let account = event.target.account.value;
-    let privateKey = event.target.privateKey.value;
-    let note = event.target.note.value;
+    // let account = event.target.account.value;
+    let account = accounts[0];
+    // let privateKey = event.target.privateKey.value;
+    let privateKey = accounts[1];
+    let spend_max = event.target.spend_max.value;
 
     // prepare variables for the switch below to send transactions
     let actionName = "";
@@ -104,7 +87,7 @@ class Index extends Component {
         actionName = "update";
         actionData = {
           _user: account,
-          _note: note
+          _spend_max: spend_max
         };
         break;
       default:
@@ -135,7 +118,7 @@ class Index extends Component {
 
   // gets table data from the blockchain
   // and saves it into the component state: "noteTable"
-  getTable() {
+  getTable = () => {
     const eos = Eos();
     eos
       .getTableRows({
@@ -145,8 +128,11 @@ class Index extends Component {
         table: "prefstruct", // name of the table as specified by the contract abi
         limit: 100
       })
-      .then(result => this.setState({ noteTable: result.rows }));
-  }
+      .then(result => {
+        console.log(result);
+        this.setState({ noteTable: result.rows });
+      });
+  };
 
   componentDidMount() {
     this.getTable();
@@ -183,35 +169,24 @@ class Index extends Component {
         <AppBar position="static" color="default">
           <Toolbar>
             <Typography variant="title" color="inherit">
-              Note Chain
+              Security Logic
             </Typography>
           </Toolbar>
         </AppBar>
         {noteCards}
         <Paper className={classes.paper}>
-          <form onSubmit={this.handleFormEvent}>
+          <Typography variant="subheading" color="inherit">
+            Account Logged In: {accounts[0].publicKey}
+          </Typography>
+          <form
+            className={classes.formContainer}
+            onSubmit={this.handleFormEvent}
+          >
             <TextField
-              name="account"
+              name="spend_max"
               autoComplete="off"
-              label="Account"
+              label="Spending Max"
               margin="normal"
-              fullWidth
-            />
-            <TextField
-              name="privateKey"
-              autoComplete="off"
-              label="Private key"
-              margin="normal"
-              fullWidth
-            />
-            <TextField
-              name="note"
-              autoComplete="off"
-              label="Note (Optional)"
-              margin="normal"
-              multiline
-              rows="10"
-              fullWidth
             />
             <Button
               variant="contained"
@@ -219,17 +194,17 @@ class Index extends Component {
               className={classes.formButton}
               type="submit"
             >
-              Add / Update note
+              Add / Update Preferences
             </Button>
           </form>
         </Paper>
-        <pre className={classes.pre}>
+        {/*<pre className={classes.pre}>
           Below is a list of pre-created accounts information for add/update
           note:
           <br />
           <br />
           accounts = {JSON.stringify(accounts, null, 2)}
-        </pre>
+        </pre>*/}
       </div>
     );
   }

@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Index from './pages/index';
+import React from "react";
+import ReactDOM from "react-dom";
+import Preferences from "./pages/Preferences";
 
-ReactDOM.render(<Index />, document.getElementById('root'));
+ReactDOM.render(<Preferences />, document.getElementById("root"));
