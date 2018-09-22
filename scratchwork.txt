@@ -1,0 +1,43 @@
+// Update auth with multi-sig of different accounts.  
+
+{
+      "name": "updateauth",
+      "base": "",
+      "fields": [
+        {"name":"account",    "type":"account_name"},
+        {"name":"permission", "type":"permission_name"},
+        {"name":"parent",     "type":"permission_name"},
+        {"name":"auth",       "type":"authority"}
+      ]
+    }
+    
+authority = {
+  "threshold":      <INTEGER [1-2^32): the threshold that must be met to satisfy this authority>,
+  "keys": [         <keys must be alpha-numerically sorted by their string representations and unique>
+    ...
+    {
+      "key":        <STRING: EOS.IO compatible Public Key>,
+      "weight":     <INTEGER [1-2^16): a signature from this key contributes this to satisfying the threshold>
+    }
+    ...
+  ],
+  "accounts": [     <accounts must be alpha-numerically sorted by their permission (actor, then permission) and unique>
+    ...
+    {
+      "permission": {
+        "actor":      <STRING: account name of the delegated signer>,
+        "permission": <STRING: permission level on the account that must be satisfied>,
+      },
+      "weight":     <INTEGER [1-2^16): satisfying the delegation contributes this to satisfying the threshold>
+    }
+    ...
+  ],
+  "waits": [        <waits must be sorted by wait_sec, largest first, and be unique>
+    ...
+    {
+      "wait_sec":   <INTEGER [1-2^32): seconds of delay which qualifies as passing this wait>
+      "weight":     <INTEGER [1-2^16): satisfying the delay contributes this to satisfying the threshold>
+    }
+    ...
+  ]
+}

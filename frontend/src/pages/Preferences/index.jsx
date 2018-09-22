@@ -56,7 +56,8 @@ class Preferences extends Component {
     this.state = {
       prefTable: [], // to store the table rows from smart contract,
       spend_max: 100,
-      trans_max: 10
+      trans_max: 10,
+      tokenBalance: 0
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -147,42 +148,52 @@ class Preferences extends Component {
     let account = accounts[0].name;
     let privateKey = accounts[0].privateKey;
     const eos = Eos({ keyProvider: privateKey });
-    // eos.transaction(
-    //   {
-    //     // ...headers,
-    //     // context_free_actions: [],
-    //     actions: [
-    //       {
-    //         account: "eosio.token",
-    //         name: "transfer",
-    //         authorization: [
-    //           {
-    //             actor: account,
-    //             permission: "active"
-    //           }
-    //         ],
-    //         data: {
-    //           from: account,
-    //           to: accounts[1].name,
-    //           quantity: "7.0000 EOS",
-    //           memo: ""
-    //         }
-    //       }
-    //     ]
-    //   }
-    //   // config -- example: {broadcast: false, sign: true}
-    // );
+    const tokenBalance = await eos.getCurrencyBalance(
+      "tokenacc",
+      account,
+      "EOS"
+    );
+    this.setState({ tokenBalance });
+  };
 
-    // await eos.transaction("securitylogic", myaccount => {
-    //   // Create the initial token with its max supply
-    //   // const options = {authorization: 'myaccount'} // default
-    //   myaccount.create("securitylogic", "10000000.000 EOS"); //, options)
+  sendEos = async () => {
+    let account = accounts[0].name;
+    let privateKey = accounts[0].privateKey;
+    const eos = Eos({ keyProvider: privateKey });
+    eos.transaction(
+      {
+        // ...headers,
+        // context_free_actions: [],
+        actions: [
+          {
+            account: "tokenacc",
+            name: "transfer",
+            authorization: [
+              {
+                actor: account,
+                permission: "active"
+              }
+            ],
+            data: {
+              from: account,
+              to: accounts[1].name,
+              quantity: "7.0000 EOS",
+              memo: ""
+            }
+          }
+        ]
+      }
+      // config -- example: {broadcast: false, sign: true}
+    );
 
-    //   // Issue some of the max supply for circulation into an arbitrary account
-    //   myaccount.issue("securitylogic", "10000.000 EOS", "issue");
-    // });
-    const balance = await eos.getCurrencyBalance("tokenacc", account, "EOS");
-    console.log(balance);
+    await eos.transaction("securitylogic", myaccount => {
+      // Create the initial token with its max supply
+      // const options = {authorization: 'myaccount'} // default
+      myaccount.create("securitylogic", "10000000.000 EOS"); //, options)
+
+      // Issue some of the max supply for circulation into an arbitrary account
+      myaccount.issue("securitylogic", "10000.000 EOS", "issue");
+    });
   };
 
   componentDidMount() {
@@ -272,7 +283,7 @@ class Preferences extends Component {
   };
 
   render() {
-    const { prefTable, spend_max, trans_max } = this.state;
+    const { prefTable, spend_max, trans_max, tokenBalance } = this.state;
     const { classes } = this.props;
 
     // generate each note as a card
@@ -281,6 +292,9 @@ class Preferences extends Component {
         <CardContent>
           <Typography variant="headline" component="h2">
             {user}
+          </Typography>
+          <Typography variant="subheading" component="h2">
+            Balance: {tokenBalance}
           </Typography>
           <Typography variant="subheading" component="h2" gutterBottom>
             {accounts[0].publicKey}

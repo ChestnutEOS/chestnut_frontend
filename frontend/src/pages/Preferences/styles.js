@@ -7,7 +7,10 @@
 
 export default theme => ({
 	card: {
-		margin: 20
+		margin: "auto",
+		marginTop: 20,
+		width: "90%",
+		maxWidth: 700
 	},
 	paper: {
 		...theme.mixins.gutters(),
