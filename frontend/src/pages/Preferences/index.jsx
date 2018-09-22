@@ -57,7 +57,8 @@ class Preferences extends Component {
       prefTable: [], // to store the table rows from smart contract,
       spend_max: 100,
       trans_max: 10,
-      tokenBalance: 0
+      tokenBalance: 0,
+      eosToSend: 3
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -156,11 +157,12 @@ class Preferences extends Component {
     this.setState({ tokenBalance });
   };
 
-  sendEos = async () => {
+  sendEos = async event => {
+    event.preventDefault();
     let account = accounts[0].name;
     let privateKey = accounts[0].privateKey;
     const eos = Eos({ keyProvider: privateKey });
-    eos.transaction(
+    await eos.transaction(
       {
         // ...headers,
         // context_free_actions: [],
@@ -177,7 +179,7 @@ class Preferences extends Component {
             data: {
               from: account,
               to: accounts[1].name,
-              quantity: "7.0000 EOS",
+              quantity: `${this.state.eosToSend.toFixed(4)} EOS`,
               memo: ""
             }
           }
@@ -185,15 +187,7 @@ class Preferences extends Component {
       }
       // config -- example: {broadcast: false, sign: true}
     );
-
-    await eos.transaction("securitylogic", myaccount => {
-      // Create the initial token with its max supply
-      // const options = {authorization: 'myaccount'} // default
-      myaccount.create("securitylogic", "10000000.000 EOS"); //, options)
-
-      // Issue some of the max supply for circulation into an arbitrary account
-      myaccount.issue("securitylogic", "10000.000 EOS", "issue");
-    });
+    this.getBalance();
   };
 
   componentDidMount() {
@@ -283,7 +277,13 @@ class Preferences extends Component {
   };
 
   render() {
-    const { prefTable, spend_max, trans_max, tokenBalance } = this.state;
+    const {
+      prefTable,
+      spend_max,
+      trans_max,
+      tokenBalance,
+      eosToSend
+    } = this.state;
     const { classes } = this.props;
 
     // generate each note as a card
@@ -360,6 +360,25 @@ class Preferences extends Component {
               type="submit"
             >
               Add / Update Preferences
+            </Button>
+          </form>
+          <form className={classes.formContainer} onSubmit={this.sendEos}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="eosToSend">EOS to Send</InputLabel>
+              <Input
+                name="eosToSend"
+                type="number"
+                onChange={this.valueChange}
+                value={eosToSend}
+              />
+            </FormControl>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.formButton}
+              type="submit"
+            >
+              Send EOS
             </Button>
           </form>
         </Paper>
