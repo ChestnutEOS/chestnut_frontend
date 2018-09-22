@@ -4,7 +4,7 @@ using namespace eosio;
 
 // Smart Contract Name: securitylogic
 // Table struct:
-//   pref_struct: multi index table to store the preferences
+//   prefstruct: multi index table to store the preferences
 //     prim_key(uint64): primary key
 //     user(account_name/uint64): account name for the user
 //     spend_max(uint64): Max amount that can be spent in a single transaction
@@ -27,7 +27,7 @@ class securitylogic : public eosio::contract {
     }
 
     /// @abi table
-    struct pref_struct {
+    struct prefstruct {
       uint64_t      prim_key;  // primary key
       account_name  user;      // account name for the user
       uint64_t      spend_max; // max amount that can be spent in a single transaction
@@ -40,8 +40,8 @@ class securitylogic : public eosio::contract {
     };
 
     // create a multi-index table and support secondary key
-    typedef eosio::multi_index< N(pref_struct), pref_struct,
-      indexed_by< N(getbyuser), const_mem_fun<pref_struct, account_name, &pref_struct::get_by_user> >
+    typedef eosio::multi_index< N(prefstruct), prefstruct,
+      indexed_by< N(getbyuser), const_mem_fun<prefstruct, account_name, &prefstruct::get_by_user> >
       > pref_table;
 
   public:

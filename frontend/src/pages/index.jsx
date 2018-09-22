@@ -116,7 +116,7 @@ class Index extends Component {
     const result = await eos.transaction({
       actions: [
         {
-          account: "notechainacc",
+          account: "seclogacc",
           name: actionName,
           authorization: [
             {
@@ -140,9 +140,9 @@ class Index extends Component {
     eos
       .getTableRows({
         json: true,
-        code: "notechainacc", // contract who owns the table
-        scope: "notechainacc", // scope of the table
-        table: "notestruct", // name of the table as specified by the contract abi
+        code: "seclogacc", // contract who owns the table
+        scope: "seclogacc", // scope of the table
+        table: "prefstruct", // name of the table as specified by the contract abi
         limit: 100
       })
       .then(result => this.setState({ noteTable: result.rows }));
