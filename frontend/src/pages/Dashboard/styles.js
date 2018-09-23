@@ -1,4 +1,5 @@
-const fontFamily = "Roboto";
+const fontFamily = "Nexa";
+const fontFamilyHeavy = "NexaHeavy";
 
 export default {
 	contentContainer: {
@@ -13,9 +14,9 @@ export default {
 	},
 	contentTitle: {
 		fontSize: 30,
-		margin: 20,
-		marginTop: "35%",
-		fontFamily: fontFamily
+		margin: 10,
+		marginTop: "25%",
+		fontFamily: fontFamilyHeavy
 	},
 	orangeButton: { margin: 10 }
 };

@@ -17,6 +17,14 @@ export default class extends Component {
 		};
 	}
 
+	goBack = () => {
+		this.setState({ pageView: this.state.pageView - 1 });
+	};
+
+	goForward = () => {
+		this.setState({ pageView: this.state.pageView + 1 });
+	};
+
 	render() {
 		const { pageView } = this.state;
 		return (
@@ -25,26 +33,40 @@ export default class extends Component {
 					userName={accounts[0].name}
 					userKey={accounts[0].publicKey}
 				/>
-				<div style={styles.contentContainer}>
-					<div style={styles.contentTitle}>
-						Ready to Create Your First Rule?
+
+				{pageView === 0 && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>
+							Ready to Create Your First Rule?
+						</div>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							style={styles.orangeButton}
+							onClick={this.goForward}
+						>
+							Get Started
+						</Button>
+						<Typography
+							color="secondary"
+							variant="body1"
+							component="h2"
+						>
+							what is a rule?
+						</Typography>
 					</div>
-					<Button
-						color="secondary"
-						variant="contained"
-						size="large"
-						style={styles.orangeButton}
-					>
-						Get Started
-					</Button>
-					<Typography
-						color="secondary"
-						variant="body1"
-						component="h2"
-					>
-						what is a rule?
-					</Typography>
-				</div>
+				)}
+
+				{pageView === 1 && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>Select a Rule</div>
+						<Typography variant="body1" component="h2">
+							Step {pageView} of 3
+						</Typography>
+					</div>
+				)}
+
 				{/*<Preferences />*/}
 			</div>
 		);
