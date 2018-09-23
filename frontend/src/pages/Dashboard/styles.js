@@ -26,5 +26,6 @@ export default {
 	ruleCardsContainer: {
 		display: "flex",
 		flexDirection: "row"
-	}
+	},
+	buttonWrapper: { background: "none", border: "none", padding: 2 }
 };

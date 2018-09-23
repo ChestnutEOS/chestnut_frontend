@@ -26,6 +26,11 @@ export default class extends Component {
 		this.setState({ pageView: this.state.pageView + 1 });
 	};
 
+	selectRule = () => {
+		console.log("Here");
+		this.setState({ pageView: this.state.pageView + 1 });
+	};
+
 	render() {
 		const { pageView } = this.state;
 		return (
@@ -70,23 +75,68 @@ export default class extends Component {
 							Step {pageView} of 3
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
-							<RuleCard
-								text="Spending Limit"
-								icon="dollarCircle.png"
-							/>
-							<RuleCard
-								text="Number of Transactions"
-								icon="clock.png"
-							/>
-							<RuleCard
-								text="Whitelisted Accounts"
-								icon="calendar.png"
-							/>
-							<RuleCard
-								text="Balance Notifications"
-								icon="dollarStack.png"
-							/>
+							<button
+								style={styles.buttonWrapper}
+								onClick={this.selectRule}
+							>
+								<RuleCard
+									text="Spending Limit"
+									icon="dollarCircle.png"
+								/>
+							</button>
+							<button
+								style={styles.buttonWrapper}
+								onClick={this.selectRule}
+							>
+								<RuleCard
+									text="Number of Transactions"
+									icon="clock.png"
+									onClick={this.selectRule}
+								/>
+							</button>
+							<button
+								style={styles.buttonWrapper}
+								onClick={this.selectRule}
+							>
+								<RuleCard
+									text="Whitelisted Accounts"
+									icon="calendar.png"
+									onClick={this.selectRule}
+								/>
+							</button>
+							<button
+								style={styles.buttonWrapper}
+								onClick={this.selectRule}
+							>
+								<RuleCard
+									text="Balance Notifications"
+									icon="dollarStack.png"
+									onClick={this.selectRule}
+								/>
+							</button>
 						</div>
+					</div>
+				)}
+
+				{pageView === 2 && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>Set Parameters</div>
+						<Typography
+							variant="body1"
+							style={styles.stepText}
+							component="h2"
+						>
+							Step {pageView} of 3
+						</Typography>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							style={styles.orangeButton}
+							onClick={this.goForward}
+						>
+							Set Parameter
+						</Button>
 					</div>
 				)}
 

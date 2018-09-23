@@ -65,7 +65,8 @@ export default {
 		alignItems: "center",
 		height: 180,
 		width: 180,
-		margin: 2
+		margin: 0,
+		cursor: "pointer"
 	},
 	ruleIcon: {
 		height: 65,
