@@ -18,6 +18,7 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import styles from "./styles";
+import Header from "../../components/Header";
 
 // NEVER store private keys in any source code in your real life development
 // This is for demo purposes only!
@@ -247,13 +248,10 @@ class Preferences extends Component {
 
     return (
       <div>
-        <AppBar position="static" color="default">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              Security Logic
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <Header
+          userName={prefTable[0] ? prefTable[0].user : "Not Logged In"}
+          userKey={accounts[0].publicKey}
+        />
         {noteCards}
         <Paper className={classes.paper}>
           <form
