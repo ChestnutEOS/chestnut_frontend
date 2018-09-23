@@ -19,7 +19,7 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pageView: 4,
+			pageView: 0,
 			spend_max: ""
 		};
 	}

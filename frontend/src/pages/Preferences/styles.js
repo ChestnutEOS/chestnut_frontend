@@ -78,6 +78,7 @@ export default {
 	contentTitle: {
 		fontSize: 45,
 		margin: 10,
+		marginBottom: 50,
 		fontFamily: fontFamilyHeavy
 	},
 	rightContent: {
