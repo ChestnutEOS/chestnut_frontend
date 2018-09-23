@@ -19,7 +19,7 @@ export default {
 	contentTitle: {
 		fontSize: 40,
 		margin: 10,
-		marginBottom: 30,
+		marginBottom: 20,
 		marginTop: "20%",
 		fontFamily: fontFamilyHeavy
 	},

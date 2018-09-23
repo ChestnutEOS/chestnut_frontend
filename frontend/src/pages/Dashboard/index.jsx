@@ -21,7 +21,7 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pageView: 4,
+			pageView: -1,
 			spend_max: "",
 			per_period: "month"
 		};
