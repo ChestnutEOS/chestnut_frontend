@@ -7,11 +7,18 @@ import styles from "./styles";
 
 export default class extends Component {
 	render() {
-		const { text, icon } = this.props;
+		const { text, icon, ruleInput } = this.props;
 		return (
 			<Card style={styles.ruleCardContainer}>
 				<img style={styles.ruleIcon} src={icon} />
-				<div style={styles.ruleText}>{text}</div>
+				{ruleInput ? (
+					<div style={styles.ruleWrapper}>
+						<div style={styles.ruleInput}>{ruleInput}</div>
+						<div style={styles.ruleTextSmall}>{text}</div>
+					</div>
+				) : (
+					<div style={styles.ruleText}>{text}</div>
+				)}
 			</Card>
 		);
 	}

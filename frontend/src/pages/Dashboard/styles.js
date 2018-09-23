@@ -15,7 +15,7 @@ export default {
 	contentTitle: {
 		fontSize: 40,
 		margin: 10,
-		marginTop: "25%",
+		marginTop: "20%",
 		fontFamily: fontFamilyHeavy
 	},
 	orangeButton: { margin: 10 },
@@ -27,5 +27,7 @@ export default {
 		display: "flex",
 		flexDirection: "row"
 	},
-	buttonWrapper: { background: "none", border: "none", padding: 2 }
+	buttonWrapper: { background: "none", border: "none", padding: 2 },
+	parameterHeading: { fontFamily: fontFamilyHeavy, fontSize: 20 },
+	formControl: { margin: 5, width: 100 }
 };

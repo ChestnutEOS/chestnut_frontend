@@ -79,5 +79,20 @@ export default {
 		textAlign: "center",
 		overflowX: "wrap",
 		margin: 15
+	},
+	ruleWrapper: {
+		margin: 15
+	},
+	ruleInput: {
+		fontFamily: fontFamilyHeavy,
+		fontSize: 22,
+		textAlign: "center",
+		overflowX: "wrap"
+	},
+	ruleTextSmall: {
+		fontFamily: fontFamilyHeavy,
+		fontSize: 14,
+		textAlign: "center",
+		overflowX: "wrap"
 	}
 };

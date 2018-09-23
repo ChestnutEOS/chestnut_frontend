@@ -1,7 +1,12 @@
 import React, { Component } from "react";
+import Eos from "eosjs"; // https://github.com/EOSIO/eosjs
 
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Preferences from "../Preferences";
 import Header from "../../components/Header";
@@ -14,7 +19,8 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pageView: 0
+			pageView: 0,
+			spend_max: ""
 		};
 	}
 
@@ -27,12 +33,60 @@ export default class extends Component {
 	};
 
 	selectRule = () => {
-		console.log("Here");
 		this.setState({ pageView: this.state.pageView + 1 });
 	};
 
+	valueChange = event => {
+		this.setState({ [event.target.name]: event.target.value });
+	};
+
+	setParameter = async event => {
+		event.preventDefault();
+		let account = accounts[0].name;
+		let privateKey = accounts[0].privateKey;
+		let spend_max = this.state.spend_max;
+		let trans_max = 0;
+
+		let actionName = "";
+		let actionData = {};
+
+		switch (event.type) {
+			case "submit":
+				actionName = "update";
+				actionData = {
+					_user: account,
+					_spend_max: spend_max,
+					_trans_max: trans_max
+				};
+				break;
+			default:
+				return;
+		}
+
+		const eos = Eos({ keyProvider: privateKey });
+		const result = await eos.transaction({
+			actions: [
+				{
+					account: "seclogacc",
+					name: actionName,
+					authorization: [
+						{
+							actor: account,
+							permission: "active"
+						}
+					],
+					data: actionData
+				}
+			]
+		});
+
+		this.goForward();
+
+		// this.getTable();
+	};
+
 	render() {
-		const { pageView } = this.state;
+		const { pageView, spend_max } = this.state;
 		return (
 			<div>
 				<Header
@@ -128,6 +182,26 @@ export default class extends Component {
 						>
 							Step {pageView} of 3
 						</Typography>
+						<Typography
+							variant="subheading"
+							style={styles.parameterHeading}
+							component="h2"
+						>
+							Spending Limit
+						</Typography>
+						<FormControl style={styles.formControl}>
+							<Input
+								name="spend_max"
+								type="number"
+								onChange={this.valueChange}
+								value={spend_max}
+								startAdornment={
+									<InputAdornment position="start">
+										EOS
+									</InputAdornment>
+								}
+							/>
+						</FormControl>
 						<Button
 							color="secondary"
 							variant="contained"
@@ -137,6 +211,42 @@ export default class extends Component {
 						>
 							Set Parameter
 						</Button>
+					</div>
+				)}
+
+				{pageView === 3 && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>Rule Review</div>
+						<Typography
+							variant="body1"
+							style={styles.stepText}
+							component="h2"
+						>
+							Step {pageView} of 3
+						</Typography>
+						<div style={styles.ruleCardsContainer}>
+							<RuleCard
+								text="Spending Limit"
+								ruleInput={`${spend_max} EOS`}
+								icon="dollarCircle.png"
+							/>
+						</div>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							style={styles.orangeButton}
+							onClick={this.setParameter}
+						>
+							Turn Rule On
+						</Button>
+						<Typography
+							color="secondary"
+							variant="body1"
+							component="h2"
+						>
+							cancel
+						</Typography>
 					</div>
 				)}
 
