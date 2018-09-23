@@ -17,6 +17,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 
 import styles from "./styles";
 import accounts from "../../accounts";
+import ActivityItem from "../../components/ActivityItem";
 
 class Preferences extends Component {
   constructor(props) {
@@ -26,7 +27,37 @@ class Preferences extends Component {
       spend_max: 100,
       trans_max: 10,
       tokenBalance: 0,
-      eosToSend: 3
+      eosToSend: 3,
+      activities: [
+        {
+          iconSrc: "success.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 20,
+          amount: 10,
+          text: "Transfer to danielle",
+          status: "Approved"
+        },
+        {
+          iconSrc: "success.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 24,
+          amount: 10,
+          text: "Transfer to danielle",
+          status: "Approved"
+        },
+        {
+          iconSrc: "dollarCircle.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 33,
+          amount: 100,
+          text: "Transfer to danielle",
+          status: "Rejected"
+        },
+        {
+          iconSrc: "calendar.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 55,
+          amount: 30,
+          text: "Transfer to anette",
+          status: "Rejected"
+        }
+      ]
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -164,7 +195,8 @@ class Preferences extends Component {
       spend_max,
       trans_max,
       tokenBalance,
-      eosToSend
+      eosToSend,
+      activities
     } = this.state;
     // const { classes } = this.props;
 
@@ -214,6 +246,19 @@ class Preferences extends Component {
             >
               {tokenBalance}
             </Typography>
+          </div>
+
+          <div style={styles.activitiesWrapper}>
+            <Typography
+              variant="body1"
+              style={styles.activityText}
+              component="h2"
+            >
+              Activity
+            </Typography>
+            {activities.map(item => {
+              return <ActivityItem item={item} />;
+            })}
           </div>
         </div>
       </div>

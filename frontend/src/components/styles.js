@@ -56,6 +56,7 @@ export default {
 		fontFamily: fontFamily,
 		fontSize: 10
 	},
+
 	//Rule Card
 	ruleCardContainer: {
 		background: tealDark,
@@ -94,5 +95,38 @@ export default {
 		fontSize: 14,
 		textAlign: "center",
 		overflowX: "wrap"
+	},
+
+	// ActivityItem
+	activityContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		borderTop: "1px solid lightgray",
+		height: 90
+	},
+	leftWrapper: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginLeft: 20
+	},
+	iconWrapper: {
+		width: 30,
+		height: "auto",
+		marginRight: 20
+	},
+	rightWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "flex-end"
+	},
+	approvedText: {
+		color: "green"
+	},
+	rejectedText: {
+		color: "red"
 	}
 };

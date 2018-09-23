@@ -53,14 +53,14 @@ export default {
 		marginRight: 75
 	},
 	leftContent: {
-		width: "65%",
+		width: "60%",
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "flex-start",
 		alignItems: "flex-start"
 	},
 	rightContent: {
-		width: "35%",
+		width: "40%",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -72,8 +72,15 @@ export default {
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
-		width: "90%",
-		margin: 10,
-		padding: 10
+		width: "85%",
+		margin: 25,
+		padding: 15
+	},
+	activityText: {
+		textAlign: "left",
+		marginBottom: 5
+	},
+	activitiesWrapper: {
+		width: "85%"
 	}
 };
