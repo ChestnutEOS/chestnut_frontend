@@ -3,7 +3,8 @@ const whiteColor = "#FFF";
 const tealLight = "#AEDFD4";
 const tealDark = "#A3CEC3";
 const orangeColor = "#FF5B3F";
-const fontFamily = "Nexa";
+const fontFamily = "Proxima Nova Lt";
+const nexa = "Nexa";
 const fontFamilyHeavy = "NexaHeavy";
 
 export default {
@@ -30,7 +31,16 @@ export default {
 		margin: 40,
 		color: whiteColor,
 		fontSize: 14,
-		fontFamily: fontFamily
+		fontFamily: nexa,
+		letterSpacing: 1.5
+	},
+	selectedHeaderNavText: {
+		margin: 40,
+		color: whiteColor,
+		fontSize: 14,
+		fontFamily: nexa,
+		letterSpacing: 1.5,
+		borderBottom: "3px solid #FF5B3F"
 	},
 	headerRight: {
 		display: "flex",
@@ -48,18 +58,25 @@ export default {
 	},
 	nameText: {
 		color: whiteColor,
-		fontFamily: fontFamily,
+		fontFamily: nexa,
+		letterSpacing: 1.5,
 		fontSize: 14
 	},
 	keyText: {
 		color: orangeColor,
-		fontFamily: fontFamily,
+		fontFamily: nexa,
+		letterSpacing: 1,
 		fontSize: 10
+	},
+	rightIcon: {
+		height: 25,
+		width: "auto",
+		paddingLeft: 15
 	},
 
 	//Rule Card
 	ruleCardContainer: {
-		background: tealDark,
+		background: tealLight,
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-around",
@@ -77,7 +94,7 @@ export default {
 	},
 	ruleText: {
 		fontFamily: fontFamilyHeavy,
-		fontSize: 22,
+		fontSize: 20,
 		textAlign: "center",
 		overflowX: "wrap",
 		margin: 10
@@ -88,6 +105,7 @@ export default {
 	ruleInput: {
 		fontFamily: fontFamilyHeavy,
 		fontSize: 14,
+		marginBottom: 10,
 		textAlign: "center",
 		overflowX: "wrap"
 	},
@@ -96,6 +114,13 @@ export default {
 		fontSize: 12,
 		textAlign: "center",
 		overflowX: "wrap"
+	},
+	questionMark: {
+		width: 20,
+		height: "auto",
+		position: "relative",
+		top: 1,
+		marginRight: -145
 	},
 	// ruleSwitch: { width: "100%" },
 	emptyRuleCardContainer: {
@@ -109,7 +134,7 @@ export default {
 		width: 150,
 		margin: 0,
 		cursor: "pointer",
-		border: "2px dotted lightgray"
+		border: "2px dashed lightgray"
 	},
 	addRuleText: {
 		color: "gray",

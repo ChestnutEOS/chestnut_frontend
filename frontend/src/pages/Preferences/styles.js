@@ -1,4 +1,5 @@
-const fontFamily = "Nexa";
+const fontFamily = "Proxima Nova Lt";
+const nexa = "Nexa";
 const fontFamilyHeavy = "NexaHeavy";
 
 // export default {
@@ -98,6 +99,7 @@ export default {
 		margin: 25,
 		padding: 15
 	},
+	balanceText: { fontFamily: fontFamilyHeavy },
 	activityText: {
 		textAlign: "left",
 		marginBottom: 5

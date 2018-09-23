@@ -21,7 +21,7 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pageView: 0,
+			pageView: 4,
 			spend_max: "",
 			per_period: "month"
 		};
@@ -91,17 +91,24 @@ export default class extends Component {
 
 	render() {
 		const { pageView, spend_max, per_period } = this.state;
+		if (pageView === -1)
+			return (
+				<img
+					style={styles.landingPage}
+					onClick={() => this.setState({ pageView: 0 })}
+					src="landingPage.jpg"
+				/>
+			);
 		return (
 			<div>
 				<Header
 					userName={accounts[0].name}
 					userKey={accounts[0].publicKey}
 				/>
-
 				{pageView === 0 && (
 					<div style={styles.contentContainer}>
 						<div style={styles.contentTitle}>
-							Ready to Create Your First Rule?
+							Ready to create your first rule?
 						</div>
 						<Button
 							color="secondary"
@@ -128,9 +135,9 @@ export default class extends Component {
 						<Typography
 							variant="body1"
 							style={styles.stepText}
-							component="h2"
+							component="h3"
 						>
-							Step {pageView} of 3
+							STEP {pageView} OF 3
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
 							<button
@@ -158,7 +165,7 @@ export default class extends Component {
 							>
 								<RuleCard
 									text="Whitelisted Accounts"
-									icon="calendar.png"
+									icon="checklist.png"
 									onClick={this.selectRule}
 								/>
 							</button>
@@ -178,13 +185,13 @@ export default class extends Component {
 
 				{pageView === 2 && (
 					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Set Parameters</div>
+						<div style={styles.contentTitle}>Set parameters</div>
 						<Typography
 							variant="body1"
 							style={styles.stepText}
-							component="h2"
+							component="h3"
 						>
-							Step {pageView} of 3
+							STEP {pageView} OF 3
 						</Typography>
 						<Typography
 							variant="subheading"
@@ -239,13 +246,13 @@ export default class extends Component {
 
 				{pageView === 3 && (
 					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Rule Review</div>
+						<div style={styles.contentTitle}>Rule review</div>
 						<Typography
 							variant="body1"
 							style={styles.stepText}
-							component="h2"
+							component="h3"
 						>
-							Step {pageView} of 3
+							STEP {pageView} OF 3
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
 							<RuleCard

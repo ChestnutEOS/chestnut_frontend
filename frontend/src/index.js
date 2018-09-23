@@ -18,7 +18,7 @@ const theme = createMuiTheme({
 	},
 	typography: {
 		// Sets the font throughout the application.  Requires using Material UI typography component.
-		fontFamily: ["Nexa", "NexaHeavy", "Roboto"].join(",")
+		fontFamily: ["Proxima Nova Lt", "Nexa", "NexaHeavy", "Roboto"].join(",")
 	}
 });
 

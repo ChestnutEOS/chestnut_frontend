@@ -42,6 +42,7 @@ export default class extends Component {
 			);
 		return (
 			<Card style={styles.ruleCardContainer}>
+				<img style={styles.questionMark} src="questionMark.png" />
 				<img style={styles.ruleIcon} src={icon} />
 				{ruleInput ? (
 					<div style={styles.ruleWrapper}>

@@ -250,22 +250,22 @@ class Preferences extends Component {
             <Switch />
           </div>
           <div style={styles.leftContent}>
-            <div style={styles.contentTitle}>My Rules</div>
+            <div style={styles.contentTitle}>My rules</div>
             <div style={styles.ruleCardContainer}>
               <RuleCard
                 text="Spending Limit"
                 style={styles.ruleCard}
                 ruleInput={`${spend_max} EOS / month`}
                 icon="dollarCircle.png"
-                modifyButton
+                // modifyButton
                 checked={true}
               />
               <RuleCard
-                text="Account Balance"
+                text="Whitelisted Accounts"
                 style={styles.ruleCard}
-                ruleInput={`1000 EOS`}
-                icon="dollarStack.png"
-                modifyButton
+                ruleInput={`3 Accounts`}
+                icon="checklist.png"
+                // modifyButton
                 checked={false}
               />
               <RuleCard empty />
