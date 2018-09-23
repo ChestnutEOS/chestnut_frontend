@@ -3,7 +3,7 @@ const whiteColor = "#FFF";
 const tealLight = "#AEDFD4";
 const tealDark = "#A3CEC3";
 const orangeColor = "#FF5B3F";
-const fontFamily = "Nexa Heavy";
+const fontFamily = "Roboto";
 
 export default {
 	headerContainer: {
@@ -27,7 +27,7 @@ export default {
 	headerNavText: {
 		margin: 40,
 		color: whiteColor,
-		fontSize: 20,
+		fontSize: 18,
 		fontFamily: fontFamily
 	},
 	headerRight: {
@@ -47,7 +47,7 @@ export default {
 	nameText: {
 		color: whiteColor,
 		fontFamily: fontFamily,
-		fontSize: 20
+		fontSize: 18
 	},
 	keyText: {
 		color: orangeColor,

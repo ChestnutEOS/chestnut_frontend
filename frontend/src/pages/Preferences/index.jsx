@@ -16,10 +16,8 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import styles from "./styles";
-import Header from "../../components/Header";
 import accounts from "../../accounts";
 
-// Preferences component
 class Preferences extends Component {
   constructor(props) {
     super(props);
@@ -199,10 +197,6 @@ class Preferences extends Component {
 
     return (
       <div>
-        <Header
-          userName={prefTable[0] ? prefTable[0].user : "Not Logged In"}
-          userKey={accounts[0].publicKey}
-        />
         {noteCards}
         <Paper className={classes.paper}>
           <form
