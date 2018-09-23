@@ -87,13 +87,13 @@ export default {
 	},
 	ruleInput: {
 		fontFamily: fontFamilyHeavy,
-		fontSize: 22,
+		fontSize: 14,
 		textAlign: "center",
 		overflowX: "wrap"
 	},
 	ruleTextSmall: {
 		fontFamily: fontFamilyHeavy,
-		fontSize: 14,
+		fontSize: 12,
 		textAlign: "center",
 		overflowX: "wrap"
 	},

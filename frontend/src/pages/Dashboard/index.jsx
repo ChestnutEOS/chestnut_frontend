@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Preferences from "../Preferences";
@@ -20,7 +22,8 @@ export default class extends Component {
 		super(props);
 		this.state = {
 			pageView: 0,
-			spend_max: ""
+			spend_max: "",
+			per_period: "month"
 		};
 	}
 
@@ -87,7 +90,7 @@ export default class extends Component {
 	};
 
 	render() {
-		const { pageView, spend_max } = this.state;
+		const { pageView, spend_max, per_period } = this.state;
 		return (
 			<div>
 				<Header
@@ -190,19 +193,38 @@ export default class extends Component {
 						>
 							Spending Limit
 						</Typography>
-						<FormControl style={styles.formControl}>
-							<Input
-								name="spend_max"
-								type="number"
-								onChange={this.valueChange}
-								value={spend_max}
-								startAdornment={
-									<InputAdornment position="start">
-										EOS
-									</InputAdornment>
-								}
-							/>
-						</FormControl>
+						<div style={styles.inputContainer}>
+							<FormControl style={styles.formControl}>
+								<Input
+									name="spend_max"
+									type="number"
+									onChange={this.valueChange}
+									value={spend_max}
+									startAdornment={
+										<InputAdornment position="start">
+											EOS
+										</InputAdornment>
+									}
+								/>
+							</FormControl>
+							<FormControl style={styles.formControl}>
+								<Select
+									value={per_period}
+									onChange={this.valueChange}
+									inputProps={{
+										name: "per_period",
+										id: "per_period",
+										style: { textAlign: "center" }
+									}}
+								>
+									<MenuItem value={"day"}>Per Day</MenuItem>
+									<MenuItem value={"month"}>
+										Per Month
+									</MenuItem>
+									<MenuItem value={"year"}>Per Year</MenuItem>
+								</Select>
+							</FormControl>
+						</div>
 						<Button
 							color="secondary"
 							variant="contained"
@@ -228,7 +250,7 @@ export default class extends Component {
 						<div style={styles.ruleCardsContainer}>
 							<RuleCard
 								text="Spending Limit"
-								ruleInput={`${spend_max} EOS`}
+								ruleInput={`${spend_max} EOS / ${per_period}`}
 								icon="dollarCircle.png"
 							/>
 						</div>

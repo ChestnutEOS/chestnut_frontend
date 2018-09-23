@@ -34,23 +34,30 @@ class Preferences extends Component {
         {
           iconSrc: "success.png",
           timestamp: new Date().valueOf() - 1000 * 60 * 20,
-          amount: 10,
-          text: "Transfer to danielle",
-          status: "Approved"
-        },
-        {
-          iconSrc: "success.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 24,
-          amount: 10,
-          text: "Transfer to danielle",
+          amount: 2,
+          text: "Transfer to brandon",
           status: "Approved"
         },
         {
           iconSrc: "dollarCircle.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 33,
+          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12.4,
           amount: 100,
           text: "Transfer to danielle",
           status: "Rejected"
+        },
+        {
+          iconSrc: "success.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12 * 2.1,
+          amount: 6,
+          text: "Transfer to daniel",
+          status: "Approved"
+        },
+        {
+          iconSrc: "success.png",
+          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12 * 3,
+          amount: 8,
+          text: "Transfer to ashe",
+          status: "Approved"
         },
         {
           iconSrc: "calendar.png",
@@ -248,16 +255,16 @@ class Preferences extends Component {
               <RuleCard
                 text="Spending Limit"
                 style={styles.ruleCard}
-                ruleInput={`${spend_max} EOS`}
+                ruleInput={`${spend_max} EOS / month`}
                 icon="dollarCircle.png"
                 modifyButton
                 checked={true}
               />
               <RuleCard
-                text="Number of Transactions"
+                text="Account Balance"
                 style={styles.ruleCard}
-                ruleInput={`10 per Day`}
-                icon="clock.png"
+                ruleInput={`1000 EOS`}
+                icon="dollarStack.png"
                 modifyButton
                 checked={false}
               />
