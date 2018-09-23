@@ -166,99 +166,123 @@ class Preferences extends Component {
       tokenBalance,
       eosToSend
     } = this.state;
-    const { classes } = this.props;
+    // const { classes } = this.props;
 
-    // generate each note as a card
-    const generateCard = (key, timestamp, user, spend_max, trans_max) => (
-      <Card className={classes.card} key={key}>
-        <CardContent>
-          <Typography variant="headline" component="h2">
-            {user}
-          </Typography>
-          <Typography variant="subheading" component="h2">
-            Balance: {tokenBalance}
-          </Typography>
-          <Typography variant="subheading" component="h2" gutterBottom>
-            {accounts[0].publicKey}
-          </Typography>
-          <Typography component="pre">Spending Max: ${spend_max}</Typography>
-          <Typography component="pre">
-            Tx Limit: {trans_max} per {"Day"}
-          </Typography>
-          <Typography style={{ fontSize: 12 }} color="textSecondary">
-            Updated: {moment(new Date(timestamp * 1000)).format("LLL")}
-          </Typography>
-        </CardContent>
-      </Card>
-    );
-    let noteCards = prefTable.map((row, i) =>
-      generateCard(i, row.timestamp, row.user, row.spend_max, row.trans_max)
-    );
+    // // generate each note as a card
+    // const generateCard = (key, timestamp, user, spend_max, trans_max) => (
+    //   <Card className={classes.card} key={key}>
+    //     <CardContent>
+    //       <Typography variant="headline" component="h2">
+    //         {user}
+    //       </Typography>
+    //       <Typography variant="subheading" component="h2">
+    //         Balance: {tokenBalance}
+    //       </Typography>
+    //       <Typography variant="subheading" component="h2" gutterBottom>
+    //         {accounts[0].publicKey}
+    //       </Typography>
+    //       <Typography component="pre">Spending Max: ${spend_max}</Typography>
+    //       <Typography component="pre">
+    //         Tx Limit: {trans_max} per {"Day"}
+    //       </Typography>
+    //       <Typography style={{ fontSize: 12 }} color="textSecondary">
+    //         Updated: {moment(new Date(timestamp * 1000)).format("LLL")}
+    //       </Typography>
+    //     </CardContent>
+    //   </Card>
+    // );
+    // let noteCards = prefTable.map((row, i) =>
+    //   generateCard(i, row.timestamp, row.user, row.spend_max, row.trans_max)
+    // );
 
     return (
-      <div>
-        {noteCards}
-        <Paper className={classes.paper}>
-          <form
-            className={classes.formContainer}
-            onSubmit={this.handleFormEvent}
-          >
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="name-helper">
-                Max Spend per Transaction
-              </InputLabel>
-              <Input
-                name="spend_max"
-                type="number"
-                onChange={this.valueChange}
-                value={spend_max}
-                startAdornment={
-                  <InputAdornment position="start">EOS</InputAdornment>
-                }
-              />
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="name-helper">
-                Max Transactions per Time Period
-              </InputLabel>
-              <Input
-                name="trans_max"
-                type="number"
-                onChange={this.valueChange}
-                value={trans_max}
-              />
-            </FormControl>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.formButton}
-              type="submit"
+      <div style={styles.preferencesContainer}>
+        <div style={styles.leftContent}>Yo</div>
+        <div style={styles.rightContent}>
+          <div style={styles.balanceWrapper}>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
             >
-              Add / Update Preferences
-            </Button>
-          </form>
-          <form className={classes.formContainer} onSubmit={this.sendEos}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="eosToSend">EOS to Send</InputLabel>
-              <Input
-                name="eosToSend"
-                type="number"
-                onChange={this.valueChange}
-                value={eosToSend}
-              />
-            </FormControl>
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.formButton}
-              type="submit"
+              my balance
+            </Typography>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
             >
-              Send EOS
-            </Button>
-          </form>
-        </Paper>
+              {tokenBalance}
+            </Typography>
+          </div>
+        </div>
       </div>
     );
+
+    // return (
+    //   <div>
+    //     {noteCards}
+    //     <Paper className={classes.paper}>
+    //       <form
+    //         className={classes.formContainer}
+    //         onSubmit={this.handleFormEvent}
+    //       >
+    //         <FormControl className={classes.formControl}>
+    //           <InputLabel htmlFor="name-helper">
+    //             Max Spend per Transaction
+    //           </InputLabel>
+    //           <Input
+    //             name="spend_max"
+    //             type="number"
+    //             onChange={this.valueChange}
+    //             value={spend_max}
+    //             startAdornment={
+    //               <InputAdornment position="start">EOS</InputAdornment>
+    //             }
+    //           />
+    //         </FormControl>
+    //         <FormControl className={classes.formControl}>
+    //           <InputLabel htmlFor="name-helper">
+    //             Max Transactions per Time Period
+    //           </InputLabel>
+    //           <Input
+    //             name="trans_max"
+    //             type="number"
+    //             onChange={this.valueChange}
+    //             value={trans_max}
+    //           />
+    //         </FormControl>
+    //         <Button
+    //           variant="contained"
+    //           color="primary"
+    //           className={classes.formButton}
+    //           type="submit"
+    //         >
+    //           Add / Update Preferences
+    //         </Button>
+    //       </form>
+    //       <form className={classes.formContainer} onSubmit={this.sendEos}>
+    //         <FormControl className={classes.formControl}>
+    //           <InputLabel htmlFor="eosToSend">EOS to Send</InputLabel>
+    //           <Input
+    //             name="eosToSend"
+    //             type="number"
+    //             onChange={this.valueChange}
+    //             value={eosToSend}
+    //           />
+    //         </FormControl>
+    //         <Button
+    //           variant="contained"
+    //           color="primary"
+    //           className={classes.formButton}
+    //           type="submit"
+    //         >
+    //           Send EOS
+    //         </Button>
+    //       </form>
+    //     </Paper>
+    //   </div>
+    // );
   }
 }
 

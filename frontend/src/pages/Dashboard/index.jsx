@@ -19,7 +19,7 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			pageView: 0,
+			pageView: 4,
 			spend_max: ""
 		};
 	}
@@ -50,18 +50,18 @@ export default class extends Component {
 		let actionName = "";
 		let actionData = {};
 
-		switch (event.type) {
-			case "submit":
-				actionName = "update";
-				actionData = {
-					_user: account,
-					_spend_max: spend_max,
-					_trans_max: trans_max
-				};
-				break;
-			default:
-				return;
-		}
+		// switch (event.type) {
+		// 	case "submit":
+		actionName = "update";
+		actionData = {
+			_user: account,
+			_spend_max: spend_max,
+			_trans_max: trans_max
+		};
+		// break;
+		// 	default:
+		// 		return;
+		// }
 
 		const eos = Eos({ keyProvider: privateKey });
 		const result = await eos.transaction({
@@ -80,6 +80,7 @@ export default class extends Component {
 			]
 		});
 
+		console.log(result);
 		this.goForward();
 
 		// this.getTable();
@@ -250,7 +251,7 @@ export default class extends Component {
 					</div>
 				)}
 
-				{/*<Preferences />*/}
+				{pageView === 4 && <Preferences />}
 			</div>
 		);
 	}
