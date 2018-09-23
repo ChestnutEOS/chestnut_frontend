@@ -7,16 +7,24 @@ export default {
 		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "center",
-		maxWidth: 600,
+		maxWidth: 700,
 		width: "90%",
 		margin: "auto",
 		height: "90%"
 	},
 	contentTitle: {
-		fontSize: 30,
+		fontSize: 40,
 		margin: 10,
 		marginTop: "25%",
 		fontFamily: fontFamilyHeavy
 	},
-	orangeButton: { margin: 10 }
+	orangeButton: { margin: 10 },
+	stepText: {
+		fontFamily: fontFamilyHeavy,
+		marginBottom: 45
+	},
+	ruleCardsContainer: {
+		display: "flex",
+		flexDirection: "row"
+	}
 };

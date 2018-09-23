@@ -4,8 +4,10 @@ const tealLight = "#AEDFD4";
 const tealDark = "#A3CEC3";
 const orangeColor = "#FF5B3F";
 const fontFamily = "Nexa";
+const fontFamilyHeavy = "NexaHeavy";
 
 export default {
+	//Header
 	headerContainer: {
 		height: 100,
 		background: blackColor,
@@ -53,5 +55,26 @@ export default {
 		color: orangeColor,
 		fontFamily: fontFamily,
 		fontSize: 10
+	},
+	//Rule Card
+	ruleCardContainer: {
+		background: tealDark,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "center",
+		height: 180,
+		width: 180,
+		margin: 2
+	},
+	ruleIcon: {
+		height: 65,
+		width: "auto"
+	},
+	ruleText: {
+		fontFamily: fontFamilyHeavy,
+		fontSize: 20,
+		textAlign: "center",
+		overflowX: "wrap"
 	}
 };

@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Preferences from "../Preferences";
 import Header from "../../components/Header";
+import RuleCard from "../../components/RuleCard";
 
 import styles from "./styles";
 import accounts from "../../accounts";
@@ -61,9 +62,31 @@ export default class extends Component {
 				{pageView === 1 && (
 					<div style={styles.contentContainer}>
 						<div style={styles.contentTitle}>Select a Rule</div>
-						<Typography variant="body1" component="h2">
+						<Typography
+							variant="body1"
+							style={styles.stepText}
+							component="h2"
+						>
 							Step {pageView} of 3
 						</Typography>
+						<div style={styles.ruleCardsContainer}>
+							<RuleCard
+								text="Spending Limit"
+								icon="dollarCircle.png"
+							/>
+							<RuleCard
+								text="Number of Transactions"
+								icon="clock.png"
+							/>
+							<RuleCard
+								text="Whitelisted Accounts"
+								icon="calendar.png"
+							/>
+							<RuleCard
+								text="Balance Notifications"
+								icon="dollarStack.png"
+							/>
+						</div>
 					</div>
 				)}
 
