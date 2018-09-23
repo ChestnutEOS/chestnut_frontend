@@ -69,12 +69,14 @@ export default {
 	},
 	ruleIcon: {
 		height: 65,
-		width: "auto"
+		width: "auto",
+		margin: 15
 	},
 	ruleText: {
 		fontFamily: fontFamilyHeavy,
-		fontSize: 20,
+		fontSize: 22,
 		textAlign: "center",
-		overflowX: "wrap"
+		overflowX: "wrap",
+		margin: 15
 	}
 };
