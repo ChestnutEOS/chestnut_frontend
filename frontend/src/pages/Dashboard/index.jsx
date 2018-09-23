@@ -235,7 +235,7 @@ export default class extends Component {
 						<Button
 							color="secondary"
 							variant="contained"
-							size="large"
+							size="small"
 							style={styles.orangeButton}
 							onClick={this.setParameter}
 						>

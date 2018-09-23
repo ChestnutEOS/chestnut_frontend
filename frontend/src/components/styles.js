@@ -65,24 +65,25 @@ export default {
 		justifyContent: "space-around",
 		alignItems: "center",
 		height: 180,
-		width: 180,
+		padding: 15,
+		width: 150,
 		margin: 0,
 		cursor: "pointer"
 	},
 	ruleIcon: {
 		height: 65,
 		width: "auto",
-		margin: 15
+		margin: 10
 	},
 	ruleText: {
 		fontFamily: fontFamilyHeavy,
 		fontSize: 22,
 		textAlign: "center",
 		overflowX: "wrap",
-		margin: 15
+		margin: 10
 	},
 	ruleWrapper: {
-		margin: 15
+		margin: 10
 	},
 	ruleInput: {
 		fontFamily: fontFamilyHeavy,
@@ -95,6 +96,24 @@ export default {
 		fontSize: 14,
 		textAlign: "center",
 		overflowX: "wrap"
+	},
+	ruleSwitch: { width: "100%" },
+	emptyRuleCardContainer: {
+		// background: "white",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "center",
+		height: 180,
+		padding: 15,
+		width: 150,
+		margin: 0,
+		cursor: "pointer",
+		border: "2px dotted lightgray"
+	},
+	addRuleText: {
+		color: "gray",
+		fontSize: 20
 	},
 
 	// ActivityItem

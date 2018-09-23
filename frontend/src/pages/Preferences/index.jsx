@@ -13,10 +13,12 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import Switch from "@material-ui/core/Switch";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 import styles from "./styles";
 import accounts from "../../accounts";
+import RuleCard from "../../components/RuleCard";
 import ActivityItem from "../../components/ActivityItem";
 
 class Preferences extends Component {
@@ -229,7 +231,40 @@ class Preferences extends Component {
 
     return (
       <div style={styles.preferencesContainer}>
-        <div style={styles.leftContent}>Yo</div>
+        <div style={styles.leftContainer}>
+          <div style={styles.freezeWrapper}>
+            <Typography
+              style={styles.freezeText}
+              variant="subheading"
+              component="h2"
+            >
+              freeze account
+            </Typography>
+            <Switch />
+          </div>
+          <div style={styles.leftContent}>
+            <div style={styles.contentTitle}>My Rules</div>
+            <div style={styles.ruleCardContainer}>
+              <RuleCard
+                text="Spending Limit"
+                style={styles.ruleCard}
+                ruleInput={`${spend_max} EOS`}
+                icon="dollarCircle.png"
+                modifyButton
+                checked={true}
+              />
+              <RuleCard
+                text="Number of Transactions"
+                style={styles.ruleCard}
+                ruleInput={`10 per Day`}
+                icon="clock.png"
+                modifyButton
+                checked={false}
+              />
+              <RuleCard empty />
+            </div>
+          </div>
+        </div>
         <div style={styles.rightContent}>
           <div style={styles.balanceWrapper}>
             <Typography

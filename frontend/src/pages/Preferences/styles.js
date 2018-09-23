@@ -52,12 +52,33 @@ export default {
 		marginLeft: 75,
 		marginRight: 75
 	},
-	leftContent: {
+	leftContainer: {
 		width: "60%",
+		flexDirection: "column",
+		justifyContent: "flex-start"
+	},
+	leftContent: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "flex-start",
 		alignItems: "flex-start"
+	},
+	freezeWrapper: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		margin: 20,
+		marginRight: 50
+	},
+	freezeText: {
+		fontFamily: fontFamilyHeavy,
+		fontSize: 20
+	},
+	contentTitle: {
+		fontSize: 45,
+		margin: 10,
+		fontFamily: fontFamilyHeavy
 	},
 	rightContent: {
 		width: "40%",
@@ -82,5 +103,11 @@ export default {
 	},
 	activitiesWrapper: {
 		width: "85%"
+	},
+	ruleCardContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "75%"
 	}
 };
