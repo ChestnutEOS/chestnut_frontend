@@ -79,6 +79,7 @@ export default {
 	contentTitle: {
 		fontSize: 45,
 		margin: 10,
+		marginLeft: 20,
 		marginBottom: 50,
 		fontFamily: fontFamilyHeavy
 	},
@@ -112,5 +113,17 @@ export default {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		width: "75%"
+	},
+	questionMark: {
+		width: 15,
+		marginRight: 10,
+		marginBottom: 5,
+		height: "auto"
+	},
+	questionMarkTitle: {
+		width: 15,
+		marginRight: 10,
+		marginBottom: -20,
+		height: "auto"
 	}
 };

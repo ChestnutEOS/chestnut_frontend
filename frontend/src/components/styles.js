@@ -85,7 +85,8 @@ export default {
 		padding: 15,
 		width: 150,
 		margin: 0,
-		cursor: "pointer"
+		cursor: "pointer",
+		borderRadius: 0
 	},
 	ruleIcon: {
 		height: 65,
@@ -134,7 +135,8 @@ export default {
 		width: 150,
 		margin: 0,
 		cursor: "pointer",
-		border: "2px dashed lightgray"
+		border: "2px dashed lightgray",
+		borderRadius: 0
 	},
 	addRuleText: {
 		color: "gray",

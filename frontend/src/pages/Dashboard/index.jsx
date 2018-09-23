@@ -105,6 +105,10 @@ export default class extends Component {
 					userName={accounts[0].name}
 					userKey={accounts[0].publicKey}
 				/>
+				{pageView < 4 &&
+					pageView > 1 && (
+						<img style={styles.backButton} src="backButton.svg" />
+					)}
 				{pageView === 0 && (
 					<div style={styles.contentContainer}>
 						<div style={styles.contentTitle}>
@@ -131,7 +135,7 @@ export default class extends Component {
 
 				{pageView === 1 && (
 					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Select a Rule</div>
+						<div style={styles.contentTitle}>Select a rule</div>
 						<Typography
 							variant="body1"
 							style={styles.stepText}

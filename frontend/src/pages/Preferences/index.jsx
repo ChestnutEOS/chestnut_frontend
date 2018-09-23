@@ -240,6 +240,7 @@ class Preferences extends Component {
       <div style={styles.preferencesContainer}>
         <div style={styles.leftContainer}>
           <div style={styles.freezeWrapper}>
+            <img style={styles.questionMark} src="questionMark.png" />
             <Typography
               style={styles.freezeText}
               variant="subheading"
@@ -250,6 +251,7 @@ class Preferences extends Component {
             <Switch />
           </div>
           <div style={styles.leftContent}>
+            <img style={styles.questionMarkTitle} src="questionMark.png" />
             <div style={styles.contentTitle}>My rules</div>
             <div style={styles.ruleCardContainer}>
               <RuleCard

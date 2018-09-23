@@ -47,7 +47,9 @@ export default class extends Component {
 				{ruleInput ? (
 					<div style={styles.ruleWrapper}>
 						<div style={styles.ruleInput}>{ruleInput}</div>
-						<div style={styles.ruleTextSmall}>{text}</div>
+						<div style={styles.ruleTextSmall}>
+							{text.toUpperCase()}
+						</div>
 					</div>
 				) : (
 					<div style={styles.ruleText}>{text}</div>
