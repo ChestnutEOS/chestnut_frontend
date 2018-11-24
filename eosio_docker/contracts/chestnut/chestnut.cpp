@@ -43,12 +43,12 @@ CONTRACT chestnut : public eosio::contract {
       return ct;
     }
 
-    bool getFrozen( name user ) {
+    void assert_frozen( name user ) {
       settings_index _settings( _self, _self.value );
       auto setting = _settings.find( user.value );
 
-      print("Is Frozen ", setting->is_frozen, "\n");
-      return setting->is_frozen;
+      print("frozen: ", setting->is_frozen, "\n");
+      eosio_assert( !setting->is_frozen, "contract frozen" );
     }
 
     /****************************************************************************
@@ -75,6 +75,10 @@ CONTRACT chestnut : public eosio::contract {
     /****************************************************************************
      *                              A C T I O N S
      ***************************************************************************/
+
+    ACTION checkfrozen() {
+      assert_frozen( _self );
+    }
 
     ACTION update( name user, bool freeze ) {
       // to sign the action with the given account
@@ -131,7 +135,6 @@ CONTRACT chestnut : public eosio::contract {
     }
 
     ACTION hello( void ) {
-      getFrozen("smartaccount"_n);
       print("hello world\n");
     }
 
@@ -145,6 +148,9 @@ extern "C" {
     // chestnut _chestnut(receiver);
     //auto self = receiver;
 
+    if( code==receiver && action != name("update").value ) {
+      execute_action( name(receiver), name(code), &chestnut::checkfrozen );
+    }
     if( code==receiver && action== name("update").value ) {
       execute_action( name(receiver), name(code), &chestnut::update );
     }
