@@ -1,0 +1,1 @@
+docker stop eosio_securitylogic_container
