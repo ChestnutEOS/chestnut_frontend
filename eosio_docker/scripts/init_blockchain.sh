@@ -98,7 +98,7 @@ echo "=== deploy smart contract ==="
 
 echo "=== create user accounts ==="
 # script for create data into blockchain
-#create_accounts.sh
+create_accounts.sh
 
 echo "=== give accounts tokens ==="
 #cleos push action eosio.token transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio

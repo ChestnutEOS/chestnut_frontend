@@ -25,5 +25,7 @@ jq -c '.[]' accounts.json | while read i; do
   pub=$(jq -r '.publicKey' <<< "$i")
 
   # to simplify, we use the same key for owner and active key of each account
-  cleos create account eosio $name $pub $pub
+  #cleos create account eosio $name $pub $pub
+  cleos system newaccount eosio --transfer $name $pub $pub \
+  --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 8
 done
