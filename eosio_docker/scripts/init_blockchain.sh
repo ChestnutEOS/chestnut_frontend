@@ -51,6 +51,8 @@ cleos wallet import -n securitylogicwal --private-key 5JpWT4ehouB2FF9aCfdfnZ5Awb
 cleos wallet import -n securitylogicwal --private-key 5JD9AGTuTeD5BXZwGQ5AtwBqHK21aHmYnTetHgk1B3pjj7krT8N
 # Active key for eosio.token
 cleos wallet import -n securitylogicwal --private-key 5JhkMn1vP6omtS4nwzWvZX9a6rjuXmpDY7kiMiXSbHW2XRowG5D
+# Active key for smartaccount
+cleos wallet import -n securitylogicwal --private-key 5KE2UNPCZX5QepKcLpLXVCLdAw7dBfJFJnuCHhXUf61hPRMtUZg
 
 # * Replace "securitylogicwal" by your own wallet name when you start your own project
 
@@ -89,19 +91,29 @@ cleos push action eosio init '["0","4,EOS"]' -p eosio
 echo 'elevate eosio.msig privileges'
 cleos push action eosio setpriv '["eosio.msig", 1]' -p eosio@active
 
+echo "=== create user accounts ==="
+# script for create data into blockchain
+create_accounts.sh
+
+echo "=== create smartaccount ==="
+# smartaccount needs more RAM for deploying contract
+cleos system newaccount eosio --transfer smartaccount EOS7XPiPuL3jbgpfS3FFmjtXK62Th9n2WZdvJb6XLygAghfx1W7Nb \
+--stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 138675
+
 echo "=== deploy smart contract ==="
 # $1 smart contract name
 # $2 account holder name of the smart contract
 # $3 wallet for unlock the account
 # $4 password for unlocking the wallet
 #deploy_contract.sh seclogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
-
-echo "=== create user accounts ==="
-# script for create data into blockchain
-create_accounts.sh
+deploy_contract.sh chestnut smartaccount securitylogicwal $(cat securitylogic_wallet_password.txt)
 
 echo "=== give accounts tokens ==="
-#cleos push action eosio.token transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio
+cleos push action eosio.token transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio
+cleos push action eosio.token transfer '[ "eosio", "smartaccount", "10000.0000 EOS", "memo"]' -p eosio smartaccount
+
+echo "=== run the smart account contract ==="
+run_smart_account.sh
 
 echo "=== end of setup blockchain accounts and smart contract ==="
 # create a file to indicate the blockchain has been initialized
