@@ -72,11 +72,11 @@ cleos create account eosio eosio.vpay   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY}
 cleos create account eosio eosio.upay   ${OWNER_PUBLIC_KEY} ${ACTIVE_PUBLIC_KEY} -p eosio
 
 echo "=== load eosio.bios, eosio.token, and eosio.msig contracts ==="
-deploy_system_contract.sh eosio.bios eosio notechainwal $(cat notechain_wallet_password.txt)
-deploy_system_contract.sh eosio.token eosio.token notechainwal $(cat notechain_wallet_password.txt)
+deploy_system_contract.sh eosio.bios eosio securitylogicwal $(cat securitylogic_wallet_password.txt)
+deploy_system_contract.sh eosio.token eosio.token securitylogicwal $(cat securitylogic_wallet_password.txt)
 cleos push action eosio.token create '[ "eosio", "1000000000.0000 EOS"]' -p eosio.token
 cleos push action eosio.token issue '[ "eosio", "1000000000.0000 EOS", "init" ]' -p eosio eosio.token
-deploy_system_contract.sh eosio.msig eosio.msig notechainwal $(cat notechain_wallet_password.txt)
+deploy_system_contract.sh eosio.msig eosio.msig securitylogicwal $(cat securitylogic_wallet_password.txt)
 
 # Set the system contract - times out first times, works second time
 sleep .5 && cleos set contract eosio ./contracts/eosio.system/ -p eosio
