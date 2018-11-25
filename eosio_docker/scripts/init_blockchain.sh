@@ -58,7 +58,6 @@ cleos wallet import -n securitylogicwal --private-key 5KE2UNPCZX5QepKcLpLXVCLdAw
 
 # create account for seclogacc with above wallet's public keys
 cleos create account eosio seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
-#cleos create account eosio tokenacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
 # * Replace "seclogacc" by your own account name when you start your own project
 
 echo "=== create system accounts ==="
@@ -100,6 +99,15 @@ echo "=== create smartaccount ==="
 cleos system newaccount eosio --transfer smartaccount EOS7XPiPuL3jbgpfS3FFmjtXK62Th9n2WZdvJb6XLygAghfx1W7Nb \
 --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 138675
 
+echo "=== create accountmaker ==="
+cleos system newaccount eosio --transfer accountmaker EOS7XPiPuL3jbgpfS3FFmjtXK62Th9n2WZdvJb6XLygAghfx1W7Nb \
+--stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 138675
+
+echo "=== give eosio.code permission to accountmaker ==="
+cleos set account permission accountmaker active \
+'{"threshold": 1,"keys": [{"key": "EOS7XPiPuL3jbgpfS3FFmjtXK62Th9n2WZdvJb6XLygAghfx1W7Nb","weight": 1}],"accounts": [{"permission":{"actor":"accountmaker","permission":"eosio.code"},"weight":1}]}' \
+owner -p accountmaker
+
 echo "=== deploy smart contract ==="
 # $1 smart contract name
 # $2 account holder name of the smart contract
@@ -107,6 +115,7 @@ echo "=== deploy smart contract ==="
 # $4 password for unlocking the wallet
 #deploy_contract.sh seclogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
 deploy_contract.sh chestnut smartaccount securitylogicwal $(cat securitylogic_wallet_password.txt)
+deploy_contract.sh accountmaker accountmaker securitylogicwal $(cat securitylogic_wallet_password.txt)
 
 echo "=== give accounts tokens ==="
 cleos push action eosio.token transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio
@@ -114,6 +123,8 @@ cleos push action eosio.token transfer '[ "eosio", "smartaccount", "10000.0000 E
 
 echo "=== run the smart account contract ==="
 run_smart_account.sh
+sleep 1
+run_accountmaker.sh
 
 echo "=== end of setup blockchain accounts and smart contract ==="
 # create a file to indicate the blockchain has been initialized
