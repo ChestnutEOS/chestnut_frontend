@@ -290,7 +290,9 @@ export default class extends Component {
 					</div>
 				)}
 
-				{pageView === 4 && <Preferences />}
+				{pageView === 4 && (
+					<Preferences addRuleClicked={() => this.goTo(1)} />
+				)}
 			</div>
 		);
 	}

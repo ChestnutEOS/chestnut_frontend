@@ -26,11 +26,15 @@ export default class extends Component {
 			ruleInput,
 			modifyButton,
 			checked,
-			empty
+			empty,
+			addRuleClicked
 		} = this.props;
 		if (empty)
 			return (
-				<Card style={styles.emptyRuleCardContainer}>
+				<Card
+					style={styles.emptyRuleCardContainer}
+					onClick={addRuleClicked}
+				>
 					<Typography
 						variant="body1"
 						style={styles.addRuleText}

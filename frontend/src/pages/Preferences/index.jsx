@@ -270,7 +270,7 @@ class Preferences extends Component {
                 // modifyButton
                 checked={false}
               />
-              <RuleCard empty />
+              <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
             </div>
           </div>
         </div>
