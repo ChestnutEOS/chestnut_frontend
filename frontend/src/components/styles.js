@@ -25,7 +25,8 @@ export default {
 	},
 	headerLogo: {
 		height: 75,
-		marginRight: 50
+		marginRight: 50,
+		cursor: "pointer"
 	},
 	headerNavText: {
 		margin: 40,

@@ -10,7 +10,11 @@ class Header extends Component {
 		return (
 			<Toolbar style={styles.headerContainer}>
 				<div style={styles.headerLeft}>
-					<img src="chestnut_logo.png" style={styles.headerLogo} />
+					<img
+						src="chestnut_logo.png"
+						onClick={() => this.props.goTo(-1)}
+						style={styles.headerLogo}
+					/>
 					<div style={styles.selectedHeaderNavText}>dashboard</div>
 					<div style={styles.headerNavText}>explore rules</div>
 					<div style={styles.headerNavText}>view all activity</div>

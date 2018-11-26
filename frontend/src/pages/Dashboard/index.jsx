@@ -36,6 +36,10 @@ export default class extends Component {
 		this.setState({ pageView: this.state.pageView + 1 });
 	};
 
+	goTo = pageView => {
+		this.setState({ pageView });
+	};
+
 	selectRule = () => {
 		this.setState({ pageView: this.state.pageView + 1 });
 	};
@@ -101,6 +105,7 @@ export default class extends Component {
 				<Header
 					userName={accounts[0].name}
 					userKey={accounts[0].publicKey}
+					goTo={this.goTo}
 				/>
 				{pageView < 4 &&
 					pageView > 1 && (
