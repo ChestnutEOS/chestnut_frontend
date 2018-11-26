@@ -9,6 +9,7 @@ import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import ArrowLeft from "@material-ui/icons/ArrowBackIos";
 
 import Preferences from "../Preferences";
 import Header from "../../components/Header";
@@ -109,7 +110,10 @@ export default class extends Component {
 				/>
 				{pageView < 4 &&
 					pageView > 1 && (
-						<img style={styles.backButton} src="backButton.svg" />
+						<Button style={styles.backButton} onClick={this.goBack}>
+							<ArrowLeft />
+							<div style={styles.backText}>Back</div>
+						</Button>
 					)}
 				{pageView === 0 && (
 					<div style={styles.contentContainer}>

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^1.5.1",
+    "@material-ui/icons": "*",
     "eosjs": "16.0.7",
     "moment": "^2.22.2",
     "react": "^16.4.2",
