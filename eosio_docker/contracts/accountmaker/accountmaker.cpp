@@ -181,6 +181,8 @@ CONTRACT accountmaker : public eosio::contract {
       // (N(eosio), {{_self, N(active)}}, {_self, account_to_create, net, cpu, 1});
 
       // fee
+      // TODO: ADD FEE ACTION HERE
+
       // INLINE_ACTION_SENDER(eosio::token, transfer)
       // (N(eosio.token), {{_self, N(active)}},
       //  {_self, string_to_name("saccountfees"), fee,
