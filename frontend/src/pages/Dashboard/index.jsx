@@ -13,6 +13,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Preferences from "../Preferences";
 import Header from "../../components/Header";
 import RuleCard from "../../components/RuleCard";
+import LandingPage from "../LandingPage";
 
 import styles from "./styles";
 import accounts from "../../accounts";
@@ -93,11 +94,7 @@ export default class extends Component {
 		const { pageView, spend_max, per_period } = this.state;
 		if (pageView === -1)
 			return (
-				<img
-					style={styles.landingPage}
-					onClick={() => this.setState({ pageView: 0 })}
-					src="landingPage.jpg"
-				/>
+				<LandingPage goClicked={() => this.setState({ pageView: 0 })} />
 			);
 		return (
 			<div>
