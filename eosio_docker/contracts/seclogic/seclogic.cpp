@@ -1,12 +1,14 @@
 #include <eosiolib/eosio.hpp>
+#include <eosiolib/time.hpp>
 #include <eosiolib/print.hpp>
+
 using namespace eosio;
 
 // Smart Contract Name: seclogic
 // Table struct:
 //   prefstruct: multi index table to store the preferences
 //     prim_key(uint64): primary key
-//     user(account_name/uint64): account name for the user
+//     user(name/uint64): account name for the user
 //     spend_max(uint64): Max amount that can be spent in a single transaction
 //     timestamp(uint64): the store the last update block time
 // Public method:
@@ -15,46 +17,54 @@ using namespace eosio;
 //   update => put the spend_max into the multi-index table and sign by the given account
 
 // Replace the contract class name when you start your own project
-class seclogic : public eosio::contract {
+CONTRACT seclogic : public eosio::contract {
   private:
-    bool isnewuser( account_name user ) {
-      pref_table pref_obj(_self, _self);
+
+    time_point current_time_point() {
+      const static time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+      return ct;
+    }
+
+    bool isnewuser( name user ) {
       // get object by secordary key
-      auto preferences = pref_obj.get_index<N(getbyuser)>();
-      auto user_prefs = preferences.find(user);
+      pref_table _pref_obj( _self, _self.value );
+
+      auto preferences = _pref_obj.get_index<name("getbyuser")>();
+      auto user_prefs = preferences.find(user.value);
 
       return user_prefs == preferences.end();
     }
 
-    /// @abi table
-    struct prefstruct {
+    TABLE prefstruct {
       uint64_t      prim_key;  // primary key
-      account_name  user;      // account name for the user
+      name          user;      // account name for the user
       uint64_t      spend_max; // max amount that can be spent in a single transaction
       uint64_t      trans_max; // max number of transactions over time period
       std::string   time_period; // time period over which transactions are limited by trans_max
-      uint64_t      timestamp; // the store the last update block time
+      time_point    timestamp; // the store the last update block time
 
       // primary key
       auto primary_key() const { return prim_key; }
       // secondary key: user
-      account_name get_by_user() const { return user; }
+      uint64_t get_by_user() const { return user.value; }
     };
 
     // create a multi-index table and support secondary key
-    typedef eosio::multi_index< N(prefstruct), prefstruct,
-      indexed_by< N(getbyuser), const_mem_fun<prefstruct, account_name, &prefstruct::get_by_user> >
+    typedef eosio::multi_index< name("prefstruct"), prefstruct,
+            indexed_by< name("getbyuser"), const_mem_fun<prefstruct, uint64_t, &prefstruct::get_by_user> >
       > pref_table;
 
   public:
     using contract::contract;
 
-    /// @abi action
-    void update( account_name _user, uint64_t& _spend_max, uint64_t& _trans_max ) {
+    seclogic( name receiver, name code, datastream<const char*> ds ):
+               contract( receiver, code, ds ) {}
+
+    ACTION update( name _user, uint64_t& _spend_max, uint64_t& _trans_max ) {
       // to sign the action with the given account
       require_auth( _user );
 
-      pref_table obj(_self, _self); // code, scope
+      pref_table obj(_self, _self.value); // code, scope
 
       // create new / update spend_max depends whether the user account exist or not
       if (isnewuser(_user)) {
@@ -64,23 +74,23 @@ class seclogic : public eosio::contract {
           address.user        = _user;
           address.spend_max   = _spend_max;
           address.trans_max   = _trans_max;
-          address.timestamp   = now();
+          address.timestamp   = current_time_point();
         });
       } else {
         // get object by secordary key and modify
-        auto preferences = obj.get_index<N(getbyuser)>();
-        auto &user_prefs = preferences.get(_user);
+        auto preferences = obj.get_index<name("getbyuser")>();
+        auto &user_prefs = preferences.get(_user.value);
         // update object
         obj.modify( user_prefs, _self, [&]( auto& address ) {
           address.spend_max   = _spend_max;
           address.trans_max   = _trans_max;
-          address.timestamp   = now();
+          address.timestamp   = current_time_point();
         });
       }
     }
 
     // /// @abi action
-    // bool approveTransaction( account_name _user, uint64_t& _spent ) {
+    // bool approveTransaction( name _user, uint64_t& _spent ) {
     //   // to sign the action with the given account
     //   require_auth( _user );
 
@@ -102,4 +112,4 @@ class seclogic : public eosio::contract {
 };
 
 // specify the contract name, and export a public action: update
-EOSIO_ABI( seclogic, (update) )
+EOSIO_DISPATCH( seclogic, (update) )

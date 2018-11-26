@@ -57,7 +57,8 @@ cleos wallet import -n securitylogicwal --private-key 5KE2UNPCZX5QepKcLpLXVCLdAw
 # * Replace "securitylogicwal" by your own wallet name when you start your own project
 
 # create account for seclogacc with above wallet's public keys
-cleos create account eosio seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+# cleos create account eosio seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9
+# MOVING THIS DOWN BELOW AFTER BOOTING THE SYSTEM CONTRACT
 # * Replace "seclogacc" by your own account name when you start your own project
 
 echo "=== create system accounts ==="
@@ -108,17 +109,23 @@ cleos set account permission accountmaker active \
 '{"threshold": 1,"keys": [{"key": "EOS7XPiPuL3jbgpfS3FFmjtXK62Th9n2WZdvJb6XLygAghfx1W7Nb","weight": 1}],"accounts": [{"permission":{"actor":"accountmaker","permission":"eosio.code"},"weight":1}]}' \
 owner -p accountmaker
 
+echo "=== create seclogacc ==="
+cleos system newaccount eosio --transfer seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSHLRxLMcRdwHZZRL4tpbtvia5B \
+EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9 \
+--stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 138675
+
 echo "=== deploy smart contract ==="
 # $1 smart contract name
 # $2 account holder name of the smart contract
 # $3 wallet for unlock the account
 # $4 password for unlocking the wallet
-#deploy_contract.sh seclogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
+deploy_contract.sh seclogic seclogacc securitylogicwal $(cat securitylogic_wallet_password.txt)
 deploy_contract.sh chestnut smartaccount securitylogicwal $(cat securitylogic_wallet_password.txt)
 deploy_contract.sh accountmaker accountmaker securitylogicwal $(cat securitylogic_wallet_password.txt)
 
 echo "=== give accounts tokens ==="
 cleos push action eosio.token transfer '[ "eosio", "daniel", "10000.0000 EOS", "memo"]' -p eosio
+cleos push action eosio.token transfer '[ "eosio", "seclogacc", "10000.0000 EOS", "memo"]' -p eosio
 cleos push action eosio.token transfer '[ "eosio", "smartaccount", "10000.0000 EOS", "memo"]' -p eosio smartaccount
 
 echo "=== run the smart account contract ==="
