@@ -14,10 +14,12 @@ import ArrowLeft from "@material-ui/icons/ArrowBackIos";
 import Preferences from "../Preferences";
 import Header from "../../components/Header";
 import RuleCard from "../../components/RuleCard";
+import SetParameter from "../../components/SetParameter";
 import LandingPage from "../LandingPage";
 
 import styles from "./styles";
 import accounts from "../../accounts";
+import ruleOptions from "../../options/ruleOptions";
 
 export default class extends Component {
 	constructor(props) {
@@ -150,109 +152,24 @@ export default class extends Component {
 							STEP {pageView} OF 3
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
-							<button
-								style={styles.buttonWrapper}
-								onClick={this.selectRule}
-							>
-								<RuleCard
-									text="Spending Limit"
-									icon="dollarCircle.png"
-								/>
-							</button>
-							<button
-								style={styles.buttonWrapper}
-								onClick={this.selectRule}
-							>
-								<RuleCard
-									text="Number of Transactions"
-									icon="clock.png"
-									onClick={this.selectRule}
-								/>
-							</button>
-							<button
-								style={styles.buttonWrapper}
-								onClick={this.selectRule}
-							>
-								<RuleCard
-									text="Whitelisted Accounts"
-									icon="checklist.png"
-									onClick={this.selectRule}
-								/>
-							</button>
-							<button
-								style={styles.buttonWrapper}
-								onClick={this.selectRule}
-							>
-								<RuleCard
-									text="Balance Notifications"
-									icon="dollarStack.png"
-									onClick={this.selectRule}
-								/>
-							</button>
+							{ruleOptions.map(item => {
+								return (
+									<button
+										style={styles.buttonWrapper}
+										onClick={this.selectRule}
+									>
+										<RuleCard
+											text={item.text}
+											icon={item.icon}
+										/>
+									</button>
+								);
+							})}
 						</div>
 					</div>
 				)}
 
-				{pageView === 2 && (
-					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Set parameters</div>
-						<Typography
-							variant="body1"
-							style={styles.stepText}
-							component="h3"
-						>
-							STEP {pageView} OF 3
-						</Typography>
-						<Typography
-							variant="subheading"
-							style={styles.parameterHeading}
-							component="h2"
-						>
-							Spending Limit
-						</Typography>
-						<div style={styles.inputContainer}>
-							<FormControl style={styles.formControl}>
-								<Input
-									name="spend_max"
-									type="number"
-									onChange={this.valueChange}
-									value={spend_max}
-									startAdornment={
-										<InputAdornment position="start">
-											EOS
-										</InputAdornment>
-									}
-								/>
-							</FormControl>
-							<FormControl style={styles.formControl}>
-								<Select
-									value={per_period}
-									onChange={this.valueChange}
-									inputProps={{
-										name: "per_period",
-										id: "per_period",
-										style: { textAlign: "center" }
-									}}
-								>
-									<MenuItem value={"day"}>Per Day</MenuItem>
-									<MenuItem value={"month"}>
-										Per Month
-									</MenuItem>
-									<MenuItem value={"year"}>Per Year</MenuItem>
-								</Select>
-							</FormControl>
-						</div>
-						<Button
-							color="secondary"
-							variant="contained"
-							size="large"
-							style={styles.orangeButton}
-							onClick={this.goForward}
-						>
-							Set Parameter
-						</Button>
-					</div>
-				)}
+				{pageView === 2 && <SetParameter goForward={this.goForward} />}
 
 				{pageView === 3 && (
 					<div style={styles.contentContainer}>
