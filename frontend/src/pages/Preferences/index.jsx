@@ -74,6 +74,8 @@ class Preferences extends Component {
   componentDidUpdate(props) {
     if (this.props != props) {
       this.getBalance();
+      this.getAccountInfo();
+      this.getActions();
     }
   }
 
@@ -158,6 +160,30 @@ class Preferences extends Component {
     //   "EOS"
     // );
     // this.setState({ tokenBalance });
+  };
+
+  getAccountInfo = () => {
+    const { eosio, account } = this.props;
+    if (!account || !eosio) return;
+    let accountName = account.name;
+    eosio.rpc.get_account(accountName).then(result => {
+      console.log(result);
+    });
+  };
+
+  // Need to use /history instead of /chain
+  // Check out network activity at https://jungle.bloks.io/account/chestnutdemo
+  getActions = () => {
+    const { eosio, account } = this.props;
+    if (!account || !eosio) return;
+    let accountName = account.name;
+    eosio.rpc.history_get_actions(accountName).then(result => {
+      console.log(result);
+    });
+    console.log(eosio.eos);
+    // eosio.eos.history_get_actions(accountName).then(result => {
+    //   console.log(result);
+    // });
   };
 
   sendEos = async event => {

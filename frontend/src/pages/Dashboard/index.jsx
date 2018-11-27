@@ -89,11 +89,11 @@ export default class extends Component {
 		// 		return;
 		// }
 
-		const eos = Eos({ keyProvider: privateKey });
-		const result = await eos.transaction({
+		// const eos = Eos({ keyProvider: privateKey });
+		const result = await this.eosio.transaction({
 			actions: [
 				{
-					account: "seclogacc",
+					account: "chestnut",
 					name: actionName,
 					authorization: [
 						{
