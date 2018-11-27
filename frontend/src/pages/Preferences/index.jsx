@@ -15,6 +15,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import styles from "./styles";
 import accounts from "../../accounts";
@@ -180,7 +181,9 @@ class Preferences extends Component {
     const { eosio, account } = this.props;
     if (!account || !eosio) return;
     let accountName = account.name;
-    eosio.rpc.history_get_actions(accountName, -1, -100).then(result => {
+
+    // Only pull last 50 transactions
+    eosio.rpc.history_get_actions(accountName, -1, -50).then(result => {
       let actions = result.actions.sort((a, b) => {
         return b.account_action_seq - a.account_action_seq;
       });
@@ -288,7 +291,9 @@ class Preferences extends Component {
       <div style={styles.preferencesContainer}>
         <div style={styles.leftContainer}>
           <div style={styles.freezeWrapper}>
-            <img style={styles.questionMark} src="questionMark.png" />
+            <Tooltip title="Temporarily freeze your account and prevent any transactions from happening!">
+              <img style={styles.questionMark} src="questionMark.png" />
+            </Tooltip>
             <Typography
               style={styles.freezeText}
               variant="subheading"
@@ -299,7 +304,9 @@ class Preferences extends Component {
             <Switch />
           </div>
           <div style={styles.leftContent}>
-            <img style={styles.questionMarkTitle} src="questionMark.png" />
+            <Tooltip title="Protect your account by setting your own rules. You are your own bank!">
+              <img style={styles.questionMarkTitle} src="questionMark.png" />
+            </Tooltip>
             <div style={styles.contentTitle}>My rules</div>
             <div style={styles.ruleCardContainer}>
               <RuleCard
