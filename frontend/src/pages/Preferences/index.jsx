@@ -71,6 +71,12 @@ class Preferences extends Component {
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
 
+  componentDidUpdate(props) {
+    if (this.props != props) {
+      this.getBalance();
+    }
+  }
+
   async handleFormEvent(event) {
     event.preventDefault();
     let account = accounts[0].name;
@@ -114,79 +120,86 @@ class Preferences extends Component {
     this.getTable();
   }
   getTable = () => {
-    const eos = Eos();
-    eos
-      .getTableRows({
-        json: true,
-        code: "seclogacc", // contract who owns the table
-        scope: "seclogacc", // scope of the table
-        table: "prefstruct", // name of the table as specified by the contract abi
-        limit: 100
-      })
-      .then(result => {
-        console.log(result);
-        if (!result || !result.rows || !result.rows[0]) return;
-        this.setState({
-          prefTable: result.rows,
-          spend_max: result.rows[0].spend_max,
-          trans_max: result.rows[0].trans_max ? result.rows[0].trans_max : 10
-        });
-      });
+    // const eos = Eos();
+    // eos
+    //   .getTableRows({
+    //     json: true,
+    //     code: "seclogacc", // contract who owns the table
+    //     scope: "seclogacc", // scope of the table
+    //     table: "prefstruct", // name of the table as specified by the contract abi
+    //     limit: 100
+    //   })
+    //   .then(result => {
+    //     console.log(result);
+    //     if (!result || !result.rows || !result.rows[0]) return;
+    //     this.setState({
+    //       prefTable: result.rows,
+    //       spend_max: result.rows[0].spend_max,
+    //       trans_max: result.rows[0].trans_max ? result.rows[0].trans_max : 10
+    //     });
+    //   });
   };
 
-  getBalance = async () => {
-    let account = accounts[0].name;
-    let privateKey = accounts[0].privateKey;
-    const eos = Eos({ keyProvider: privateKey });
-    const tokenBalance = await eos.getCurrencyBalance(
-      "tokenacc",
-      account,
-      "EOS"
-    );
-    this.setState({ tokenBalance });
+  getBalance = () => {
+    const { eosio, account } = this.props;
+    if (!account || !eosio) return;
+    let accountName = account.name;
+    eosio.rpc
+      .get_currency_balance("eosio.token", accountName, "EOS")
+      .then(result => {
+        console.log(result);
+        this.setState({ tokenBalance: result[0] });
+      });
+    // let privateKey = accounts[0].privateKey;
+    // const eos = Eos({ keyProvider: privateKey });
+    // const tokenBalance = await eos.getCurrencyBalance(
+    //   "tokenacc",
+    //   account,
+    //   "EOS"
+    // );
+    // this.setState({ tokenBalance });
   };
 
   sendEos = async event => {
-    event.preventDefault();
-    let account = accounts[0].name;
-    let privateKey = accounts[0].privateKey;
-    const eos = Eos({ keyProvider: privateKey });
-    const toSend = this.state.eosToSend * 1;
-    const data =
-      this.state.prefTable && this.state.prefTable[0]
-        ? this.state.prefTable[0]
-        : null;
-
-    if (data && data.spend_max && toSend > data.spend_max * 1)
-      return alert(
-        "This exceeds your maximum spend threshold.  Transaction denied."
-      ); // Not the long-term way of doing this
-    await eos.transaction(
-      {
-        // ...headers,
-        // context_free_actions: [],
-        actions: [
-          {
-            account: "tokenacc",
-            name: "transfer",
-            authorization: [
-              {
-                actor: account,
-                permission: "active"
-              }
-            ],
-            data: {
-              from: account,
-              to: accounts[1].name,
-              quantity: `${toSend.toFixed(4)} EOS`,
-              memo: ""
-            }
-          }
-        ]
-      }
-      // config -- example: {broadcast: false, sign: true}
-    );
-    this.getBalance();
+    // event.preventDefault();
+    // let account = accounts[0].name;
+    // let privateKey = accounts[0].privateKey;
+    // const eos = Eos({ keyProvider: privateKey });
+    // const toSend = this.state.eosToSend * 1;
+    // const data =
+    //   this.state.prefTable && this.state.prefTable[0]
+    //     ? this.state.prefTable[0]
+    //     : null;
+    // if (data && data.spend_max && toSend > data.spend_max * 1)
+    //   return alert(
+    //     "This exceeds your maximum spend threshold.  Transaction denied."
+    //   ); // Not the long-term way of doing this
+    // await eos.transaction(
+    //   {
+    //     // ...headers,
+    //     // context_free_actions: [],
+    //     actions: [
+    //       {
+    //         account: "tokenacc",
+    //         name: "transfer",
+    //         authorization: [
+    //           {
+    //             actor: account,
+    //             permission: "active"
+    //           }
+    //         ],
+    //         data: {
+    //           from: account,
+    //           to: accounts[1].name,
+    //           quantity: `${toSend.toFixed(4)} EOS`,
+    //           memo: ""
+    //         }
+    //       }
+    //     ]
+    //   }
+    //   // config -- example: {broadcast: false, sign: true}
+    // );
+    // this.getBalance();
   };
 
   componentDidMount() {
@@ -300,8 +313,8 @@ class Preferences extends Component {
             >
               Activity
             </Typography>
-            {activities.map(item => {
-              return <ActivityItem item={item} />;
+            {activities.map((item, index) => {
+              return <ActivityItem key={index} item={item} />;
             })}
           </div>
         </div>

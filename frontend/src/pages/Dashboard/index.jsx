@@ -267,7 +267,11 @@ export default class extends Component {
 				)}
 
 				{pageView === 4 && (
-					<Preferences addRuleClicked={() => this.goTo(1)} />
+					<Preferences
+						addRuleClicked={() => this.goTo(1)}
+						eosio={this.eosio}
+						account={account}
+					/>
 				)}
 			</div>
 		);

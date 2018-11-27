@@ -16,6 +16,10 @@ Our service will be a subscription based model, with freemium/ premium offerings
 
 Chestnut will provide the peace of mind that so many blockchain curious members of the general public desire before taking the leap into the world of crypto assets.
 
+# To deploy to Heroku
+
+`git subtree push --prefix frontend heroku master`
+
 # Prerequisites
 
 Make sure Docker and Node.js are installed
