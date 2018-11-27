@@ -13,9 +13,31 @@ iconSrc: "success.png",
 */
 
 export default class extends Component {
+	renderText = info => {
+		if (info.data.memo)
+			return (
+				info.data.memo.charAt(0).toUpperCase() + info.data.memo.slice(1)
+			);
+		if (info.name === "transfer")
+			return (
+				info.name.charAt(0).toUpperCase() +
+				info.name.slice(1) +
+				" to " +
+				info.data.to
+			);
+		// if (info.name === "buyrambytes")
+		// return "Buy " + info.data.bytes + " bytes";
+		if (info.name === "voteproducer")
+			return "Voted for " + info.data.producers[0];
+		if (info.name)
+			return info.name.charAt(0).toUpperCase() + info.name.slice(1);
+		// If none of the above apply
+		console.log(info);
+		return "";
+	};
+
 	render() {
 		const { item } = this.props;
-		console.log(item);
 		const actionTrace = item.action_trace;
 		const info = actionTrace.act;
 		return (
@@ -28,13 +50,7 @@ export default class extends Component {
 							style={styles.activityText}
 							component="h2"
 						>
-							{info.data.memo
-								? info.data.memo
-								: info.name === "transfer"
-									? info.name + " to " + info.data.to
-									: info.name === "buyrambytes"
-										? "Buy " + info.data.bytes + " bytes"
-										: ""}
+							{this.renderText(info)}
 						</Typography>
 						<Typography
 							variant="body1"

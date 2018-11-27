@@ -21,6 +21,8 @@ import accounts from "../../accounts";
 import RuleCard from "../../components/RuleCard";
 import ActivityItem from "../../components/ActivityItem";
 
+let activitySanitizer = {};
+
 class Preferences extends Component {
   constructor(props) {
     super(props);
@@ -178,9 +180,12 @@ class Preferences extends Component {
     const { eosio, account } = this.props;
     if (!account || !eosio) return;
     let accountName = account.name;
-    eosio.rpc.history_get_actions(accountName).then(result => {
-      console.log(result);
-      this.setState({ actions: result.actions });
+    eosio.rpc.history_get_actions(accountName, -1, -100).then(result => {
+      let actions = result.actions.sort((a, b) => {
+        return b.account_action_seq - a.account_action_seq;
+      });
+
+      this.setState({ actions });
     });
     // eosio.eos.history_get_actions(accountName).then(result => {
     //   console.log(result);
@@ -344,6 +349,15 @@ class Preferences extends Component {
               Activity
             </Typography>
             {actions.map((item, index) => {
+              if (
+                activitySanitizer[item.action_trace.receipt.act_digest] ||
+                item.action_trace.act.name === "buyrambytes" ||
+                item.action_trace.act.name === "sellram"
+              )
+                return null;
+              {
+                activitySanitizer[item.action_trace.receipt.act_digest] = true;
+              }
               return <ActivityItem key={index} item={item} />;
             })}
           </div>
