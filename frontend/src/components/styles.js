@@ -34,6 +34,7 @@ export default {
 		fontSize: 14,
 		fontFamily: nexa,
 		letterSpacing: 1.5,
+		borderBottom: "3px solid black",
 		cursor: "pointer"
 	},
 	selectedHeaderNavText: {

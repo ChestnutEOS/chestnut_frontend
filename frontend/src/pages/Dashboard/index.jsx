@@ -142,6 +142,7 @@ export default class extends Component {
 					userKey={account ? account.publicKey : null}
 					goTo={this.goTo}
 					attachAccount={this.attachAccount}
+					pageView={pageView}
 				/>
 				{pageView < 4 &&
 					pageView > 1 && (

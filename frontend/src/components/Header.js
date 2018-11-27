@@ -8,6 +8,7 @@ import styles from "./styles";
 
 class Header extends Component {
 	render() {
+		const { userName, userKey, attachAccount, pageView } = this.props;
 		return (
 			<Toolbar style={styles.headerContainer}>
 				<div style={styles.headerLeft}>
@@ -17,7 +18,12 @@ class Header extends Component {
 						style={styles.headerLogo}
 					/>
 					<div
-						style={styles.selectedHeaderNavText}
+						// style={styles.selectedHeaderNavText}
+						style={
+							pageView === 4
+								? styles.selectedHeaderNavText
+								: styles.headerNavText
+						}
 						onClick={() => this.props.goTo(4)}
 					>
 						dashboard
@@ -27,20 +33,16 @@ class Header extends Component {
 				</div>
 				<div style={styles.headerRight}>
 					<div style={styles.rightTextContainer}>
-						{this.props.userName ? (
+						{userName ? (
 							<div>
-								<div style={styles.nameText}>
-									{this.props.userName}
-								</div>
-								<div style={styles.keyText}>
-									{this.props.userKey}
-								</div>
+								<div style={styles.nameText}>{userName}</div>
+								<div style={styles.keyText}>{userKey}</div>
 							</div>
 						) : (
 							<div>
 								<Button
 									style={styles.attachAccount}
-									onClick={this.props.attachAccount}
+									onClick={attachAccount}
 								>
 									Attach Existing Account
 								</Button>
