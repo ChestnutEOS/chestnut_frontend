@@ -44,5 +44,8 @@ export default {
 	},
 	backText: {
 		paddingTop: 2
+	},
+	cancelButton: {
+		cursor: "pointer"
 	}
 };

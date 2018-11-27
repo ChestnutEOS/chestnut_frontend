@@ -11,6 +11,8 @@
     "react-dom": "^16.4.2",
     "react-scripts": "^1.1.5",
     "scatter-js": "^2.5.2",
+    "scatterjs-core": "^2.3.8",
+    "scatterjs-plugin-eosjs2": "^1.1.6",
     "styled-components": "^4.1.1"
   },
   "scripts": {

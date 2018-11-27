@@ -13,12 +13,13 @@ import ArrowLeft from "@material-ui/icons/ArrowBackIos";
 
 import styles from "./styles";
 import accounts from "../accounts";
+import ruleOptions from "../options/ruleOptions";
 
 export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			spend_max: "",
+			input: "",
 			per_period: "month"
 		};
 	}
@@ -28,8 +29,8 @@ export default class extends Component {
 	};
 
 	render() {
-		const { spend_max, per_period } = this.state;
-		const { goForward } = this.props;
+		const { input, per_period } = this.state;
+		const { goForward, selectedRuleIndex } = this.props;
 		return (
 			<div style={styles.contentContainer}>
 				<div style={styles.contentTitle}>Set parameters</div>
@@ -45,37 +46,41 @@ export default class extends Component {
 					style={styles.parameterHeading}
 					component="h2"
 				>
-					Spending Limit
+					{ruleOptions[selectedRuleIndex].text}
 				</Typography>
 				<div style={styles.inputContainer}>
 					<FormControl style={styles.formControl}>
 						<Input
-							name="spend_max"
+							name="input"
 							type="number"
 							onChange={this.valueChange}
-							value={spend_max}
+							value={input}
 							startAdornment={
-								<InputAdornment position="start">
-									EOS
-								</InputAdornment>
+								selectedRuleIndex === 0 ? (
+									<InputAdornment position="start">
+										EOS
+									</InputAdornment>
+								) : null
 							}
 						/>
 					</FormControl>
-					<FormControl style={styles.formControl}>
-						<Select
-							value={per_period}
-							onChange={this.valueChange}
-							inputProps={{
-								name: "per_period",
-								id: "per_period",
-								style: { textAlign: "center" }
-							}}
-						>
-							<MenuItem value={"day"}>Per Day</MenuItem>
-							<MenuItem value={"month"}>Per Month</MenuItem>
-							<MenuItem value={"year"}>Per Year</MenuItem>
-						</Select>
-					</FormControl>
+					{(selectedRuleIndex === 0 || selectedRuleIndex === 1) && (
+						<FormControl style={styles.formControl}>
+							<Select
+								value={per_period}
+								onChange={this.valueChange}
+								inputProps={{
+									name: "per_period",
+									id: "per_period",
+									style: { textAlign: "center" }
+								}}
+							>
+								<MenuItem value={"day"}>Per Day</MenuItem>
+								<MenuItem value={"month"}>Per Month</MenuItem>
+								<MenuItem value={"year"}>Per Year</MenuItem>
+							</Select>
+						</FormControl>
+					)}
 				</div>
 				<Button
 					color="secondary"
@@ -90,4 +95,3 @@ export default class extends Component {
 		);
 	}
 }
-

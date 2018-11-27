@@ -44,8 +44,8 @@ class EOSIOClient extends React.Component {
 					);
 
 					// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
-					const rpc = new JsonRpc(endpoint);
-					this.eos = scatter.eos(network, Api, { rpc });
+					// const rpc = new JsonRpc(endpoint);
+					// this.eos = scatter.eos(network, Api, { rpc });
 				});
 
 				window.ScatterJS = null;

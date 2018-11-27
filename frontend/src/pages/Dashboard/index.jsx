@@ -18,8 +18,10 @@ import SetParameter from "../../components/SetParameter";
 import LandingPage from "../LandingPage";
 
 import styles from "./styles";
-import accounts from "../../accounts";
+// import accounts from "../../accounts";
 import ruleOptions from "../../options/ruleOptions";
+
+import EOSIOClient from "../../utils/eosio-client";
 
 export default class extends Component {
 	constructor(props) {
@@ -27,9 +29,18 @@ export default class extends Component {
 		this.state = {
 			pageView: -1,
 			spend_max: "",
-			per_period: "month"
+			per_period: "month",
+			selectedRuleIndex: null
 		};
+
+		this.eosio = { account: { name: "" } };
+		// this.eosio = new EOSIOClient("chestnut");
 	}
+
+	goHome = () => {
+		this.setState({ pageView: 0 });
+		this.eosio = new EOSIOClient("chestnut");
+	};
 
 	goBack = () => {
 		this.setState({ pageView: this.state.pageView - 1 });
@@ -43,8 +54,8 @@ export default class extends Component {
 		this.setState({ pageView });
 	};
 
-	selectRule = () => {
-		this.setState({ pageView: this.state.pageView + 1 });
+	selectRule = selectedRuleIndex => {
+		this.setState({ pageView: this.state.pageView + 1, selectedRuleIndex });
 	};
 
 	valueChange = event => {
@@ -53,8 +64,10 @@ export default class extends Component {
 
 	setParameter = async event => {
 		event.preventDefault();
-		let account = accounts[0].name;
-		let privateKey = accounts[0].privateKey;
+		// let account = accounts[0].name;
+		// let privateKey = accounts[0].privateKey;
+		let account = this.eosio.account.name;
+		let privateKey = null;
 		let spend_max = this.state.spend_max;
 		let trans_max = 0;
 
@@ -97,18 +110,30 @@ export default class extends Component {
 		// this.getTable();
 	};
 
+	cancel = () => {
+		this.setState({ pageView: 1 });
+	};
+
+	attachAccount = () => {
+		this.eosio = new EOSIOClient("chestnut");
+	};
+
 	render() {
-		const { pageView, spend_max, per_period } = this.state;
-		if (pageView === -1)
-			return (
-				<LandingPage goClicked={() => this.setState({ pageView: 0 })} />
-			);
+		const {
+			pageView,
+			spend_max,
+			per_period,
+			selectedRuleIndex
+		} = this.state;
+
+		if (pageView === -1) return <LandingPage goClicked={this.goForward} />;
 		return (
 			<div>
 				<Header
-					userName={accounts[0].name}
-					userKey={accounts[0].publicKey}
+					userName={this.eosio.account.name}
+					userKey={"Hi"}
 					goTo={this.goTo}
+					attachAccount={this.attachAccount}
 				/>
 				{pageView < 4 &&
 					pageView > 1 && (
@@ -152,11 +177,12 @@ export default class extends Component {
 							STEP {pageView} OF 3
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
-							{ruleOptions.map(item => {
+							{ruleOptions.map((item, index) => {
 								return (
 									<button
 										style={styles.buttonWrapper}
-										onClick={this.selectRule}
+										onClick={() => this.selectRule(index)}
+										key={index}
 									>
 										<RuleCard
 											text={item.text}
@@ -169,7 +195,12 @@ export default class extends Component {
 					</div>
 				)}
 
-				{pageView === 2 && <SetParameter goForward={this.goForward} />}
+				{pageView === 2 && (
+					<SetParameter
+						goForward={this.goForward}
+						selectedRuleIndex={selectedRuleIndex}
+					/>
+				)}
 
 				{pageView === 3 && (
 					<div style={styles.contentContainer}>
@@ -183,9 +214,9 @@ export default class extends Component {
 						</Typography>
 						<div style={styles.ruleCardsContainer}>
 							<RuleCard
-								text="Spending Limit"
+								text={ruleOptions[selectedRuleIndex].text}
 								ruleInput={`${spend_max} EOS / ${per_period}`}
-								icon="dollarCircle.png"
+								icon={ruleOptions[selectedRuleIndex].icon}
 							/>
 						</div>
 						<Button
@@ -197,13 +228,16 @@ export default class extends Component {
 						>
 							Turn Rule On
 						</Button>
-						<Typography
-							color="secondary"
-							variant="body1"
-							component="h2"
-						>
-							cancel
-						</Typography>
+						<Button onClick={this.cancel}>
+							<Typography
+								color="secondary"
+								variant="body1"
+								component="h2"
+								style={styles.cancelButton}
+							>
+								cancel
+							</Typography>
+						</Button>
 					</div>
 				)}
 

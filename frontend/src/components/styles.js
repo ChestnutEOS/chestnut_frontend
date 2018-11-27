@@ -33,7 +33,8 @@ export default {
 		color: whiteColor,
 		fontSize: 14,
 		fontFamily: nexa,
-		letterSpacing: 1.5
+		letterSpacing: 1.5,
+		cursor: "pointer"
 	},
 	selectedHeaderNavText: {
 		margin: 40,
@@ -41,7 +42,8 @@ export default {
 		fontSize: 14,
 		fontFamily: nexa,
 		letterSpacing: 1.5,
-		borderBottom: "3px solid #FF5B3F"
+		borderBottom: "3px solid #FF5B3F",
+		cursor: "pointer"
 	},
 	headerRight: {
 		display: "flex",
