@@ -14,25 +14,34 @@ iconSrc: "success.png",
 
 export default class extends Component {
 	render() {
-		const info = this.props.item;
+		const { item } = this.props;
+		console.log(item);
+		const actionTrace = item.action_trace;
+		const info = actionTrace.act;
 		return (
 			<div style={styles.activityContainer}>
 				<div style={styles.leftWrapper}>
-					<img src={info.iconSrc} style={styles.iconWrapper} />
+					<img src="success.png" style={styles.iconWrapper} />
 					<div style={styles.activityTextWrapper}>
 						<Typography
 							variant="body1"
 							style={styles.activityText}
 							component="h2"
 						>
-							{info.text}
+							{info.data.memo
+								? info.data.memo
+								: info.name === "transfer"
+									? info.name + " to " + info.data.to
+									: info.name === "buyrambytes"
+										? "Buy " + info.data.bytes + " bytes"
+										: ""}
 						</Typography>
 						<Typography
 							variant="body1"
 							style={styles.timestampText}
 							component="h2"
 						>
-							{moment(info.timestamp).format("LLL")}
+							{moment(item.block_time).format("LLL")}
 						</Typography>
 					</div>
 				</div>
@@ -42,19 +51,19 @@ export default class extends Component {
 						style={styles.amountText}
 						component="h2"
 					>
-						{info.amount} EOS
+						{info.data.quantity}
 					</Typography>
 
 					<Typography
 						variant="body1"
 						style={
-							info.status === "Approved"
+							actionTrace.trx_id
 								? styles.approvedText
 								: styles.rejectedText
 						}
 						component="h2"
 					>
-						{info.status}
+						{actionTrace.trx_id ? "Approved" : "Rejected"}
 					</Typography>
 				</div>
 			</div>

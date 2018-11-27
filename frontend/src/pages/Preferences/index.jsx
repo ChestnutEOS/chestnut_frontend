@@ -30,6 +30,7 @@ class Preferences extends Component {
       trans_max: 10,
       tokenBalance: 0,
       eosToSend: 3,
+      actions: [],
       activities: [
         {
           iconSrc: "success.png",
@@ -179,8 +180,8 @@ class Preferences extends Component {
     let accountName = account.name;
     eosio.rpc.history_get_actions(accountName).then(result => {
       console.log(result);
+      this.setState({ actions: result.actions });
     });
-    console.log(eosio.eos);
     // eosio.eos.history_get_actions(accountName).then(result => {
     //   console.log(result);
     // });
@@ -231,6 +232,8 @@ class Preferences extends Component {
   componentDidMount() {
     this.getTable();
     this.getBalance();
+    this.getAccountInfo();
+    this.getActions();
   }
 
   valueChange = event => {
@@ -244,7 +247,8 @@ class Preferences extends Component {
       trans_max,
       tokenBalance,
       eosToSend,
-      activities
+      activities,
+      actions
     } = this.state;
     // const { classes } = this.props;
 
@@ -320,7 +324,7 @@ class Preferences extends Component {
               style={styles.balanceText}
               component="h2"
             >
-              my balance
+              my EOS balance
             </Typography>
             <Typography
               variant="subheading"
@@ -339,7 +343,7 @@ class Preferences extends Component {
             >
               Activity
             </Typography>
-            {activities.map((item, index) => {
+            {actions.map((item, index) => {
               return <ActivityItem key={index} item={item} />;
             })}
           </div>
