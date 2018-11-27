@@ -20,13 +20,13 @@ export default {
 		fontSize: 40,
 		margin: 10,
 		marginBottom: 20,
-		marginTop: "20%",
+		marginTop: "10%",
 		fontFamily: fontFamilyHeavy
 	},
 	orangeButton: { margin: 10, borderRadius: 0, marginTop: 50, padding: 15 },
 	stepText: {
 		fontFamily: fontFamily,
-		marginBottom: 45,
+		marginBottom: 10,
 		fontWeight: 600
 	},
 	ruleCardsContainer: {
@@ -52,25 +52,29 @@ export default {
 		width: "100%",
 		display: "flex",
 		backgroundColor: "#E3E3E3",
-		margin: 25
+		margin: 25,
+		marginTop: 0
 	},
 	leftWrapper: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-between",
 		width: "45%",
-		padding: 15
+		padding: 15,
+		paddingTop: 35
 	},
 	leftItemWrapper: {
 		display: "flex",
 		justifyContent: "space-between",
-		alignItems: "center"
+		alignItems: "center",
+		paddingTop: 5,
+		paddingBottom: 5
 	},
 	leftSummaryWrapper: {
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingTop: 5,
+		paddingTop: 10,
 		borderTop: "1px solid darkgray"
 	},
 	rightItemWrapper: {

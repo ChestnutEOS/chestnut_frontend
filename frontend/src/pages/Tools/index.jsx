@@ -70,6 +70,11 @@ class Tools extends Component {
 					accountInfo.net_weight / 10000
 			  ).toFixed(4)} EOS`
 			: null;
+
+		const ramUsage = accountInfo
+			? (accountInfo.ram_usage / accountInfo.ram_quota) * 100
+			: 0;
+
 		return (
 			<div style={styles.rulesContainer}>
 				{pageView === 1 && (
@@ -151,7 +156,7 @@ class Tools extends Component {
 								<div style={styles.rightWrapper}>
 									<div style={styles.rightItemWrapper}>
 										<Typography
-											variant="subheading"
+											variant="body2"
 											component="h2"
 										>
 											RAM
@@ -164,11 +169,7 @@ class Tools extends Component {
 											}}
 										>
 											<LinearProgress
-												value={
-													(accountInfo.ram_usage /
-														accountInfo.ram_quota) *
-													100
-												}
+												value={ramUsage}
 												variant="determinate"
 												label="Hi"
 												style={{
@@ -176,27 +177,21 @@ class Tools extends Component {
 													height: "100%"
 												}}
 											/>
-											<div
+
+											<Typography
+												variant="body2"
+												component="h2"
 												style={{
 													position: "absolute",
-													left:
-														(accountInfo.ram_usage /
-															accountInfo.ram_quota) *
-															300 +
-														5,
+													left: ramUsage * 3 + 5,
 													top: 4
 												}}
 											>
-												{(
-													(accountInfo.ram_usage /
-														accountInfo.ram_quota) *
-													100
-												).toFixed(0)}
-												%
-											</div>
+												{ramUsage.toFixed(0)}%
+											</Typography>
 										</div>
 										<Typography
-											variant="subheading"
+											variant="body2"
 											component="h2"
 											style={{
 												textAlign: "center",
