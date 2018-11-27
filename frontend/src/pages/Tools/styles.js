@@ -47,5 +47,45 @@ export default {
 	},
 	cancelButton: {
 		cursor: "pointer"
-	}
+	},
+	infoContent: {
+		width: "100%",
+		display: "flex",
+		backgroundColor: "#E3E3E3",
+		margin: 25
+	},
+	leftWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		width: "45%",
+		padding: 15
+	},
+	leftItemWrapper: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center"
+	},
+	leftSummaryWrapper: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingTop: 5,
+		borderTop: "1px solid darkgray"
+	},
+	rightItemWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		alignItems: "center",
+		width: "100%"
+	},
+	rightWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		width: "45%",
+		padding: 15
+	},
+	balanceText: { fontFamily: fontFamilyHeavy }
 };

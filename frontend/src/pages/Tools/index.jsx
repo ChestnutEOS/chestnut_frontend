@@ -3,13 +3,13 @@ import styles from "./styles";
 import ToolCard from "../../components/ToolCard";
 
 import toolOptions from "../../options/toolOptions";
-import { Typography } from "@material-ui/core";
+import { Typography, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 class Tools extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { pageView: 1 };
+		this.state = { pageView: 1, accountInfo: null };
 	}
 
 	componentDidUpdate(props) {
@@ -52,13 +52,24 @@ class Tools extends Component {
 		const { eosio, account } = this.props;
 		if (!account || !eosio) return;
 		let accountName = account.name;
-		eosio.rpc.get_account(accountName).then(result => {
-			console.log(result);
+		eosio.rpc.get_account(accountName).then(accountInfo => {
+			console.log(accountInfo);
+			this.setState({ accountInfo });
 		});
 	};
 
 	render() {
-		const { pageView } = this.state;
+		const { pageView, accountInfo } = this.state;
+		const accountBalance = accountInfo
+			? accountInfo.core_liquid_balance.split(" ")[0] * 1
+			: 0;
+		const total = accountInfo
+			? `${(
+					accountBalance +
+					accountInfo.cpu_weight / 10000 +
+					accountInfo.net_weight / 10000
+			  ).toFixed(4)} EOS`
+			: null;
 		return (
 			<div style={styles.rulesContainer}>
 				{pageView === 1 && (
@@ -71,6 +82,82 @@ class Tools extends Component {
 						>
 							STEP 1 OF 3
 						</Typography>
+						{accountInfo && (
+							<div style={styles.infoContent}>
+								<div style={styles.leftWrapper}>
+									<div style={styles.leftItemWrapper}>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											Available:
+										</Typography>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											{accountInfo.core_liquid_balance}
+										</Typography>
+									</div>
+									<div style={styles.leftItemWrapper}>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											CPU Staked:
+										</Typography>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											{(
+												accountInfo.cpu_weight / 10000
+											).toFixed(4)}{" "}
+											EOS
+										</Typography>
+									</div>
+									<div style={styles.leftItemWrapper}>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											Net Staked:
+										</Typography>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											{(
+												accountInfo.net_weight / 10000
+											).toFixed(4)}{" "}
+											EOS
+										</Typography>
+									</div>
+									<div style={styles.leftSummaryWrapper}>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											Total:
+										</Typography>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											{total}
+										</Typography>
+									</div>
+								</div>
+								<div style={styles.rightWrapper}>
+									<Typography
+										variant="subheading"
+										component="h2"
+									>
+										RAM
+									</Typography>
+								</div>
+							</div>
+						)}
 						<div style={styles.ruleCardsContainer}>
 							{toolOptions.map((item, index) => {
 								return (
