@@ -108,7 +108,7 @@ export default class extends Component {
 		});
 
 		console.log(result);
-		this.goForward();
+		// this.goForward();
 
 		// this.getTable();
 	};
@@ -214,6 +214,7 @@ export default class extends Component {
 										<RuleCard
 											text={item.text}
 											icon={item.icon}
+											description={item.description}
 										/>
 									</button>
 								);

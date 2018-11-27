@@ -22,6 +22,8 @@ import accounts from "../../accounts";
 import RuleCard from "../../components/RuleCard";
 import ActivityItem from "../../components/ActivityItem";
 
+import ruleOptions from "../../options/ruleOptions";
+
 let activitySanitizer = {};
 
 class Preferences extends Component {
@@ -33,44 +35,7 @@ class Preferences extends Component {
       trans_max: 10,
       tokenBalance: 0,
       eosToSend: 3,
-      actions: [],
-      activities: [
-        {
-          iconSrc: "success.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 20,
-          amount: 2,
-          text: "Transfer to brandon",
-          status: "Approved"
-        },
-        {
-          iconSrc: "dollarCircle.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12.4,
-          amount: 100,
-          text: "Transfer to danielle",
-          status: "Rejected"
-        },
-        {
-          iconSrc: "success.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12 * 2.1,
-          amount: 6,
-          text: "Transfer to daniel",
-          status: "Approved"
-        },
-        {
-          iconSrc: "success.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 60 * 12 * 3,
-          amount: 8,
-          text: "Transfer to ashe",
-          status: "Approved"
-        },
-        {
-          iconSrc: "calendar.png",
-          timestamp: new Date().valueOf() - 1000 * 60 * 55,
-          amount: 30,
-          text: "Transfer to anette",
-          status: "Rejected"
-        }
-      ]
+      actions: []
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
   }
@@ -304,24 +269,29 @@ class Preferences extends Component {
             <Switch />
           </div>
           <div style={styles.leftContent}>
-            <Tooltip title="Protect your account by setting your own rules. You are your own bank!">
+            <Tooltip
+              title="Protect your account by setting your own rules. You are your own bank!"
+              placement="top"
+            >
               <img style={styles.questionMarkTitle} src="questionMark.png" />
             </Tooltip>
             <div style={styles.contentTitle}>My rules</div>
             <div style={styles.ruleCardContainer}>
               <RuleCard
-                text="Spending Limit"
+                text={ruleOptions[0].text}
                 style={styles.ruleCard}
                 ruleInput={`${spend_max} EOS / month`}
-                icon="dollarCircle.png"
+                icon={ruleOptions[0].icon}
+                description={ruleOptions[0].description}
                 // modifyButton
                 checked={true}
               />
               <RuleCard
-                text="Whitelisted Accounts"
+                text={ruleOptions[2].text}
                 style={styles.ruleCard}
                 ruleInput={`3 Accounts`}
-                icon="checklist.png"
+                icon={ruleOptions[2].icon}
+                description={ruleOptions[2].description}
                 // modifyButton
                 checked={false}
               />

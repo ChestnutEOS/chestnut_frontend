@@ -14,7 +14,7 @@ class Tools extends Component {
 
 	componentDidUpdate(props) {
 		if (this.props != props) {
-			return;
+			this.getAccountInfo();
 		}
 	}
 
@@ -40,10 +40,21 @@ class Tools extends Component {
 		// }
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		this.getAccountInfo();
+	}
 
 	valueChange = event => {
 		this.setState({ [event.target.name]: event.target.value });
+	};
+
+	getAccountInfo = () => {
+		const { eosio, account } = this.props;
+		if (!account || !eosio) return;
+		let accountName = account.name;
+		eosio.rpc.get_account(accountName).then(result => {
+			console.log(result);
+		});
 	};
 
 	render() {

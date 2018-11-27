@@ -32,7 +32,7 @@ class Header extends Component {
 						style={styles.headerNavText}
 						onClick={() => this.props.goTo(5)}
 					>
-						Tools
+						tools
 					</div>
 					<div style={styles.headerNavText}>explore rules</div>
 				</div>

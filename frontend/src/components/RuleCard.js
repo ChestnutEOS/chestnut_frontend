@@ -4,6 +4,7 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import styles from "./styles";
 
@@ -27,7 +28,8 @@ export default class extends Component {
 			modifyButton,
 			checked,
 			empty,
-			addRuleClicked
+			addRuleClicked,
+			description
 		} = this.props;
 		if (empty)
 			return (
@@ -46,7 +48,9 @@ export default class extends Component {
 			);
 		return (
 			<Card style={styles.ruleCardContainer}>
-				<img style={styles.questionMark} src="questionMark.png" />
+				<Tooltip title={description} placement="top">
+					<img style={styles.questionMark} src="questionMark.png" />
+				</Tooltip>
 				<img style={styles.ruleIcon} src={icon} />
 				{ruleInput ? (
 					<div style={styles.ruleWrapper}>

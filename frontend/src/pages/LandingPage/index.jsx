@@ -276,6 +276,10 @@ class LandingPage extends React.Component {
 		window.addEventListener("resize", this.handleWindowSizeChange);
 	}
 
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.handleWindowSizeChange);
+	}
+
 	handleWindowSizeChange = () => {
 		this.setState({
 			screenHeight: window.innerHeight,
