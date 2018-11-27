@@ -56,14 +56,56 @@ CONTRACT chestnut : public eosio::contract {
      ***************************************************************************/
 
     TABLE settings {
-      name       user;
-      time_point created;
-      bool       is_frozen = 0;
+      name        user;
+      time_point  created;
+      bool        is_frozen = 0;
 
       auto primary_key() const { return user.value; }
     };
 
-    typedef eosio::multi_index< name("settings"), settings>     settings_index;
+    TABLE txlimit {
+      uint64_t    id;
+      name        user;
+      bool        is_frozen = 0;
+      time_point  end_time;
+      uint64_t    tx_number_limit;
+      uint64_t    tx_number;
+
+      uint64_t primary_key() const { return id; }
+    };
+
+    TABLE spendlimit {
+      uint64_t    id;
+      name        user;
+      bool        is_frozen = 0;
+      time_point  end_time;
+      asset       total_EOS_allowed_to_spend;
+      asset       current_EOS_spent;
+
+      uint64_t primary_key() const { return id; }
+    };
+
+    TABLE whitelist {
+      name              user;
+      bool              is_frozen = 0;
+      std::vector<name> accounts;
+
+      uint64_t primary_key() const { return user.value; }
+    };
+
+    TABLE blacklist {
+      name              user;
+      bool              is_frozen = 0;
+      std::vector<name> accounts;
+
+      uint64_t primary_key() const { return user.value; }
+    };
+
+    typedef eosio::multi_index< name("settings"),    settings   >    settings_index;
+    typedef eosio::multi_index< name("txlimits"),    txlimit    >    stxlimit_index;
+    typedef eosio::multi_index< name("spendlimits"), spendlimit >  spendlimit_index;
+    typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
+    typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
 
   public:
     using contract::contract;
@@ -128,10 +170,14 @@ CONTRACT chestnut : public eosio::contract {
                      name    to,
                      asset   quantity,
                      std::string  memo ) {
-      require_auth( _self );
-      print("!!transfer!!\n");
+      // require_auth( _self );
+      print("!!Chestnut Smart Transfer!!\n");
       // Uncomment line below to freeze all token transfers
       // eosio_assert(false, "asserted");
+    }
+
+    ACTION setnotify ( bool is_on ) {
+      print("!!setnotify!!\n");
     }
 
     ACTION hello( void ) {
@@ -160,6 +206,9 @@ extern "C" {
     // else if(code==receiver && action== name("erase").value) {
     //   execute_action(name(receiver), name(code), &chestnut::erase );
     // }
+    else if( code==receiver && action== name("setnotify").value ) {
+      execute_action( name(receiver), name(code), &chestnut::setnotify );
+    }
     else if( code==receiver && action== name("hello").value ) {
       execute_action( name(receiver), name(code), &chestnut::hello );
     }
