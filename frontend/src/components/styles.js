@@ -147,6 +147,22 @@ export default {
 		fontSize: 20
 	},
 
+	// Tool Card
+	//Rule Card
+	toolCardContainer: {
+		background: tealLight,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "center",
+		height: 150,
+		padding: 15,
+		width: 150,
+		margin: 0,
+		cursor: "pointer",
+		borderRadius: 0
+	},
+
 	// ActivityItem
 	activityContainer: {
 		display: "flex",

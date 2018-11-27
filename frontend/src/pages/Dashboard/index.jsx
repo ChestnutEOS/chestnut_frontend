@@ -16,6 +16,7 @@ import Header from "../../components/Header";
 import RuleCard from "../../components/RuleCard";
 import SetParameter from "../../components/SetParameter";
 import LandingPage from "../LandingPage";
+import Tools from "../Tools";
 
 import styles from "./styles";
 // import accounts from "../../accounts";
@@ -273,6 +274,9 @@ export default class extends Component {
 						eosio={this.eosio}
 						account={account}
 					/>
+				)}
+				{pageView === 5 && (
+					<Tools eosio={this.eosio} account={account} />
 				)}
 			</div>
 		);

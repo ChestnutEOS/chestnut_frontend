@@ -28,8 +28,13 @@ class Header extends Component {
 					>
 						dashboard
 					</div>
+					<div
+						style={styles.headerNavText}
+						onClick={() => this.props.goTo(5)}
+					>
+						Tools
+					</div>
 					<div style={styles.headerNavText}>explore rules</div>
-					<div style={styles.headerNavText}>view all activity</div>
 				</div>
 				<div style={styles.headerRight}>
 					<div style={styles.rightTextContainer}>
