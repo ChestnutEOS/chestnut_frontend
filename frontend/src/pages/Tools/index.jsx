@@ -3,7 +3,7 @@ import styles from "./styles";
 import ToolCard from "../../components/ToolCard";
 
 import toolOptions from "../../options/toolOptions";
-import { Typography, Paper } from "@material-ui/core";
+import { Typography, Paper, LinearProgress } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 class Tools extends Component {
@@ -149,12 +149,71 @@ class Tools extends Component {
 									</div>
 								</div>
 								<div style={styles.rightWrapper}>
-									<Typography
-										variant="subheading"
-										component="h2"
-									>
-										RAM
-									</Typography>
+									<div style={styles.rightItemWrapper}>
+										<Typography
+											variant="subheading"
+											component="h2"
+										>
+											RAM
+										</Typography>
+										<div
+											style={{
+												height: 25,
+												width: 300,
+												position: "relative"
+											}}
+										>
+											<LinearProgress
+												value={
+													(accountInfo.ram_usage /
+														accountInfo.ram_quota) *
+													100
+												}
+												variant="determinate"
+												label="Hi"
+												style={{
+													width: "100%",
+													height: "100%"
+												}}
+											/>
+											<div
+												style={{
+													position: "absolute",
+													left:
+														(accountInfo.ram_usage /
+															accountInfo.ram_quota) *
+															300 +
+														5,
+													top: 4
+												}}
+											>
+												{(
+													(accountInfo.ram_usage /
+														accountInfo.ram_quota) *
+													100
+												).toFixed(0)}
+												%
+											</div>
+										</div>
+										<Typography
+											variant="subheading"
+											component="h2"
+											style={{
+												textAlign: "center",
+												fontWeight: 600
+											}}
+										>
+											RAM used -{" "}
+											{(
+												accountInfo.ram_usage / 1000
+											).toFixed(2)}{" "}
+											Kb /{" "}
+											{(
+												accountInfo.ram_quota / 1000
+											).toFixed(2)}{" "}
+											Kb
+										</Typography>
+									</div>
 								</div>
 							</div>
 						)}
