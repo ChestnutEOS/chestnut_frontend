@@ -61,20 +61,20 @@ export default {
 		justifyContent: "space-between",
 		width: "45%",
 		padding: 15,
-		paddingTop: 35
+		paddingTop: 35,
+		paddingBottom: 35
 	},
 	leftItemWrapper: {
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingTop: 5,
-		paddingBottom: 5
+		paddingTop: 5
 	},
 	leftSummaryWrapper: {
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingTop: 10,
+		paddingTop: 15,
 		borderTop: "1px solid darkgray"
 	},
 	rightItemWrapper: {

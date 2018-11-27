@@ -75,6 +75,14 @@ class Tools extends Component {
 			? (accountInfo.ram_usage / accountInfo.ram_quota) * 100
 			: 0;
 
+		const netUsage = accountInfo
+			? (accountInfo.net_limit.used / accountInfo.net_limit.max) * 100
+			: 0;
+
+		const cpuUsage = accountInfo
+			? (accountInfo.cpu_limit.used / accountInfo.cpu_limit.max) * 100
+			: 0;
+
 		return (
 			<div style={styles.rulesContainer}>
 				{pageView === 1 && (
@@ -207,6 +215,118 @@ class Tools extends Component {
 												accountInfo.ram_quota / 1000
 											).toFixed(2)}{" "}
 											Kb
+										</Typography>
+									</div>
+									<div style={styles.rightItemWrapper}>
+										<Typography
+											variant="body2"
+											component="h2"
+										>
+											NET
+										</Typography>
+										<div
+											style={{
+												height: 25,
+												width: 300,
+												position: "relative"
+											}}
+										>
+											<LinearProgress
+												value={netUsage}
+												variant="determinate"
+												label="Hi"
+												style={{
+													width: "100%",
+													height: "100%"
+												}}
+											/>
+
+											<Typography
+												variant="body2"
+												component="h2"
+												style={{
+													position: "absolute",
+													left: netUsage * 3 + 5,
+													top: 4
+												}}
+											>
+												{netUsage.toFixed(0)}%
+											</Typography>
+										</div>
+										<Typography
+											variant="body2"
+											component="h2"
+											style={{
+												textAlign: "center",
+												fontWeight: 600
+											}}
+										>
+											NET used -{" "}
+											{(
+												accountInfo.net_limit.used /
+												1000
+											).toFixed(2)}{" "}
+											Kb /{" "}
+											{(
+												accountInfo.net_limit.max / 1000
+											).toFixed(2)}{" "}
+											Kb
+										</Typography>
+									</div>
+									<div style={styles.rightItemWrapper}>
+										<Typography
+											variant="body2"
+											component="h2"
+										>
+											CPU
+										</Typography>
+										<div
+											style={{
+												height: 25,
+												width: 300,
+												position: "relative"
+											}}
+										>
+											<LinearProgress
+												value={cpuUsage}
+												variant="determinate"
+												label="Hi"
+												style={{
+													width: "100%",
+													height: "100%"
+												}}
+											/>
+
+											<Typography
+												variant="body2"
+												component="h2"
+												style={{
+													position: "absolute",
+													left: cpuUsage * 3 + 5,
+													top: 4
+												}}
+											>
+												{cpuUsage.toFixed(0)}%
+											</Typography>
+										</div>
+										<Typography
+											variant="body2"
+											component="h2"
+											style={{
+												textAlign: "center",
+												fontWeight: 600
+											}}
+										>
+											CPU used -{" "}
+											{(
+												accountInfo.cpu_limit.used /
+												1000
+											).toFixed(2)}{" "}
+											µs /{" "}
+											{(
+												accountInfo.cpu_limit.max / 1000
+											).toFixed(2)}{" "}
+											µs
 										</Typography>
 									</div>
 								</div>
