@@ -30,16 +30,18 @@ export default class extends Component {
 			pageView: -1,
 			spend_max: "",
 			per_period: "month",
-			selectedRuleIndex: null
+			selectedRuleIndex: null,
+			account: null
 		};
 
-		this.eosio = { account: { name: "" } };
-		// this.eosio = new EOSIOClient("chestnut");
+		// this.eosio = null;
+		// this.eosio = { account: { name: "" } };
+		this.eosio = new EOSIOClient("chestnut");
+		// this.eosio.login();
 	}
 
 	goHome = () => {
 		this.setState({ pageView: 0 });
-		this.eosio = new EOSIOClient("chestnut");
 	};
 
 	goBack = () => {
@@ -115,7 +117,12 @@ export default class extends Component {
 	};
 
 	attachAccount = () => {
-		this.eosio = new EOSIOClient("chestnut");
+		// console.log("hi");
+		this.eosio.login(account => {
+			console.log(account);
+			this.setState({ account });
+		});
+		// this.setState({ eosio: new EOSIOClient("chestnut") });
 	};
 
 	render() {
@@ -123,15 +130,16 @@ export default class extends Component {
 			pageView,
 			spend_max,
 			per_period,
-			selectedRuleIndex
+			selectedRuleIndex,
+			account
 		} = this.state;
 
 		if (pageView === -1) return <LandingPage goClicked={this.goForward} />;
 		return (
 			<div>
 				<Header
-					userName={this.eosio.account.name}
-					userKey={"Hi"}
+					userName={account ? account.name : null}
+					userKey={account ? account.publicKey : null}
 					goTo={this.goTo}
 					attachAccount={this.attachAccount}
 				/>
@@ -142,29 +150,46 @@ export default class extends Component {
 							<div style={styles.backText}>Back</div>
 						</Button>
 					)}
-				{pageView === 0 && (
-					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>
-							Ready to create your first rule?
+				{pageView === 0 &&
+					account && (
+						<div style={styles.contentContainer}>
+							<div style={styles.contentTitle}>
+								Ready to create your first rule?
+							</div>
+							<Button
+								color="secondary"
+								variant="contained"
+								size="large"
+								style={styles.orangeButton}
+								onClick={this.goForward}
+							>
+								Get Started
+							</Button>
+							<Typography
+								color="secondary"
+								variant="body1"
+								component="h2"
+							>
+								what is a rule?
+							</Typography>
 						</div>
-						<Button
-							color="secondary"
-							variant="contained"
-							size="large"
-							style={styles.orangeButton}
-							onClick={this.goForward}
-						>
-							Get Started
-						</Button>
-						<Typography
-							color="secondary"
-							variant="body1"
-							component="h2"
-						>
-							what is a rule?
-						</Typography>
-					</div>
-				)}
+					)}
+
+				{pageView === 0 &&
+					!account && (
+						<div style={styles.contentContainer}>
+							<div style={styles.contentTitle}>Register</div>
+							<Button
+								color="secondary"
+								variant="contained"
+								size="large"
+								style={styles.orangeButton}
+								onClick={this.attachAccount}
+							>
+								Connect Scatter
+							</Button>
+						</div>
+					)}
 
 				{pageView === 1 && (
 					<div style={styles.contentContainer}>

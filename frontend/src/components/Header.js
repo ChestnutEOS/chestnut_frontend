@@ -38,7 +38,10 @@ class Header extends Component {
 							</div>
 						) : (
 							<div>
-								<Button onClick={this.props.attachAccount}>
+								<Button
+									style={styles.attachAccount}
+									onClick={this.props.attachAccount}
+								>
 									Attach Existing Account
 								</Button>
 							</div>

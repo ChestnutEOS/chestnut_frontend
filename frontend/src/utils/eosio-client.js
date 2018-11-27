@@ -21,6 +21,8 @@ class EOSIOClient extends React.Component {
 	constructor(contractAccount) {
 		super(contractAccount);
 		this.contractAccount = contractAccount;
+		this.account;
+		this.eos;
 
 		// Don't forget to tell ScatterJS which plugins you are using.
 		ScatterJS.plugins(new ScatterEOS());
@@ -32,28 +34,52 @@ class EOSIOClient extends React.Component {
 				if (!connected) return console.log("Issue Connecting");
 
 				const scatter = ScatterJS.scatter;
+				this.scatter = scatter;
 
-				const requiredFields = {
+				this.requiredFields = {
 					accounts: [network]
 				};
-				scatter.getIdentity(requiredFields).then(() => {
-					// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
-					// the user for their account name beforehand. They could still give you a different account.
-					this.account = scatter.identity.accounts.find(
-						x => x.blockchain === "eos"
-					);
 
-					// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
-					// const rpc = new JsonRpc(endpoint);
-					// this.eos = scatter.eos(network, Api, { rpc });
-				});
+				this.rpc = new JsonRpc(endpoint);
+				// // this.login();
+				// scatter.getIdentity(this.requiredFields).then(() => {
+				// 	// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
+				// 	// the user for their account name beforehand. They could still give you a different account.
+				// 	this.account = scatter.identity.accounts.find(
+				// 		x => x.blockchain === "eos"
+				// 	);
 
-				window.ScatterJS = null;
+				// 	// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
+				// 	const rpc = new JsonRpc(endpoint);
+				// 	this.eos = scatter.eos(network, Api, { rpc });
+				// });
+
+				// window.ScatterJS = null;
 			});
 		} catch (error) {
 			console.log(error);
 		}
 	}
+
+	login = cb => {
+		try {
+			this.scatter.getIdentity(this.requiredFields).then(() => {
+				// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
+				// the user for their account name beforehand. They could still give you a different account.
+				this.account = this.scatter.identity.accounts.find(
+					x => x.blockchain === "eos"
+				);
+
+				// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
+				this.eos = this.scatter.eos(network, Api, { rpc: this.rpc });
+				return cb(this.account);
+			});
+
+			window.ScatterJS = null;
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	transaction = (action, data) => {
 		return this.eos.transact(

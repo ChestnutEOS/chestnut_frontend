@@ -216,5 +216,8 @@ export default {
 	},
 	backText: {
 		paddingTop: 2
+	},
+	attachAccount: {
+		color: "white"
 	}
 };
