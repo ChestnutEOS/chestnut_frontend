@@ -8,8 +8,8 @@ node_modules/
 frontend/build
 
 #compile contract files
-**/*.abi
-**/*.wasm
+#**/*.abi
+#**/*.wasm
 **/*.wast
 
 #blockchain data
