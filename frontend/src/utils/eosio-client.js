@@ -108,6 +108,53 @@ class EOSIOClient extends React.Component {
 			}
 		);
 	};
+
+	// tokenTransaction = data => {
+	// 	console.log(this.eos);
+	// 	return this.eos.transfer(
+	// 		this.account.name,
+	// 		data.to,
+	// 		data.quantity,
+	// 		data.memo,
+	// 		{
+	// 			authorization: [
+	// 				{
+	// 					actor: this.account.name,
+	// 					permission: this.account.authority
+	// 				}
+	// 			]
+	// 		}
+	// 	);
+	// };
+
+	tokenTransfer = data => {
+		return this.eos.transact(
+			{
+				actions: [
+					{
+						account: "eosio.token",
+						name: "transfer",
+						authorization: [
+							{
+								actor: this.account.name,
+								permission: this.account.authority
+							}
+						],
+						data: {
+							from: this.account.name,
+							to: data.to,
+							quantity: data.quantity,
+							memo: data.memo
+						}
+					}
+				]
+			},
+			{
+				blocksBehind: 3,
+				expireSeconds: 30
+			}
+		);
+	};
 }
 
 export default EOSIOClient;

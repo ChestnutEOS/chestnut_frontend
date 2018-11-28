@@ -15,7 +15,8 @@ class Tools extends Component {
 		this.state = {
 			pageView: 1,
 			accountInfo: null,
-			selectedToolIndex: null
+			selectedToolIndex: null,
+			result: null
 		};
 	}
 
@@ -69,9 +70,14 @@ class Tools extends Component {
 		this.setState({ selectedToolIndex });
 	};
 
-	onSubmit = inputs => {
-		const { eosio } = this.props;
-		console.log(inputs);
+	onSubmit = async inputs => {
+		const { account, eosio } = this.props;
+		const result = await eosio.tokenTransfer({
+			to: inputs[0],
+			quantity: `${(inputs[1] * 1).toFixed(4)} EOS`,
+			memo: inputs[2]
+		});
+		console.log(result);
 	};
 
 	goBack = () => {
