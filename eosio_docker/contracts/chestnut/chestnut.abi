@@ -1,0 +1,502 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Tue Nov 27 21:58:56 2018",
+    "version": "eosio::abi/1.0",
+    "structs": [
+        {
+            "name": "addblacklist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "account_to_blacklist",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "addeoslimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "days",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "addtxlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "tx_limit",
+                    "type": "uint64"
+                },
+                {
+                    "name": "days",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "addwhitelist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "account_to_whitelist",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "blacklist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                },
+                {
+                    "name": "account",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "checkfrozen",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "eoslimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                },
+                {
+                    "name": "end_time",
+                    "type": "time_point"
+                },
+                {
+                    "name": "total_EOS_allowed_to_spend",
+                    "type": "asset"
+                },
+                {
+                    "name": "current_EOS_spent",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "hello",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "lockblacklst",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "lock",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "lockeoslimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "lock",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "locktxlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "lock",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "lockwhitelst",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "lock",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "rmblacklist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "account_to_remove",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "rmeoslimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "rmtxlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "rmwhitelist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "account_to_remove",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "safetransfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "setnotify",
+            "base": "",
+            "fields": [
+                {
+                    "name": "is_on",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "settings",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "created",
+                    "type": "time_point"
+                },
+                {
+                    "name": "is_frozen",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "transfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                },
+                {
+                    "name": "memo",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "txlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                },
+                {
+                    "name": "end_time",
+                    "type": "time_point"
+                },
+                {
+                    "name": "tx_number_limit",
+                    "type": "uint64"
+                },
+                {
+                    "name": "tx_number",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "update",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "freeze",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "whitelist",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                },
+                {
+                    "name": "account",
+                    "type": "name"
+                }
+            ]
+        }
+    ],
+    "types": [],
+    "actions": [
+        {
+            "name": "addblacklist",
+            "type": "addblacklist",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addeoslimit",
+            "type": "addeoslimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addtxlimit",
+            "type": "addtxlimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "addwhitelist",
+            "type": "addwhitelist",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "checkfrozen",
+            "type": "checkfrozen",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "hello",
+            "type": "hello",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "lockblacklst",
+            "type": "lockblacklst",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "lockeoslimit",
+            "type": "lockeoslimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "locktxlimit",
+            "type": "locktxlimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "lockwhitelst",
+            "type": "lockwhitelst",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmblacklist",
+            "type": "rmblacklist",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmeoslimit",
+            "type": "rmeoslimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmtxlimit",
+            "type": "rmtxlimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmwhitelist",
+            "type": "rmwhitelist",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "safetransfer",
+            "type": "safetransfer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setnotify",
+            "type": "setnotify",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transfer",
+            "type": "transfer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "update",
+            "type": "update",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "blacklist",
+            "type": "blacklist",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "settings",
+            "type": "settings",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "spendlimits",
+            "type": "eoslimit",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "txlimits",
+            "type": "txlimit",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "whitelist",
+            "type": "whitelist",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "abi_extensions": []
+}
