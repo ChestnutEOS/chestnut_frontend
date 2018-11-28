@@ -231,10 +231,24 @@ export default {
 		top: "35%",
 		left: 40
 	},
+
 	backText: {
 		paddingTop: 2
 	},
 	attachAccount: {
 		color: "white"
+	},
+	buttonsWrapper: {
+		display: "flex"
+	},
+	backButtonTool: { margin: 10, borderRadius: 0, marginTop: 5, padding: 15 },
+	orangeButtonTool: {
+		margin: 10,
+		borderRadius: 0,
+		marginTop: 5,
+		padding: 15
+	},
+	toolInputContainer: {
+		display: "flex"
 	}
 };

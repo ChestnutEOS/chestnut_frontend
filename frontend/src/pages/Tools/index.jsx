@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import styles from "./styles";
+import AccountInfo from "./AccountInfo";
+
 import ToolCard from "../../components/ToolCard";
+import ToolInput from "../../components/ToolInput";
 
 import toolOptions from "../../options/toolOptions";
 import { Typography, Paper, LinearProgress } from "@material-ui/core";
@@ -9,7 +12,11 @@ import { withStyles } from "@material-ui/core/styles";
 class Tools extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { pageView: 1, accountInfo: null };
+		this.state = {
+			pageView: 1,
+			accountInfo: null,
+			selectedToolIndex: null
+		};
 	}
 
 	componentDidUpdate(props) {
@@ -18,27 +25,27 @@ class Tools extends Component {
 		}
 	}
 
-	async handleFormEvent(event) {
-		// event.preventDefault();
-		// let account = accounts[0].name;
-		// let privateKey = accounts[0].privateKey;
-		// let spend_max = event.target.spend_max.value;
-		// let trans_max = event.target.trans_max.value;
-		// let actionName = "";
-		// let actionData = {};
-		// switch (event.type) {
-		// 	case "submit":
-		// 		actionName = "update";
-		// 		actionData = {
-		// 			_user: account,
-		// 			_spend_max: spend_max,
-		// 			_trans_max: trans_max
-		// 		};
-		// 		break;
-		// 	default:
-		// 		return;
-		// }
-	}
+	// async handleFormEvent(event) {
+	// event.preventDefault();
+	// let account = accounts[0].name;
+	// let privateKey = accounts[0].privateKey;
+	// let spend_max = event.target.spend_max.value;
+	// let trans_max = event.target.trans_max.value;
+	// let actionName = "";
+	// let actionData = {};
+	// switch (event.type) {
+	// 	case "submit":
+	// 		actionName = "update";
+	// 		actionData = {
+	// 			_user: account,
+	// 			_spend_max: spend_max,
+	// 			_trans_max: trans_max
+	// 		};
+	// 		break;
+	// 	default:
+	// 		return;
+	// }
+	// }
 
 	componentDidMount() {
 		this.getAccountInfo();
@@ -58,297 +65,59 @@ class Tools extends Component {
 		});
 	};
 
+	selectTool = selectedToolIndex => {
+		this.setState({ selectedToolIndex });
+	};
+
+	onSubmit = inputs => {
+		const { eosio } = this.props;
+		console.log(inputs);
+	};
+
+	goBack = () => {
+		this.setState({ selectedToolIndex: null });
+	};
+
 	render() {
-		const { pageView, accountInfo } = this.state;
-		const accountBalance = accountInfo
-			? accountInfo.core_liquid_balance.split(" ")[0] * 1
-			: 0;
-		const total = accountInfo
-			? `${(
-					accountBalance +
-					accountInfo.cpu_weight / 10000 +
-					accountInfo.net_weight / 10000
-			  ).toFixed(4)} EOS`
-			: null;
-
-		const ramUsage = accountInfo
-			? (accountInfo.ram_usage / accountInfo.ram_quota) * 100
-			: 0;
-
-		const netUsage = accountInfo
-			? (accountInfo.net_limit.used / accountInfo.net_limit.max) * 100
-			: 0;
-
-		const cpuUsage = accountInfo
-			? (accountInfo.cpu_limit.used / accountInfo.cpu_limit.max) * 100
-			: 0;
+		const { pageView, accountInfo, selectedToolIndex } = this.state;
 
 		return (
 			<div style={styles.rulesContainer}>
 				{pageView === 1 && (
 					<div style={styles.contentContainer}>
 						<div style={styles.contentTitle}>Select a tool</div>
-						<Typography
-							variant="body1"
-							style={styles.stepText}
-							component="h3"
-						>
-							STEP 1 OF 3
-						</Typography>
 						{accountInfo && (
-							<div style={styles.infoContent}>
-								<div style={styles.leftWrapper}>
-									<div style={styles.leftItemWrapper}>
-										<Typography
-											variant="subheading"
-											component="h2"
+							<AccountInfo accountInfo={accountInfo} />
+						)}
+						{!selectedToolIndex && selectedToolIndex != 0 ? (
+							<div style={styles.ruleCardsContainer}>
+								{toolOptions.map((item, index) => {
+									return (
+										<button
+											style={styles.buttonWrapper}
+											onClick={() =>
+												this.selectTool(index)
+											}
+											key={index}
 										>
-											Available:
-										</Typography>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											{accountInfo.core_liquid_balance}
-										</Typography>
-									</div>
-									<div style={styles.leftItemWrapper}>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											CPU Staked:
-										</Typography>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											{(
-												accountInfo.cpu_weight / 10000
-											).toFixed(4)}{" "}
-											EOS
-										</Typography>
-									</div>
-									<div style={styles.leftItemWrapper}>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											Net Staked:
-										</Typography>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											{(
-												accountInfo.net_weight / 10000
-											).toFixed(4)}{" "}
-											EOS
-										</Typography>
-									</div>
-									<div style={styles.leftSummaryWrapper}>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											Total:
-										</Typography>
-										<Typography
-											variant="subheading"
-											component="h2"
-										>
-											{total}
-										</Typography>
-									</div>
-								</div>
-								<div style={styles.rightWrapper}>
-									<div style={styles.rightItemWrapper}>
-										<Typography
-											variant="body2"
-											component="h2"
-										>
-											RAM
-										</Typography>
-										<div
-											style={{
-												height: 25,
-												width: 300,
-												position: "relative"
-											}}
-										>
-											<LinearProgress
-												value={ramUsage}
-												variant="determinate"
-												label="Hi"
-												style={{
-													width: "100%",
-													height: "100%"
-												}}
+											<ToolCard
+												text={item.text}
+												icon={item.icon}
+												description={item.description}
 											/>
-
-											<Typography
-												variant="body2"
-												component="h2"
-												style={{
-													position: "absolute",
-													left: ramUsage * 3 + 5,
-													top: 4
-												}}
-											>
-												{ramUsage.toFixed(0)}%
-											</Typography>
-										</div>
-										<Typography
-											variant="body2"
-											component="h2"
-											style={{
-												textAlign: "center",
-												fontWeight: 600
-											}}
-										>
-											RAM used -{" "}
-											{(
-												accountInfo.ram_usage / 1000
-											).toFixed(2)}{" "}
-											Kb /{" "}
-											{(
-												accountInfo.ram_quota / 1000
-											).toFixed(2)}{" "}
-											Kb
-										</Typography>
-									</div>
-									<div style={styles.rightItemWrapper}>
-										<Typography
-											variant="body2"
-											component="h2"
-										>
-											NET
-										</Typography>
-										<div
-											style={{
-												height: 25,
-												width: 300,
-												position: "relative"
-											}}
-										>
-											<LinearProgress
-												value={netUsage}
-												variant="determinate"
-												label="Hi"
-												style={{
-													width: "100%",
-													height: "100%"
-												}}
-											/>
-
-											<Typography
-												variant="body2"
-												component="h2"
-												style={{
-													position: "absolute",
-													left: netUsage * 3 + 5,
-													top: 4
-												}}
-											>
-												{netUsage.toFixed(0)}%
-											</Typography>
-										</div>
-										<Typography
-											variant="body2"
-											component="h2"
-											style={{
-												textAlign: "center",
-												fontWeight: 600
-											}}
-										>
-											NET used -{" "}
-											{(
-												accountInfo.net_limit.used /
-												1000
-											).toFixed(2)}{" "}
-											Kb /{" "}
-											{(
-												accountInfo.net_limit.max / 1000
-											).toFixed(2)}{" "}
-											Kb
-										</Typography>
-									</div>
-									<div style={styles.rightItemWrapper}>
-										<Typography
-											variant="body2"
-											component="h2"
-										>
-											CPU
-										</Typography>
-										<div
-											style={{
-												height: 25,
-												width: 300,
-												position: "relative"
-											}}
-										>
-											<LinearProgress
-												value={cpuUsage}
-												variant="determinate"
-												label="Hi"
-												style={{
-													width: "100%",
-													height: "100%"
-												}}
-											/>
-
-											<Typography
-												variant="body2"
-												component="h2"
-												style={{
-													position: "absolute",
-													left: cpuUsage * 3 + 5,
-													top: 4
-												}}
-											>
-												{cpuUsage.toFixed(0)}%
-											</Typography>
-										</div>
-										<Typography
-											variant="body2"
-											component="h2"
-											style={{
-												textAlign: "center",
-												fontWeight: 600
-											}}
-										>
-											CPU used -{" "}
-											{(
-												accountInfo.cpu_limit.used /
-												1000
-											).toFixed(2)}{" "}
-											µs /{" "}
-											{(
-												accountInfo.cpu_limit.max / 1000
-											).toFixed(2)}{" "}
-											µs
-										</Typography>
-									</div>
-								</div>
+										</button>
+									);
+								})}
+							</div>
+						) : (
+							<div>
+								<ToolInput
+									onSubmit={this.onSubmit}
+									selectedToolIndex={selectedToolIndex}
+									goBack={this.goBack}
+								/>
 							</div>
 						)}
-						<div style={styles.ruleCardsContainer}>
-							{toolOptions.map((item, index) => {
-								return (
-									<button
-										style={styles.buttonWrapper}
-										onClick={() => this.selectRule(index)}
-										key={index}
-									>
-										<ToolCard
-											text={item.text}
-											icon={item.icon}
-											description={item.description}
-										/>
-									</button>
-								);
-							})}
-						</div>
 					</div>
 				)}
 			</div>
