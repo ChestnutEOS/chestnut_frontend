@@ -6,6 +6,11 @@
 
 using namespace eosio;
 
+// const uint32_t blocks_per_day        = 2 * 24 * 3600;
+// const uint32_t blocks_per_hour       = 2 * 3600;
+const int64_t  useconds_per_day      = 24 * 3600 * int64_t(1000000);
+// const int64_t  useconds_per_year     = seconds_per_year*1000000ll;
+
 CONTRACT chestnut : public eosio::contract {
   private:
 
@@ -66,7 +71,7 @@ CONTRACT chestnut : public eosio::contract {
     TABLE txlimit {
       uint64_t    id;
       name        user;
-      bool        is_frozen = 0;
+      bool        is_locked = 0;
       time_point  end_time;
       uint64_t    tx_number_limit;
       uint64_t    tx_number;
@@ -74,10 +79,10 @@ CONTRACT chestnut : public eosio::contract {
       uint64_t primary_key() const { return id; }
     };
 
-    TABLE spendlimit {
+    TABLE eoslimit {
       uint64_t    id;
       name        user;
-      bool        is_frozen = 0;
+      bool        is_locked = 0;
       time_point  end_time;
       asset       total_EOS_allowed_to_spend;
       asset       current_EOS_spent;
@@ -86,24 +91,24 @@ CONTRACT chestnut : public eosio::contract {
     };
 
     TABLE whitelist {
-      name              user;
-      bool              is_frozen = 0;
-      std::vector<name> accounts;
+      name        user;
+      bool        is_locked = 0;
+      name        account;
 
       uint64_t primary_key() const { return user.value; }
     };
 
     TABLE blacklist {
-      name              user;
-      bool              is_frozen = 0;
-      std::vector<name> accounts;
+      name        user;
+      bool        is_locked = 0;
+      name        account;
 
       uint64_t primary_key() const { return user.value; }
     };
 
     typedef eosio::multi_index< name("settings"),    settings   >    settings_index;
     typedef eosio::multi_index< name("txlimits"),    txlimit    >    stxlimit_index;
-    typedef eosio::multi_index< name("spendlimits"), spendlimit >  spendlimit_index;
+    typedef eosio::multi_index< name("spendlimits"), eoslimit   >    eoslimit_index;
     typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
     typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
 
@@ -184,6 +189,59 @@ CONTRACT chestnut : public eosio::contract {
       print("hello world\n");
     }
 
+
+    ACTION addtxlimit( name user, uint64_t tx_limit, uint32_t days ) {
+      print("!!addtxlimit!! - Chestnut\n");
+    }
+
+    ACTION rmtxlimit( name user, uint64_t id ) {
+      print("!!rmtxlimit!! - Chestnut\n");
+    }
+
+    ACTION locktxlimit( name user, bool lock ) {
+      print("!!locktxlimit!! - Chestnut\n");
+    }
+
+
+    ACTION addeoslimit( name user, asset quantity, uint32_t days ) {
+      print("!!addeoslimit!! - Chestnut\n");
+    }
+
+    ACTION rmeoslimit( name user, uint64_t id ) {
+      print("!!rmeoslimit!! - Chestnut\n");
+    }
+
+    ACTION lockeoslimit( name user, bool lock ) {
+      print("!!lockeoslimit!! - Chestnut\n");
+    }
+
+
+    ACTION addwhitelist( name user, name account_to_whitelist ) {
+      print("!!addwhitelist!! - Chestnut\n");
+    }
+
+    ACTION rmwhitelist( name user, name account_to_remove ) {
+      print("!!rmwhitelist!! - Chestnut\n");
+    }
+
+    ACTION lockwhitelst( name user, bool lock ) {
+      print("!!lockwhitelst!! - Chestnut\n");
+    }
+
+
+    ACTION addblacklist( name user, name account_to_blacklist ) {
+      print("!!addblacklist!! - Chestnut\n");
+    }
+
+    ACTION rmblacklist( name user, name account_to_remove ) {
+      print("!!rmblacklist!! - Chestnut\n");
+    }
+
+    ACTION lockblacklst( name user, bool lock ) {
+      print("!!lockblacklst!! - Chestnut\n");
+    }
+
+
 };
 
 // specify the contract name, and export a public action: update
@@ -218,6 +276,43 @@ extern "C" {
     else if( code==name("eosio.token").value && action== name("transfer").value ) {
       execute_action( name(receiver), name(code), &chestnut::transfer );
     }
+    else if( code==receiver && action== name("addtxlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::addtxlimit );
+    }
+    else if( code==receiver && action== name("rmtxlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmtxlimit );
+    }
+    else if( code==receiver && action== name("locktxlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::locktxlimit );
+    }
+    else if( code==receiver && action== name("addeoslimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::addeoslimit );
+    }
+    else if( code==receiver && action== name("rmeoslimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmeoslimit );
+    }
+    else if( code==receiver && action== name("lockeoslimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::lockeoslimit );
+    }
+    else if( code==receiver && action== name("addwhitelist").value ) {
+      execute_action( name(receiver), name(code), &chestnut::addwhitelist );
+    }
+    else if( code==receiver && action== name("rmwhitelist").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmwhitelist );
+    }
+    else if( code==receiver && action== name("lockwhitelst").value ) {
+      execute_action( name(receiver), name(code), &chestnut::lockwhitelst );
+    }
+    else if( code==receiver && action== name("addblacklist").value ) {
+      execute_action( name(receiver), name(code), &chestnut::addblacklist );
+    }
+    else if( code==receiver && action== name("rmblacklist").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmblacklist );
+    }
+    else if( code==receiver && action== name("lockblacklst").value ) {
+      execute_action( name(receiver), name(code), &chestnut::lockblacklst );
+    }
+
 
   }
 };
