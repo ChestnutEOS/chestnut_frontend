@@ -99,6 +99,13 @@ export default {
 		backgroundColor: tealLight,
 		position: "relative"
 	},
+	failurePaper: {
+		display: "flex",
+		flexDirection: "column",
+		padding: 15,
+		backgroundColor: "red",
+		position: "relative"
+	},
 	closeButton: {
 		position: "absolute",
 		height: 30,

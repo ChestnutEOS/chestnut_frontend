@@ -22,7 +22,8 @@ class Tools extends Component {
 			pageView: 1,
 			accountInfo: null,
 			selectedToolIndex: null,
-			result: null
+			success: null,
+			failure: null
 		};
 	}
 
@@ -67,7 +68,7 @@ class Tools extends Component {
 		if (!account || !eosio) return;
 		let accountName = account.name;
 		eosio.rpc.get_account(accountName).then(accountInfo => {
-			console.log(accountInfo);
+			// console.log(accountInfo);
 			this.setState({ accountInfo });
 		});
 	};
@@ -83,7 +84,15 @@ class Tools extends Component {
 			quantity: `${(inputs[1] * 1).toFixed(4)} EOS`,
 			memo: inputs[2]
 		});
-		this.setState({ result });
+		console.log(result);
+		if (result.processed.receipt.status === "executed") {
+			this.setState({ success: result.transaction_id, failure: null });
+		} else {
+			this.setState({
+				success: null,
+				failure: "Error sending transaction.  Please try again."
+			});
+		}
 		this.getAccountInfo();
 	};
 
@@ -92,11 +101,17 @@ class Tools extends Component {
 	};
 
 	closeResultPaper = () => {
-		this.setState({ result: null });
+		this.setState({ success: null, failure: null });
 	};
 
 	render() {
-		const { pageView, accountInfo, selectedToolIndex, result } = this.state;
+		const {
+			pageView,
+			accountInfo,
+			selectedToolIndex,
+			success,
+			failure
+		} = this.state;
 
 		return (
 			<div style={styles.rulesContainer}>
@@ -106,8 +121,14 @@ class Tools extends Component {
 						{accountInfo && (
 							<AccountInfo accountInfo={accountInfo} />
 						)}
-						{result ? (
-							<Paper style={styles.successPaper}>
+						{success || failure ? (
+							<Paper
+								style={
+									success
+										? styles.successPaper
+										: styles.failurePaper
+								}
+							>
 								<IconButton
 									aria-label="Close"
 									size="small"
@@ -121,15 +142,17 @@ class Tools extends Component {
 									style={styles.resultHeader}
 									component="h2"
 								>
-									Success
+									{success ? "Success" : "Error"}
 								</Typography>
 								<Typography
 									variant="body1"
 									style={styles.resultBody}
 									component="h2"
 								>
-									Your action was successfully pushed, with
-									transaction hash of {result}
+									{success
+										? `Your action was successfully pushed, with
+									transaction hash of ${success}`
+										: failure}
 								</Typography>
 							</Paper>
 						) : !selectedToolIndex && selectedToolIndex != 0 ? (

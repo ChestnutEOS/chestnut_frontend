@@ -4,27 +4,33 @@ import ScatterJS from "scatterjs-core";
 import ScatterEOS from "scatterjs-plugin-eosjs2"; // Use eosjs2 if your version of eosjs is > 16
 
 // const endpoint = "http://jungle2.cryptolions.io:80"; // Jungle
-const endpoint = "http://junglehistory.cryptolions.io:18888"; // Jungle
+// const endpoint = "https://junglehistory.cryptolions.io:443"; // Jungle2 full node
 
 // Networks are used to reference certain blockchains.
 // They let you get accounts and help you build signature providers.
-const network = {
+const network = ScatterJS.Network.fromJson({
 	blockchain: "eos",
-	protocol: "https",
+	protocol: "http",
+	// protocol: "https",
 	// host: "dev.cryptolions.io",
+	// host: "api.jungle.alohaeos.com",
 	host: "jungle2.cryptolions.io",
-	port: 443,
-	// port: 80,
+	// port: 443,
+	port: 80,
 	// chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906" // EOS Main Net
-	chainId: "e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473" // Jungle
-};
+	chainId: "e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473" // Jungle2
+	// chainId: "038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca" //Jungle1
+});
 
 class EOSIOClient extends React.Component {
-	constructor(contractAccount) {
+	constructor(contractAccount, endpoint) {
 		super(contractAccount);
 		this.contractAccount = contractAccount;
+		this.endpoint = endpoint;
+		if (!endpoint) this.endpoint = "http://jungle2.cryptolions.io:80";
 		this.account;
 		this.eos;
+		this.scatter;
 
 		// Don't forget to tell ScatterJS which plugins you are using.
 		ScatterJS.plugins(new ScatterEOS());
@@ -42,7 +48,7 @@ class EOSIOClient extends React.Component {
 					accounts: [network]
 				};
 
-				this.rpc = new JsonRpc(endpoint);
+				this.rpc = new JsonRpc(this.endpoint);
 				// // this.login();
 				// scatter.getIdentity(this.requiredFields).then(() => {
 				// 	// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
@@ -56,6 +62,7 @@ class EOSIOClient extends React.Component {
 				// 	this.eos = scatter.eos(network, Api, { rpc });
 				// });
 
+				this.eos = this.scatter.eos(network, Api, { rpc: this.rpc });
 				window.ScatterJS = null;
 			});
 		} catch (error) {
@@ -63,24 +70,20 @@ class EOSIOClient extends React.Component {
 		}
 	}
 
-	login = cb => {
-		try {
-			this.scatter.getIdentity(this.requiredFields).then(() => {
-				// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
-				// the user for their account name beforehand. They could still give you a different account.
-				this.account = this.scatter.identity.accounts.find(
-					x => x.blockchain === "eos"
-				);
+	login = async cb => {
+		await this.scatter.suggestNetwork(network);
+		await this.scatter.getIdentity(this.requiredFields);
+		// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
+		// the user for their account name beforehand. They could still give you a different account.
+		this.account = await this.scatter.identity.accounts.find(
+			x => x.blockchain === "eos"
+		);
 
-				// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
-				this.eos = this.scatter.eos(network, Api, { rpc: this.rpc });
-				return cb(this.account);
-			});
+		// Get a proxy reference to eosjs which you can use to sign transactions with a user's Scatter.
+		this.eos = this.scatter.eos(network, Api, { rpc: this.rpc });
+		return cb(this.account);
 
-			window.ScatterJS = null;
-		} catch (error) {
-			console.log(error);
-		}
+		window.ScatterJS = null;
 	};
 
 	transaction = (action, data) => {
@@ -104,7 +107,8 @@ class EOSIOClient extends React.Component {
 			},
 			{
 				blocksBehind: 3,
-				expireSeconds: 30
+				expireSeconds: 30,
+				broadcast: false
 			}
 		);
 	};
@@ -127,8 +131,8 @@ class EOSIOClient extends React.Component {
 	// 	);
 	// };
 
-	tokenTransfer = data => {
-		return this.eos.transact(
+	tokenTransfer = async data => {
+		const result = await this.eos.transact(
 			{
 				actions: [
 					{
@@ -144,17 +148,17 @@ class EOSIOClient extends React.Component {
 							from: this.account.name,
 							to: data.to,
 							quantity: data.quantity,
-							memo: ""
+							memo: data.memo
 						}
 					}
 				]
 			},
 			{
 				blocksBehind: 3,
-				expireSeconds: 30,
-				broadcast: false
+				expireSeconds: 30
 			}
 		);
+		return result;
 	};
 }
 
