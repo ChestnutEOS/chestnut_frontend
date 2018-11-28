@@ -6,8 +6,14 @@ import ToolCard from "../../components/ToolCard";
 import ToolInput from "../../components/ToolInput";
 
 import toolOptions from "../../options/toolOptions";
-import { Typography, Paper, LinearProgress } from "@material-ui/core";
+import {
+	Typography,
+	Paper,
+	LinearProgress,
+	IconButton
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import Close from "@material-ui/icons/Close";
 
 class Tools extends Component {
 	constructor(props) {
@@ -67,7 +73,7 @@ class Tools extends Component {
 	};
 
 	selectTool = selectedToolIndex => {
-		this.setState({ selectedToolIndex });
+		this.setState({ selectedToolIndex, result: null });
 	};
 
 	onSubmit = async inputs => {
@@ -77,15 +83,20 @@ class Tools extends Component {
 			quantity: `${(inputs[1] * 1).toFixed(4)} EOS`,
 			memo: inputs[2]
 		});
-		console.log(result);
+		this.setState({ result });
+		this.getAccountInfo();
 	};
 
 	goBack = () => {
 		this.setState({ selectedToolIndex: null });
 	};
 
+	closeResultPaper = () => {
+		this.setState({ result: null });
+	};
+
 	render() {
-		const { pageView, accountInfo, selectedToolIndex } = this.state;
+		const { pageView, accountInfo, selectedToolIndex, result } = this.state;
 
 		return (
 			<div style={styles.rulesContainer}>
@@ -95,7 +106,33 @@ class Tools extends Component {
 						{accountInfo && (
 							<AccountInfo accountInfo={accountInfo} />
 						)}
-						{!selectedToolIndex && selectedToolIndex != 0 ? (
+						{result ? (
+							<Paper style={styles.successPaper}>
+								<IconButton
+									aria-label="Close"
+									size="small"
+									style={styles.closeButton}
+									onClick={() => this.closeResultPaper()}
+								>
+									<Close />
+								</IconButton>
+								<Typography
+									variant="subheading"
+									style={styles.resultHeader}
+									component="h2"
+								>
+									Success
+								</Typography>
+								<Typography
+									variant="body1"
+									style={styles.resultBody}
+									component="h2"
+								>
+									Your action was successfully pushed, with
+									transaction hash of {result}
+								</Typography>
+							</Paper>
+						) : !selectedToolIndex && selectedToolIndex != 0 ? (
 							<div style={styles.ruleCardsContainer}>
 								{toolOptions.map((item, index) => {
 									return (

@@ -1,6 +1,7 @@
 const fontFamily = "Proxima Nova Lt";
 const nexa = "Nexa";
 const fontFamilyHeavy = "NexaHeavy";
+const tealLight = "#AEDFD4";
 
 export default {
 	contentContainer: {
@@ -90,5 +91,22 @@ export default {
 		width: "45%",
 		padding: 15
 	},
-	balanceText: { fontFamily: fontFamilyHeavy }
+	balanceText: { fontFamily: fontFamilyHeavy },
+	successPaper: {
+		display: "flex",
+		flexDirection: "column",
+		padding: 15,
+		backgroundColor: tealLight,
+		position: "relative"
+	},
+	closeButton: {
+		position: "absolute",
+		height: 30,
+		width: 30,
+		right: 0,
+		top: 0,
+		color: "white"
+	},
+	resultHeader: {},
+	resultBody: {}
 };
