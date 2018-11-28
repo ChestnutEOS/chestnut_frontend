@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Eos from "eosjs"; // https://github.com/EOSIO/eosjs
+import { JsonRpc } from "eosjs";
 import moment from "moment";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -24,8 +25,6 @@ import ActivityItem from "../../components/ActivityItem";
 
 import ruleOptions from "../../options/ruleOptions";
 
-let activitySanitizer = {};
-
 class Preferences extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +37,7 @@ class Preferences extends Component {
       actions: []
     };
     this.handleFormEvent = this.handleFormEvent.bind(this);
+    this.eosioHistory = new JsonRpc("https://junglehistory.cryptolions.io:443");
   }
 
   componentDidUpdate(props) {
@@ -46,6 +46,13 @@ class Preferences extends Component {
       this.getAccountInfo();
       this.getActions();
     }
+  }
+
+  componentDidMount() {
+    // this.getTable();
+    this.getBalance();
+    this.getAccountInfo();
+    this.getActions();
   }
 
   async handleFormEvent(event) {
@@ -112,30 +119,22 @@ class Preferences extends Component {
   };
 
   getBalance = () => {
-    const { eosio, account } = this.props;
-    if (!account || !eosio) return;
+    const { account } = this.props;
+    if (!account) return;
     let accountName = account.name;
-    eosio.rpc
+    this.eosioHistory
       .get_currency_balance("eosio.token", accountName, "EOS")
       .then(result => {
         console.log(result);
         this.setState({ tokenBalance: result[0] });
       });
-    // let privateKey = accounts[0].privateKey;
-    // const eos = Eos({ keyProvider: privateKey });
-    // const tokenBalance = await eos.getCurrencyBalance(
-    //   "tokenacc",
-    //   account,
-    //   "EOS"
-    // );
-    // this.setState({ tokenBalance });
   };
 
   getAccountInfo = () => {
-    const { eosio, account } = this.props;
-    if (!account || !eosio) return;
+    const { account } = this.props;
+    if (!account) return;
     let accountName = account.name;
-    eosio.rpc.get_account(accountName).then(result => {
+    this.eosioHistory.get_account(accountName).then(result => {
       console.log(result);
     });
   };
@@ -143,12 +142,13 @@ class Preferences extends Component {
   // Need to use /history instead of /chain
   // Check out network activity at https://jungle.bloks.io/account/chestnutdemo
   getActions = () => {
-    const { eosio, account } = this.props;
-    if (!account || !eosio) return;
+    const { account } = this.props;
+    if (!account) return;
     let accountName = account.name;
 
     // Only pull last 50 transactions
-    eosio.rpc.history_get_actions(accountName, -1, -50).then(result => {
+    this.eosioHistory.history_get_actions(accountName, -1, -50).then(result => {
+      console.log(result);
       let actions = result.actions.sort((a, b) => {
         return b.account_action_seq - a.account_action_seq;
       });
@@ -202,13 +202,6 @@ class Preferences extends Component {
     // this.getBalance();
   };
 
-  componentDidMount() {
-    this.getTable();
-    this.getBalance();
-    this.getAccountInfo();
-    this.getActions();
-  }
-
   valueChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -223,6 +216,8 @@ class Preferences extends Component {
       activities,
       actions
     } = this.state;
+
+    let activitySanitizer = {};
     // const { classes } = this.props;
 
     // // generate each note as a card

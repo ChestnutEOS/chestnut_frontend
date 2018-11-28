@@ -38,10 +38,6 @@ export default class extends Component {
 		// this.eosio = null;
 		// this.eosio = { account: { name: "" } };
 		this.eosio = new EOSIOClient("chestnut");
-		// this.eosioHistory = new EOSIOClient(
-		// 	"chestnut",
-		// 	"https://junglehistory.cryptolions.io:443"
-		// );
 		// this.eosio.login();
 	}
 
@@ -276,7 +272,6 @@ export default class extends Component {
 				{pageView === 4 && (
 					<Preferences
 						addRuleClicked={() => this.goTo(1)}
-						eosio={this.eosio}
 						account={account}
 					/>
 				)}

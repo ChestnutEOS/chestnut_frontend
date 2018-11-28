@@ -3,7 +3,7 @@ import { Api, JsonRpc, JsSignatureProvider } from "eosjs";
 import ScatterJS from "scatterjs-core";
 import ScatterEOS from "scatterjs-plugin-eosjs2"; // Use eosjs2 if your version of eosjs is > 16
 
-// const endpoint = "http://jungle2.cryptolions.io:80"; // Jungle
+const endpoint = "http://jungle2.cryptolions.io:80"; // Jungle
 // const endpoint = "https://junglehistory.cryptolions.io:443"; // Jungle2 full node
 
 // Networks are used to reference certain blockchains.
@@ -23,11 +23,9 @@ const network = ScatterJS.Network.fromJson({
 });
 
 class EOSIOClient extends React.Component {
-	constructor(contractAccount, endpoint) {
+	constructor(contractAccount) {
 		super(contractAccount);
 		this.contractAccount = contractAccount;
-		this.endpoint = endpoint;
-		if (!endpoint) this.endpoint = "http://jungle2.cryptolions.io:80";
 		this.account;
 		this.eos;
 		this.scatter;
@@ -48,7 +46,7 @@ class EOSIOClient extends React.Component {
 					accounts: [network]
 				};
 
-				this.rpc = new JsonRpc(this.endpoint);
+				this.rpc = new JsonRpc(endpoint);
 				// // this.login();
 				// scatter.getIdentity(this.requiredFields).then(() => {
 				// 	// Always use the accounts you got back from Scatter. Never hardcode them even if you are prompting
