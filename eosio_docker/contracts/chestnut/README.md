@@ -33,7 +33,7 @@ ex: turn transaction limit back on again
 cleos push action smartaccount locktxlimit '["smartaccount","0"]' -p smartaccount
 ```
 
---
+---
 Create a spending limit parameter for a Chestnut account, including amount and timeframe
 ### addeoslimit
 ex: send no more than ( <= ) 50.0000 EOS over the next 5 days
@@ -57,7 +57,7 @@ ex: unlock eos limit
 cleos push action smartaccount lockeoslimit '["smartaccount","0"]' -p smartaccount
 ```
 
---
+---
 Create a list of whitelisted and blacklisted accounts, referencing an EOS account name
 ### addwhitelist
 ex: add goodguybrian to the whitelist
@@ -104,15 +104,140 @@ ex: unlock blacklist
 cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccount
 ```
 
-
+---
 **Tables**
 
+---
 ### settings
+```json
+{
+    "name": "settings",
+    "base": "",
+    "fields": [
+        {
+            "name": "user",
+            "type": "name"
+        },
+        {
+            "name": "created",
+            "type": "time_point"
+        },
+        {
+            "name": "is_frozen",
+            "type": "bool"
+        }
+    ]
+}
+```
 
 ### txlimit
+```json
+{
+    "name": "txlimit",
+    "base": "",
+    "fields": [
+        {
+            "name": "id",
+            "type": "uint64"
+        },
+        {
+            "name": "user",
+            "type": "name"
+        },
+        {
+            "name": "is_locked",
+            "type": "bool"
+        },
+        {
+            "name": "end_time",
+            "type": "time_point"
+        },
+        {
+            "name": "tx_number_limit",
+            "type": "uint64"
+        },
+        {
+            "name": "tx_number",
+            "type": "uint64"
+        }
+    ]
+}
+```
 
 ### eoslimit
+```json
+{
+    "name": "eoslimit",
+    "base": "",
+    "fields": [
+        {
+            "name": "id",
+            "type": "uint64"
+        },
+        {
+            "name": "user",
+            "type": "name"
+        },
+        {
+            "name": "is_locked",
+            "type": "bool"
+        },
+        {
+            "name": "end_time",
+            "type": "time_point"
+        },
+        {
+            "name": "total_EOS_allowed_to_spend",
+            "type": "asset"
+        },
+        {
+            "name": "current_EOS_spent",
+            "type": "asset"
+        }
+    ]
+}
+```
+
+### whitelist
+```json
+{
+    "name": "whitelist",
+    "base": "",
+    "fields": [
+        {
+            "name": "user",
+            "type": "name"
+        },
+        {
+            "name": "is_locked",
+            "type": "bool"
+        },
+        {
+            "name": "account",
+            "type": "name"
+        }
+    ]
+}
+```
 
 ### blacklist
-
-### blacklist
+```json
+{
+    "name": "blacklist",
+    "base": "",
+    "fields": [
+        {
+            "name": "user",
+            "type": "name"
+        },
+        {
+            "name": "is_locked",
+            "type": "bool"
+        },
+        {
+            "name": "account",
+            "type": "name"
+        }
+    ]
+}
+```
