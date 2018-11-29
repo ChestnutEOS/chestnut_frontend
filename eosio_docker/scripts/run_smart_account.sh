@@ -21,6 +21,7 @@ echo '=== transaction limits ==='
 cleos push action smartaccount addtxlimit '["smartaccount","50","7"]' -p smartaccount
 sleep 0.5
 cleos get table smartaccount smartaccount txlimits
+
 cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
 sleep 0.5
 cleos get table smartaccount smartaccount txlimits
@@ -30,22 +31,37 @@ cleos push action smartaccount addtxlimit '["smartaccount","50","30"]' -p smarta
 sleep 0.5
 cleos push action smartaccount addtxlimit '["smartaccount","50","1"]' -p smartaccount
 sleep 0.5
+
 cleos push action smartaccount locktxlimit '["smartaccount","1"]' -p smartaccount
 sleep 0.5
 cleos get table smartaccount smartaccount txlimits
+
 cleos push action smartaccount locktxlimit '["smartaccount","0"]' -p smartaccount
 sleep 0.5
 cleos get table smartaccount smartaccount txlimits
 
-# echo '=== EOS limits ==='
-# cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount rmeoslimit '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockeoslimit '["smartaccount","1"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockeoslimit '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
+echo '=== EOS limits ==='
+cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount eoslimits
+
+cleos push action smartaccount rmeoslimit '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount eoslimits
+
+cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
+sleep 0.5
+
+cleos push action smartaccount lockeoslimit '["smartaccount","1"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount eoslimits
+cleos push action smartaccount lockeoslimit '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount eoslimits
 
 # echo '=== Whitelist transactions ==='
 # cleos push action smartaccount addwhitelist '["smartaccount","badguybrian"]' -p smartaccount

@@ -86,9 +86,10 @@ CONTRACT chestnut : public eosio::contract {
       bool        is_locked = 0;
       time_point  end_time;
       asset       total_EOS_allowed_to_spend;
-      asset       current_EOS_spent;
+      asset       current_EOS_spent = asset(0,EOS_SYMBOL);
 
       uint64_t primary_key() const { return id; }
+      uint64_t get_by_user() const { return user.value; }
     };
 
     TABLE whitelist {
@@ -115,7 +116,13 @@ CONTRACT chestnut : public eosio::contract {
                                        &txlimit::get_by_user >
                       >
                                                                 >     txlimit_index;
-    typedef eosio::multi_index< name("eoslimits"),   eoslimit   >    eoslimit_index;
+    typedef eosio::multi_index< name("eoslimits"),   eoslimit,
+            indexed_by< name("byuser"),
+                        const_mem_fun< eoslimit,
+                                       uint64_t,
+                                       &eoslimit::get_by_user >
+                      >
+                                                                >    eoslimit_index;
     typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
     typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
 
@@ -199,6 +206,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addtxlimit( name user, uint64_t tx_limit, uint32_t days ) {
       print("!!addtxlimit!! - Chestnut\n");
+      require_auth( _self );
       time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
       time_point duration{ microseconds{ static_cast<int64_t>( days * useconds_per_day ) } };
 
@@ -213,6 +221,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION rmtxlimit( name user, uint64_t id ) {
       print("!!rmtxlimit!! - Chestnut\n");
+      require_auth( _self );
       txlimit_index txlimit_table( _self, user.value );
       auto tx_limit = txlimit_table.find( id );
 
@@ -223,6 +232,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION locktxlimit( name user, bool lock ) {
       print("!!locktxlimit!! - Chestnut\n");
+      require_auth( _self );
 
       txlimit_index txlimit_table( _self, user.value );
       auto txlimit_user_index = txlimit_table.get_index<name("byuser")>();
@@ -241,14 +251,44 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addeoslimit( name user, asset quantity, uint32_t days ) {
       print("!!addeoslimit!! - Chestnut\n");
+      require_auth( _self );
+      time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+      time_point duration{ microseconds{ static_cast<int64_t>( days * useconds_per_day ) } };
+
+      eoslimit_index eoslimit_table( _self, user.value );
+      eoslimit_table.emplace( user, [&]( auto& e ) {
+        e.id                         = eoslimit_table.available_primary_key();
+        e.user                       = user;
+        e.end_time                   = ct + duration;
+        e.total_EOS_allowed_to_spend = quantity;
+      });
     }
 
     ACTION rmeoslimit( name user, uint64_t id ) {
       print("!!rmeoslimit!! - Chestnut\n");
+      require_auth( _self );
+      eoslimit_index eoslimit_table( _self, user.value );
+      auto eos_limit = eoslimit_table.find( id );
+
+      eosio_assert( eos_limit != eoslimit_table.end() , "cannot find txlimit id");
+
+      eoslimit_table.erase( eos_limit );
     }
 
     ACTION lockeoslimit( name user, bool lock ) {
       print("!!lockeoslimit!! - Chestnut\n");
+      eoslimit_index eoslimit_table( _self, user.value );
+      auto eoslimit_user_index = eoslimit_table.get_index<name("byuser")>();
+      auto eos_limit_user = eoslimit_user_index.lower_bound( user.value);
+
+      //const auto& st = *txlimit_user;
+
+      for ( ; eos_limit_user->user == user ; ++eos_limit_user) {
+        eosio_assert(eos_limit_user->user == user, "incorrect first lower bound record");
+        eoslimit_table.modify( *eos_limit_user, same_payer, [&]( auto& e ) {
+          e.is_locked =  lock ? true : false ;
+        });
+      }
     }
 
 
