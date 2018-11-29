@@ -115,7 +115,7 @@ CONTRACT chestnut : public eosio::contract {
                                        &txlimit::get_by_user >
                       >
                                                                 >     txlimit_index;
-    typedef eosio::multi_index< name("spendlimits"), eoslimit   >    eoslimit_index;
+    typedef eosio::multi_index< name("eoslimits"),   eoslimit   >    eoslimit_index;
     typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
     typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
 
