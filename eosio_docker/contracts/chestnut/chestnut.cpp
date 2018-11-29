@@ -74,9 +74,10 @@ CONTRACT chestnut : public eosio::contract {
       bool        is_locked = 0;
       time_point  end_time;
       uint64_t    tx_number_limit;
-      uint64_t    tx_number;
+      uint64_t    tx_number = 0;
 
       uint64_t primary_key() const { return id; }
+      uint64_t get_by_user() const { return user.value; }
     };
 
     TABLE eoslimit {
@@ -107,7 +108,13 @@ CONTRACT chestnut : public eosio::contract {
     };
 
     typedef eosio::multi_index< name("settings"),    settings   >    settings_index;
-    typedef eosio::multi_index< name("txlimits"),    txlimit    >    stxlimit_index;
+    typedef eosio::multi_index< name("txlimits"),    txlimit,
+            indexed_by< name("byuser"),
+                        const_mem_fun< txlimit,
+                                       uint64_t,
+                                       &txlimit::get_by_user >
+                      >
+                                                                >     txlimit_index;
     typedef eosio::multi_index< name("spendlimits"), eoslimit   >    eoslimit_index;
     typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
     typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
@@ -192,14 +199,43 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addtxlimit( name user, uint64_t tx_limit, uint32_t days ) {
       print("!!addtxlimit!! - Chestnut\n");
+      time_point ct{ microseconds{ static_cast<int64_t>( current_time() ) } };
+      time_point duration{ microseconds{ static_cast<int64_t>( days * useconds_per_day ) } };
+
+      txlimit_index txlimit_table( _self, user.value );
+      txlimit_table.emplace( user, [&]( auto& tx ) {
+        tx.id              = txlimit_table.available_primary_key();
+        tx.user            = user;
+        tx.end_time        = ct + duration;
+        tx.tx_number_limit = tx_limit;
+      });
     }
 
     ACTION rmtxlimit( name user, uint64_t id ) {
       print("!!rmtxlimit!! - Chestnut\n");
+      txlimit_index txlimit_table( _self, user.value );
+      auto tx_limit = txlimit_table.find( id );
+
+      eosio_assert( tx_limit != txlimit_table.end() , "cannot find txlimit id");
+
+      txlimit_table.erase( tx_limit );
     }
 
     ACTION locktxlimit( name user, bool lock ) {
       print("!!locktxlimit!! - Chestnut\n");
+
+      txlimit_index txlimit_table( _self, user.value );
+      auto txlimit_user_index = txlimit_table.get_index<name("byuser")>();
+      auto txlimit_user = txlimit_user_index.lower_bound( user.value);
+
+      //const auto& st = *txlimit_user;
+
+      for ( ; txlimit_user->user == user ; ++txlimit_user) {
+        eosio_assert(txlimit_user->user == user, "incorrect first lower bound record");
+        txlimit_table.modify( *txlimit_user, same_payer, [&]( auto& tx ) {
+          tx.is_locked =  lock ? true : false ;
+        });
+      }
     }
 
 
