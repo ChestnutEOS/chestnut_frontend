@@ -205,16 +205,12 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     "base": "",
     "fields": [
         {
-            "name": "user",
+            "name": "account",
             "type": "name"
         },
         {
             "name": "is_locked",
             "type": "bool"
-        },
-        {
-            "name": "account",
-            "type": "name"
         }
     ]
 }
@@ -227,16 +223,12 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     "base": "",
     "fields": [
         {
-            "name": "user",
+            "name": "account",
             "type": "name"
         },
         {
             "name": "is_locked",
             "type": "bool"
-        },
-        {
-            "name": "account",
-            "type": "name"
         }
     ]
 }
