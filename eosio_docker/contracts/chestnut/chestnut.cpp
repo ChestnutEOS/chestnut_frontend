@@ -275,6 +275,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION lockeoslimit( name user, bool lock ) {
       print("!!lockeoslimit!! - Chestnut\n");
+      require_auth( _self );
       eoslimit_index eoslimit_table( _self, user.value );
       auto eoslimit_user_index = eoslimit_table.get_index<name("byuser")>();
       auto eos_limit_user = eoslimit_user_index.lower_bound( user.value);
@@ -292,6 +293,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addwhitelist( name user, name account_to_whitelist ) {
       print("!!addwhitelist!! - Chestnut\n");
+      require_auth( _self );
       whitelist_index whitelist_table( _self, user.value );
       eosio_assert( is_account( account_to_whitelist ), "account does not exist");
 
@@ -302,6 +304,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION rmwhitelist( name user, name account_to_remove ) {
       print("!!rmwhitelist!! - Chestnut\n");
+      require_auth( _self );
       whitelist_index whitelist_table( _self, user.value );
       auto whitelisted = whitelist_table.find( account_to_remove.value );
 
@@ -312,6 +315,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION lockwhitelst( name user, bool lock ) {
       print("!!lockwhitelst!! - Chestnut\n");
+      require_auth( _self );
       whitelist_index whitelist_table( _self, user.value );
       //auto whitelist_owner = whitelist_table.find( user.value );
       auto begin = whitelist_table.begin();
@@ -326,6 +330,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addblacklist( name user, name account_to_blacklist ) {
       print("!!addblacklist!! - Chestnut\n");
+      require_auth( _self );
       blacklist_index blacklist_table( _self, user.value );
       eosio_assert( is_account( account_to_blacklist ), "account does not exist");
 
@@ -336,6 +341,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION rmblacklist( name user, name account_to_remove ) {
       print("!!rmblacklist!! - Chestnut\n");
+      require_auth( _self );
       blacklist_index blacklist_table( _self, user.value );
       auto blacklisted = blacklist_table.find( account_to_remove.value );
 
@@ -346,7 +352,7 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION lockblacklst( name user, bool lock ) {
       print("!!lockblacklst!! - Chestnut\n");
-      print("!!lockblacklst!! - Chestnut\n");
+      require_auth( _self );
       blacklist_index blacklist_table( _self, user.value );
       //auto blacklist_owner = blacklist_table.find( user.value );
       auto begin = blacklist_table.begin();
