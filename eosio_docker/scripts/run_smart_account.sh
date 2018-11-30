@@ -42,8 +42,10 @@ cleos get table smartaccount smartaccount txlimits
 
 echo '=== EOS limits ==='
 cleos push action smartaccount addeoslimit '["smartaccount","50.0000 EOS","5"]' -p smartaccount
+cleos push action smartaccount addeoslimit '["smartaccount","5000.0000 EOS","30"]' -p smartaccount
 sleep 0.5
 cleos get table smartaccount smartaccount eoslimits
+
 
 cleos push action smartaccount rmeoslimit '["smartaccount","0"]' -p smartaccount
 sleep 0.5
