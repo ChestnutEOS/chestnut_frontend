@@ -129,7 +129,7 @@ cleos push action eosio.token transfer '[ "eosio", "seclogacc", "10000.0000 EOS"
 cleos push action eosio.token transfer '[ "eosio", "smartaccount", "10000.0000 EOS", "memo"]' -p eosio smartaccount
 
 echo "=== run the smart account contract ==="
-run_smart_account.sh
+#run_smart_account.sh
 
 run_accountmaker.sh
 
