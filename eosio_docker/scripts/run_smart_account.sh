@@ -63,23 +63,47 @@ cleos push action smartaccount lockeoslimit '["smartaccount","0"]' -p smartaccou
 sleep 0.5
 cleos get table smartaccount smartaccount eoslimits
 
-# echo '=== Whitelist transactions ==='
-# cleos push action smartaccount addwhitelist '["smartaccount","badguybrian"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount rmwhitelist '["smartaccount","badguybrian"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockwhitelst '["smartaccount","1"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockwhitelst '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
+echo '=== Whitelist transactions ==='
+cleos push action smartaccount addwhitelist '["smartaccount","trish"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount whitelist
 
-# echo '=== Blacklist transactions ==='
-# cleos push action smartaccount addblacklist '["smartaccount","goodguybrian"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount rmblacklist '["smartaccount","goodguybrian"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockblacklst '["smartaccount","1"]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
+cleos push action smartaccount rmwhitelist '["smartaccount","trish"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
+
+cleos push action smartaccount addwhitelist '["smartaccount","annette"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount addwhitelist '["smartaccount","ashe"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount whitelist
+
+cleos push action smartaccount lockwhitelst '["smartaccount","1"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount whitelist
+cleos push action smartaccount lockwhitelst '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount whitelist
+
+echo '=== Blacklist transactions ==='
+cleos push action smartaccount addblacklist '["smartaccount","trish"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
+
+cleos push action smartaccount rmblacklist '["smartaccount","trish"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
+
+cleos push action smartaccount addblacklist '["smartaccount","annette"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount addblacklist '["smartaccount","ashe"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
+
+cleos push action smartaccount lockblacklst '["smartaccount","1"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
+cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount blacklist
 

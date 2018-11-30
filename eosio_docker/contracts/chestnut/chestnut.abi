@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Nov 29 12:52:28 2018",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Nov 29 19:49:53 2018",
     "version": "eosio::abi/1.0",
     "structs": [
         {
@@ -71,16 +71,12 @@
             "base": "",
             "fields": [
                 {
-                    "name": "user",
+                    "name": "account",
                     "type": "name"
                 },
                 {
                     "name": "is_locked",
                     "type": "bool"
-                },
-                {
-                    "name": "account",
-                    "type": "name"
                 }
             ]
         },
@@ -353,16 +349,12 @@
             "base": "",
             "fields": [
                 {
-                    "name": "user",
+                    "name": "account",
                     "type": "name"
                 },
                 {
                     "name": "is_locked",
                     "type": "bool"
-                },
-                {
-                    "name": "account",
-                    "type": "name"
                 }
             ]
         }

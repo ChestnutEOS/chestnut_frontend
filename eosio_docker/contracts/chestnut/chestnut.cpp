@@ -93,19 +93,17 @@ CONTRACT chestnut : public eosio::contract {
     };
 
     TABLE whitelist {
-      name        user;
-      bool        is_locked = 0;
       name        account;
+      bool        is_locked = 0;
 
-      uint64_t primary_key() const { return user.value; }
+      uint64_t primary_key() const { return account.value; }
     };
 
     TABLE blacklist {
-      name        user;
-      bool        is_locked = 0;
       name        account;
+      bool        is_locked = 0;
 
-      uint64_t primary_key() const { return user.value; }
+      uint64_t primary_key() const { return account.value; }
     };
 
     typedef eosio::multi_index< name("settings"),    settings   >    settings_index;
@@ -294,27 +292,70 @@ CONTRACT chestnut : public eosio::contract {
 
     ACTION addwhitelist( name user, name account_to_whitelist ) {
       print("!!addwhitelist!! - Chestnut\n");
+      whitelist_index whitelist_table( _self, user.value );
+      eosio_assert( is_account( account_to_whitelist ), "account does not exist");
+
+      whitelist_table.emplace( user, [&]( auto& w ) {
+        w.account = account_to_whitelist;
+      });
     }
 
     ACTION rmwhitelist( name user, name account_to_remove ) {
       print("!!rmwhitelist!! - Chestnut\n");
+      whitelist_index whitelist_table( _self, user.value );
+      auto whitelisted = whitelist_table.find( account_to_remove.value );
+
+      eosio_assert( whitelisted->account == account_to_remove , "cannot find account");
+
+      whitelist_table.erase( whitelisted );
     }
 
     ACTION lockwhitelst( name user, bool lock ) {
       print("!!lockwhitelst!! - Chestnut\n");
+      whitelist_index whitelist_table( _self, user.value );
+      //auto whitelist_owner = whitelist_table.find( user.value );
+      auto begin = whitelist_table.begin();
+
+      for ( ; begin != whitelist_table.end(); ++begin ) {
+          whitelist_table.modify( *begin, same_payer, [&]( auto& w ) {
+            w.is_locked =  lock ? true : false ;
+          });
+      }
     }
 
 
     ACTION addblacklist( name user, name account_to_blacklist ) {
       print("!!addblacklist!! - Chestnut\n");
+      blacklist_index blacklist_table( _self, user.value );
+      eosio_assert( is_account( account_to_blacklist ), "account does not exist");
+
+      blacklist_table.emplace( user, [&]( auto& w ) {
+        w.account = account_to_blacklist;
+      });
     }
 
     ACTION rmblacklist( name user, name account_to_remove ) {
       print("!!rmblacklist!! - Chestnut\n");
+      blacklist_index blacklist_table( _self, user.value );
+      auto blacklisted = blacklist_table.find( account_to_remove.value );
+
+      eosio_assert( blacklisted->account == account_to_remove , "cannot find account");
+
+      blacklist_table.erase( blacklisted );
     }
 
     ACTION lockblacklst( name user, bool lock ) {
       print("!!lockblacklst!! - Chestnut\n");
+      print("!!lockblacklst!! - Chestnut\n");
+      blacklist_index blacklist_table( _self, user.value );
+      //auto blacklist_owner = blacklist_table.find( user.value );
+      auto begin = blacklist_table.begin();
+
+      for ( ; begin != blacklist_table.end(); ++begin ) {
+          blacklist_table.modify( *begin, same_payer, [&]( auto& w ) {
+            w.is_locked =  lock ? true : false ;
+          });
+      }
     }
 
 

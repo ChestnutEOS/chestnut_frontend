@@ -114,7 +114,7 @@ cleos system newaccount eosio --transfer seclogacc EOS6PUh9rs7eddJNzqgqDx1QrspSH
 EOS8BCgapgYA2L4LJfCzekzeSr3rzgSTUXRXwNi8bNRoz31D14en9 \
 --stake-net "1.0000 EOS" --stake-cpu "1.0000 EOS" --buy-ram-kbytes 138675
 
-echo "=== deploy smart contract ==="
+echo "=== DEPOLYING SMART CONTRACT - PLEASE WAIT ==="
 # $1 smart contract name
 # $2 account holder name of the smart contract
 # $3 wallet for unlock the account
@@ -130,7 +130,7 @@ cleos push action eosio.token transfer '[ "eosio", "smartaccount", "10000.0000 E
 
 echo "=== run the smart account contract ==="
 run_smart_account.sh
-sleep 1
+
 run_accountmaker.sh
 
 echo "=== end of setup blockchain accounts and smart contract ==="
