@@ -3,20 +3,21 @@ import { Api, JsonRpc, JsSignatureProvider } from "eosjs";
 import ScatterJS from "scatterjs-core";
 import ScatterEOS from "scatterjs-plugin-eosjs2"; // Use eosjs2 if your version of eosjs is > 16
 
-const endpoint = "http://jungle2.cryptolions.io:80"; // Jungle
+// const endpoint = "http://jungle2.cryptolions.io:80"; // Jungle
+const endpoint = "https://jungle2.cryptolions.io:443"; // Jungle2
 // const endpoint = "https://junglehistory.cryptolions.io:443"; // Jungle2 full node
 
 // Networks are used to reference certain blockchains.
 // They let you get accounts and help you build signature providers.
 const network = ScatterJS.Network.fromJson({
 	blockchain: "eos",
-	protocol: "http",
-	// protocol: "https",
+	// protocol: "http",
+	protocol: "https",
 	// host: "dev.cryptolions.io",
 	// host: "api.jungle.alohaeos.com",
 	host: "jungle2.cryptolions.io",
-	// port: 443,
-	port: 80,
+	port: 443,
+	// port: 80,
 	// chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906" // EOS Main Net
 	chainId: "e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473" // Jungle2
 	// chainId: "038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca" //Jungle1
