@@ -85,12 +85,12 @@ class EOSIOClient extends React.Component {
 		window.ScatterJS = null;
 	};
 
-	transaction = (action, data) => {
+	chestnutTransaction = (action, data) => {
 		return this.eos.transact(
 			{
 				actions: [
 					{
-						account: this.contractAccount,
+						account: this.account.name,
 						name: action,
 						authorization: [
 							{
@@ -106,29 +106,10 @@ class EOSIOClient extends React.Component {
 			},
 			{
 				blocksBehind: 3,
-				expireSeconds: 30,
-				broadcast: false
+				expireSeconds: 30
 			}
 		);
 	};
-
-	// tokenTransaction = data => {
-	// 	console.log(this.eos);
-	// 	return this.eos.transfer(
-	// 		this.account.name,
-	// 		data.to,
-	// 		data.quantity,
-	// 		data.memo,
-	// 		{
-	// 			authorization: [
-	// 				{
-	// 					actor: this.account.name,
-	// 					permission: this.account.authority
-	// 				}
-	// 			]
-	// 		}
-	// 	);
-	// };
 
 	tokenTransfer = async data => {
 		const result = await this.eos.transact(

@@ -37,7 +37,7 @@ export default class extends Component {
 
 		// this.eosio = null;
 		// this.eosio = { account: { name: "" } };
-		this.eosio = new EOSIOClient("chestnut");
+		this.eosio = new EOSIOClient("Chestnut");
 		// this.eosio.login();
 	}
 
@@ -67,47 +67,65 @@ export default class extends Component {
 
 	setParameter = async event => {
 		event.preventDefault();
-		// let account = accounts[0].name;
-		// let privateKey = accounts[0].privateKey;
-		let account = this.eosio.account.name;
-		let privateKey = null;
-		let spend_max = this.state.spend_max;
-		let trans_max = 0;
 
-		let actionName = "";
-		let actionData = {};
-
-		// switch (event.type) {
-		// 	case "submit":
-		actionName = "update";
-		actionData = {
-			_user: account,
-			_spend_max: spend_max,
-			_trans_max: trans_max
-		};
-		// break;
-		// 	default:
-		// 		return;
-		// }
-
-		// const eos = Eos({ keyProvider: privateKey });
-		const result = await this.eosio.transaction({
-			actions: [
-				{
-					account: "chestnut",
-					name: actionName,
-					authorization: [
-						{
-							actor: account,
-							permission: "active"
-						}
-					],
-					data: actionData
-				}
-			]
+		const result = await this.eosio.chestnutTransaction("addtxlimit", {
+			user: this.state.account.name,
+			tx_limit: `50`,
+			days: "5"
 		});
 
 		console.log(result);
+
+		// if (result.processed.receipt.status === "executed") {
+		// 	this.setState({ success: result.transaction_id, failure: null });
+		// } else {
+		// 	this.setState({
+		// 		success: null,
+		// 		failure: "Error sending transaction.  Please try again."
+		// 	});
+		// }
+		// this.getAccountInfo();
+		// // let account = accounts[0].name;
+		// // let privateKey = accounts[0].privateKey;
+		// let account = this.eosio.account.name;
+		// let privateKey = null;
+		// let spend_max = this.state.spend_max;
+		// let trans_max = 0;
+
+		// let actionName = "";
+		// let actionData = {};
+
+		// // switch (event.type) {
+		// // 	case "submit":
+		// actionName = "update";
+		// actionData = {
+		// 	_user: account,
+		// 	_spend_max: spend_max,
+		// 	_trans_max: trans_max
+		// };
+		// // break;
+		// // 	default:
+		// // 		return;
+		// // }
+
+		// // const eos = Eos({ keyProvider: privateKey });
+		// const result = await this.eosio.transaction({
+		// 	actions: [
+		// 		{
+		// 			account: "chestnutDemo",
+		// 			name: actionName,
+		// 			authorization: [
+		// 				{
+		// 					actor: account,
+		// 					permission: "active"
+		// 				}
+		// 			],
+		// 			data: actionData
+		// 		}
+		// 	]
+		// });
+
+		// console.log(result);
 		// this.goForward();
 
 		// this.getTable();
@@ -245,6 +263,9 @@ export default class extends Component {
 								text={ruleOptions[selectedRuleIndex].text}
 								ruleInput={`${spend_max} EOS / ${per_period}`}
 								icon={ruleOptions[selectedRuleIndex].icon}
+								description={
+									ruleOptions[selectedRuleIndex].description
+								}
 							/>
 						</div>
 						<Button
