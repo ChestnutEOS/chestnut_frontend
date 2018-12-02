@@ -139,6 +139,30 @@ CONTRACT chestnut : public eosio::contract {
       assert_frozen( _self );
     }
 
+    ACTION checktxlimit() {
+      // try and pass in "receiver" instead of using "_self"
+      txlimit_index txlimit_table( _self, _self.value );
+      auto tx_limit = txlimit_table.begin();
+
+      for ( ; tx_limit != txlimit_table.end() ; ++tx_limit ) {
+        // only check if txlimit is "unlocked"
+        if ( !tx_limit->is_locked ) {
+          eosio_assert( tx_limit->user == _self, "could not find self");
+
+          // check if limit still in effect
+          if ( current_time_point() <= tx_limit->end_time ) {
+            //print("tx_limit->tx_number: ", tx_limit->tx_number, "\n");
+            //print("tx_limit->tx_number_limit: ", tx_limit->tx_number_limit, "\n");
+            eosio_assert( tx_limit->tx_number < tx_limit->tx_number_limit, "exceeded maximum transaction number" );
+            // increase transaction count
+            txlimit_table.modify( tx_limit, same_payer, [&]( auto& tx ) {
+              tx.tx_number = tx.tx_number + 1;
+            });
+          }
+        }
+      }
+    }
+
     ACTION update( name user, bool freeze ) {
       // to sign the action with the given account
       require_auth( _self );
@@ -375,8 +399,19 @@ extern "C" {
     // chestnut _chestnut(receiver);
     //auto self = receiver;
 
+    /****************************************************************************
+     *  ACTION HANDLERS
+     ***************************************************************************/
+
+    // gives ability to rm a txlimit after it is exceeded
+    if( code==receiver && action== name("rmtxlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmtxlimit );
+    }
+
+    // Runs for every actions that is not "update"
     if( code==receiver && action != name("update").value ) {
       execute_action( name(receiver), name(code), &chestnut::checkfrozen );
+      execute_action( name(receiver), name(code), &chestnut::checktxlimit );
     }
     if( code==receiver && action== name("update").value ) {
       execute_action( name(receiver), name(code), &chestnut::update );
@@ -384,9 +419,7 @@ extern "C" {
     // else if(code==receiver && action== name("notify").value) {
     //   execute_action(name(receiver), name(code), &chestnut::notify );
     // }
-    // else if(code==receiver && action== name("erase").value) {
-    //   execute_action(name(receiver), name(code), &chestnut::erase );
-    // }
+
     else if( code==receiver && action== name("setnotify").value ) {
       execute_action( name(receiver), name(code), &chestnut::setnotify );
     }
@@ -399,12 +432,17 @@ extern "C" {
     else if( code==name("eosio.token").value && action== name("transfer").value ) {
       execute_action( name(receiver), name(code), &chestnut::transfer );
     }
+
+    /****************************************************************************
+     *  ACTION SETTINGS
+     ***************************************************************************/
+
     else if( code==receiver && action== name("addtxlimit").value ) {
       execute_action( name(receiver), name(code), &chestnut::addtxlimit );
     }
-    else if( code==receiver && action== name("rmtxlimit").value ) {
-      execute_action( name(receiver), name(code), &chestnut::rmtxlimit );
-    }
+    // else if( code==receiver && action== name("rmtxlimit").value ) {
+    //   execute_action( name(receiver), name(code), &chestnut::rmtxlimit );
+    // }
     else if( code==receiver && action== name("locktxlimit").value ) {
       execute_action( name(receiver), name(code), &chestnut::locktxlimit );
     }

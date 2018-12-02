@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Thu Nov 29 20:00:00 2018",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Dec  2 09:43:50 2018",
     "version": "eosio::abi/1.0",
     "structs": [
         {
@@ -82,6 +82,11 @@
         },
         {
             "name": "checkfrozen",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "checktxlimit",
             "base": "",
             "fields": []
         },
@@ -384,6 +389,11 @@
         {
             "name": "checkfrozen",
             "type": "checkfrozen",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "checktxlimit",
+            "type": "checktxlimit",
             "ricardian_contract": ""
         },
         {
