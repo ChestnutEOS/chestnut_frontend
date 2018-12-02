@@ -18,29 +18,30 @@ CONTRACT chestnut : public eosio::contract {
      *                            F U N C T I O N S
      ***************************************************************************/
 
-    void validate_transfer( name code, name to, asset quantity ) {
-        // whitelist_table w(code, code);
-        asset cap_total;
-        asset cap_tx;
-        uint64_t duration;
+    void validate_transfer( name to, asset quantity ) {
+      eoslimit_index eoslimit_table( _self, _self.value );
+      auto eos_limit = eoslimit_table.begin();
 
-        // auto itr = w.find(to);
-        // if(itr != w.end()) {
-        //     cap_total = itr->cap_total;
-        //     cap_tx = itr->cap_tx;
-        //     duration = itr->duration;
-        // } else {
-        //     settings_table s(code, code);
-        //     auto it = s.find(code);
-        //     cap_total = it->cap_total;
-        //     cap_tx = it->cap_tx;
-        //     duration = it->duration;
-        // }
-        // eosio_assert(quantity <= cap_tx, "cap_tx exceeded!");
-        // asset cap_used = get_cap_used(code, to, quantity, duration);
-        //print("cap_used:", cap_used.amount);
-        //print("cap_total:", cap_total.amount);
-        //  eosio_assert(cap_used <= cap_total, "cap_total exceeded!");
+      for ( ; eos_limit != eoslimit_table.end() ; ++eos_limit ) {
+        // only check if txlimit is "unlocked"
+        if ( !eos_limit->is_locked ) {
+          eosio_assert( eos_limit->user == _self, "could not find self");
+
+          // check if limit still in effect
+          if ( current_time_point() <= eos_limit->end_time ) {
+            //print("eos_limit->current_EOS_spent: ", eos_limit->current_EOS_spent, "\n");
+            //print("eos_limit->total_EOS_allowed_to_spend: ", eos_limit->total_EOS_allowed_to_spend, "\n");
+            eosio_assert( quantity + eos_limit->current_EOS_spent <= eos_limit->total_EOS_allowed_to_spend,
+                          "exceeded maximum transaction number" );
+            eosio_assert( eos_limit->current_EOS_spent <= eos_limit->total_EOS_allowed_to_spend,
+                          "exceeded maximum transaction number" );
+            // increase transaction count
+            eoslimit_table.modify( eos_limit, same_payer, [&]( auto& e ) {
+              e.current_EOS_spent = e.current_EOS_spent + quantity;
+            });
+          }
+        }
+      }
     }
 
     time_point current_time_point() {
@@ -192,7 +193,7 @@ CONTRACT chestnut : public eosio::contract {
       eosio_assert( quantity.symbol == EOS_SYMBOL, "only supports EOS");
 
       // validate_blacklist(_self, to);
-      validate_transfer( _self , to, quantity);
+      validate_transfer( to, quantity);
 
       // INLINE_ACTION_SENDER(eosio::token, transfer)
       // (N(eosio.token), {{_self, N(gperm)}}, {_self, to, quantity, memo});
@@ -211,10 +212,17 @@ CONTRACT chestnut : public eosio::contract {
                      name    to,
                      asset   quantity,
                      std::string  memo ) {
-      // require_auth( _self );
       print("!!Chestnut Smart Transfer!!\n");
-      // Uncomment line below to freeze all token transfers
-      // eosio_assert(false, "asserted");
+
+      if ( from == _self ) {
+        // out-going tx, validate
+        validate_transfer( to, quantity );
+      }
+
+      if ( to == _self ) {
+        // in-comming tx
+        return;
+      }
     }
 
     ACTION setnotify ( bool is_on ) {
