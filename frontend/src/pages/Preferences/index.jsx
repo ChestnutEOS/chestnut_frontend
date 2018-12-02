@@ -212,24 +212,41 @@ class Preferences extends Component {
                   checked={true}
                 />
               )}
+              {/*} Tx Limit (over time) */}
+              {txlimits && (
+                <RuleCard
+                  text={ruleOptions[1].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${txlimits[0].tx_number_limit
+                    .toString()
+                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")} Tx / month`}
+                  icon={ruleOptions[1].icon}
+                  description={ruleOptions[1].description}
+                  checked={true}
+                />
+              )}
               {/* Whitelist */}
-              <RuleCard
-                text={ruleOptions[2].text}
-                style={styles.ruleCard}
-                ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
-                icon={ruleOptions[2].icon}
-                description={ruleOptions[2].description}
-                checked={false}
-              />
+              {whitelist && (
+                <RuleCard
+                  text={ruleOptions[2].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
+                  icon={ruleOptions[2].icon}
+                  description={ruleOptions[2].description}
+                  checked={false}
+                />
+              )}
               {/* Blacklist */}
-              <RuleCard
-                text={ruleOptions[3].text}
-                style={styles.ruleCard}
-                ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
-                icon={ruleOptions[3].icon}
-                description={ruleOptions[3].description}
-                checked={false}
-              />
+              {blacklist && (
+                <RuleCard
+                  text={ruleOptions[3].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
+                  icon={ruleOptions[3].icon}
+                  description={ruleOptions[3].description}
+                  checked={false}
+                />
+              )}
               <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
             </div>
           </div>

@@ -89,6 +89,7 @@ export default {
 		padding: 15,
 		width: 150,
 		margin: 0,
+		marginBottom: 15,
 		cursor: "pointer",
 		borderRadius: 0
 	},
