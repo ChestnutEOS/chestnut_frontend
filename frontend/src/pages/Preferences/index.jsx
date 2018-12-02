@@ -36,7 +36,7 @@ class Preferences extends Component {
       eosToSend: 3,
       actions: []
     };
-    this.handleFormEvent = this.handleFormEvent.bind(this);
+    // this.handleFormEvent = this.handleFormEvent.bind(this);
     this.eosioHistory = new JsonRpc("https://junglehistory.cryptolions.io:443");
   }
 
@@ -45,6 +45,7 @@ class Preferences extends Component {
       this.getBalance();
       this.getAccountInfo();
       this.getActions();
+      this.getTables();
     }
   }
 
@@ -53,69 +54,30 @@ class Preferences extends Component {
     this.getBalance();
     this.getAccountInfo();
     this.getActions();
+    this.getTables();
   }
 
-  async handleFormEvent(event) {
-    event.preventDefault();
-    let account = accounts[0].name;
-    let privateKey = accounts[0].privateKey;
-    let spend_max = event.target.spend_max.value;
-    let trans_max = event.target.trans_max.value;
-
-    let actionName = "";
-    let actionData = {};
-
-    switch (event.type) {
-      case "submit":
-        actionName = "update";
-        actionData = {
-          _user: account,
-          _spend_max: spend_max,
-          _trans_max: trans_max
-        };
-        break;
-      default:
-        return;
-    }
-
-    const eos = Eos({ keyProvider: privateKey });
-    const result = await eos.transaction({
-      actions: [
-        {
-          account: "seclogacc",
-          name: actionName,
-          authorization: [
-            {
-              actor: account,
-              permission: "active"
-            }
-          ],
-          data: actionData
-        }
-      ]
+  getTable = async (account, table) => {
+    const result = await this.props.eosio.rpc.get_table_rows({
+      json: true,
+      code: account.name, // contract who owns the table
+      scope: account.name, // scope of the table
+      table: table, // name of the table as specified by the contract abi
+      limit: 100
     });
+    console.log(result.rows);
+    this.setState({ [table]: result.rows });
+  };
 
-    this.getTable();
-  }
-  getTable = () => {
-    // const eos = Eos();
-    // eos
-    //   .getTableRows({
-    //     json: true,
-    //     code: "seclogacc", // contract who owns the table
-    //     scope: "seclogacc", // scope of the table
-    //     table: "prefstruct", // name of the table as specified by the contract abi
-    //     limit: 100
-    //   })
-    //   .then(result => {
-    //     console.log(result);
-    //     if (!result || !result.rows || !result.rows[0]) return;
-    //     this.setState({
-    //       prefTable: result.rows,
-    //       spend_max: result.rows[0].spend_max,
-    //       trans_max: result.rows[0].trans_max ? result.rows[0].trans_max : 10
-    //     });
-    //   });
+  getTables = () => {
+    const { account } = this.props;
+    if (!account) return;
+
+    this.getTable(account, "txlimits");
+    this.getTable(account, "eoslimits");
+    this.getTable(account, "settings");
+    this.getTable(account, "blacklist");
+    this.getTable(account, "whitelist");
   };
 
   getBalance = () => {

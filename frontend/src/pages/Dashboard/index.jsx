@@ -352,6 +352,7 @@ export default class extends Component {
 					<Preferences
 						addRuleClicked={() => this.goTo(1)}
 						account={account}
+						eosio={this.eosio}
 					/>
 				)}
 				{pageView === 5 && (

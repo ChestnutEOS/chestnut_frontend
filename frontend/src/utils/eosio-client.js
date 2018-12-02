@@ -140,6 +140,15 @@ class EOSIOClient extends React.Component {
 		);
 		return result;
 	};
+
+	getTable = async data => {
+		console.log(this.eos);
+		const result = await this.eos.getTableRows(data);
+
+		console.log(result);
+
+		return result;
+	};
 }
 
 export default EOSIOClient;

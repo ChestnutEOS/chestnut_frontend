@@ -1,0 +1,55 @@
+Object
+authorization:Array[1]
+0:Object
+actor:"imthemachine"
+permission:"active"
+code:"eosio"
+data:Object
+active:Object
+accounts:Array[0]
+keys:Array[1]
+0:Object
+key:"EOS5RmF22318rJ4AcXgEYX29AeB1C643TmoB7E2WMcYnE2VnVxiT8"
+weight:1
+threshold:1
+waits:Array[0]
+creator:"imthemachine"
+name:"exploremagii"
+owner:Object
+accounts:Array[0]
+keys:Array[1]
+0:Object
+key:"EOS4yNR5ZuEGeJyiRi3rJfbaUMs3B7KmoZp5H2AL9RD3Zwd6h1PpK"
+weight:1
+threshold:1
+waits:Array[0]
+ricardian:"<div class="ricardian-action">Action</div> - "newaccount"<br><br>#<div class="ricardian-description">Description</div><br><br>The "newaccount" action creates a new account.<br><br>As an authorized party I "imthemachine" wish to exercise the authority of "imthemachine" to create a new account on this system named "exploremagii" such that the new account's owner public key shall be "[object Object]" and the active public key shall be "[object Object]".<br>"
+type:"newaccount"
+
+Object
+authorization:Array[1]
+0:Object
+actor:"imthemachine"
+permission:"active"
+code:"eosio"
+data:Object
+bytes:4096
+payer:"imthemachine"
+receiver:"exploremagii"
+ricardian:"<div class="ricardian-action">Action</div> - "buyrambytes"<br><br>#<div class="ricardian-description">Description</div><br><br>This action will attempt to reserve about {{bytes}} bytes of RAM on behalf of {{receiver}}. <br><br>{{buyer}} authorizes this contract to transfer sufficient EOS tokens to buy the RAM based upon the current price as determined by the market maker algorithm.<br><br>{{buyer}} accepts that a 0.5% fee will be charged on the EOS spent and that the actual RAM received may be slightly less than requested due to the approximations necessary to enable this service.<br>{{buyer}} accepts that a 0.5% fee will be charged if and when they sell the RAM received.<br>{{buyer}} accepts that rounding errors resulting from limits of computational precision may result in less RAM being allocated.<br>{{buyer}} acknowledges that the supply of RAM may be increased at any time up to the limits of off-the-shelf computer equipment and that this may result in RAM selling for less than purchase price.<br>{{buyer}} acknowledges that the price of RAM may increase or decrease over time according to supply and demand.<br>{{buyer}} acknowledges that RAM is non-transferable. <br>{{buyer}} acknowledges RAM currently in use by their account cannot be sold until it is freed and that freeing RAM may be subject to terms of other contracts.<br><br>"
+type:"buyrambytes"
+
+Object
+authorization:Array[1]
+0:Object
+actor:"imthemachine"
+permission:"active"
+code:"eosio"
+data:Object
+from:"imthemachine"
+receiver:"exploremagii"
+stake_cpu_quantity:"0.2000 EOS"
+stake_net_quantity:"0.2000 EOS"
+transfer:0
+ricardian:"<div class="ricardian-action">Action</div> - "delegatebw"<br><br><div class="ricardian-description">Description</div><br><br>The intent of the "delegatebw" action is to stake tokens for bandwidth and/or CPU and optionally transfer ownership.<br><br>As an authorized party I "imthemachine" wish to stake "0.2000 EOS" for CPU and "0.2000 EOS" for bandwidth from the liquid tokens of "imthemachine" for the use of delegatee {{ to }}. <br>  <br>    {{if transfer }}<br>    <br>It is "0" that I wish these tokens to become immediately owned by the delegatee.<br> <br>    {{/if}}<br><br>As signer I stipulate that, if I am not the beneficial owner of these tokens, I have proof that Iu2019ve been authorized to take this action by their beneficial owner(s). <br>"
+type:"delegatebw"
