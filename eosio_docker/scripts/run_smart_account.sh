@@ -18,58 +18,58 @@ cleos push action smartaccount hello '[]' -p smartaccount
 
 
 
-# echo '=== Transaction Limits ==='
-# echo 'cleos push action smartaccount addtxlimit ["smartaccount","500","7"] -p smartaccount'
-# cleos push action smartaccount addtxlimit '["smartaccount","500","7"]' -p smartaccount
-# sleep 0.5
-# echo 'cleos get table smartaccount smartaccount txlimits'
-# cleos get table smartaccount smartaccount txlimits
+echo '=== Transaction Limits ==='
+echo 'cleos push action smartaccount addtxlimit ["smartaccount","500","7"] -p smartaccount'
+cleos push action smartaccount addtxlimit '["smartaccount","500","7"]' -p smartaccount
+sleep 0.5
+echo 'cleos get table smartaccount smartaccount txlimits'
+cleos get table smartaccount smartaccount txlimits
 
-# echo 'cleos push action smartaccount rmtxlimit ["smartaccount","0"] -p smartaccount'
-# cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
-# echo 'cleos get table smartaccount smartaccount txlimits'
-# cleos get table smartaccount smartaccount txlimits
+echo 'cleos push action smartaccount rmtxlimit ["smartaccount","0"] -p smartaccount'
+cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+echo 'cleos get table smartaccount smartaccount txlimits'
+cleos get table smartaccount smartaccount txlimits
 
-# echo 'cleos push action smartaccount addtxlimit ["smartaccount","5","1"] -p smartaccount'
-# cleos push action smartaccount addtxlimit '["smartaccount","5","1"]' -p smartaccount
-# sleep 0.5
+echo 'cleos push action smartaccount addtxlimit ["smartaccount","5","1"] -p smartaccount'
+cleos push action smartaccount addtxlimit '["smartaccount","5","1"]' -p smartaccount
+sleep 0.5
 
-# echo '=== do some example transactions ==='
-# cleos push action smartaccount hello '[]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount hello '[]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount hello '[]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount hello '[]' -p smartaccount
-# sleep 0.5
-# cleos push action smartaccount hello '[]' -p smartaccount
-# sleep 0.5
+echo '=== do some example transactions ==='
+cleos push action smartaccount hello '[]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount hello '[]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount hello '[]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount hello '[]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount hello '[]' -p smartaccount
+sleep 0.5
 
-# echo 'cleos get table smartaccount smartaccount txlimits'
-# cleos get table smartaccount smartaccount txlimits
+echo 'cleos get table smartaccount smartaccount txlimits'
+cleos get table smartaccount smartaccount txlimits
 
-# echo 'cleos push action smartaccount rmtxlimit ["smartaccount","0"] -p smartaccount'
-# cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
+echo 'cleos push action smartaccount rmtxlimit ["smartaccount","0"] -p smartaccount'
+cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
 
-# echo 'cleos push action smartaccount addtxlimit ["smartaccount","300","30"] -p smartaccount'
-# cleos push action smartaccount addtxlimit '["smartaccount","300","30"]' -p smartaccount
-# sleep 0.5
-# echo 'cleos push action smartaccount addtxlimit ["smartaccount","200","1"] -p smartaccount'
-# cleos push action smartaccount addtxlimit '["smartaccount","200","1"]' -p smartaccount
-# sleep 0.5
+echo 'cleos push action smartaccount addtxlimit ["smartaccount","300","30"] -p smartaccount'
+cleos push action smartaccount addtxlimit '["smartaccount","300","30"]' -p smartaccount
+sleep 0.5
+echo 'cleos push action smartaccount addtxlimit ["smartaccount","200","1"] -p smartaccount'
+cleos push action smartaccount addtxlimit '["smartaccount","200","1"]' -p smartaccount
+sleep 0.5
 
-# cleos push action smartaccount locktxlimit '["smartaccount","1"]' -p smartaccount
-# sleep 0.5
-# cleos get table smartaccount smartaccount txlimits
+cleos push action smartaccount locktxlimit '["smartaccount","1"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount txlimits
 
-# cleos push action smartaccount locktxlimit '["smartaccount","0"]' -p smartaccount
-# sleep 0.5
-# cleos get table smartaccount smartaccount txlimits
-# cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
-# cleos push action smartaccount rmtxlimit '["smartaccount","1"]' -p smartaccount
-# cleos get table smartaccount smartaccount txlimits
+cleos push action smartaccount locktxlimit '["smartaccount","0"]' -p smartaccount
+sleep 0.5
+cleos get table smartaccount smartaccount txlimits
+cleos push action smartaccount rmtxlimit '["smartaccount","0"]' -p smartaccount
+cleos push action smartaccount rmtxlimit '["smartaccount","1"]' -p smartaccount
+cleos get table smartaccount smartaccount txlimits
 
 
 
