@@ -19,8 +19,8 @@ export default class extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			input: "",
-			per_period: "month"
+			firstInput: "",
+			secondInput: 7
 		};
 	}
 
@@ -29,8 +29,8 @@ export default class extends Component {
 	};
 
 	render() {
-		const { input, per_period } = this.state;
-		const { goForward, selectedRuleIndex } = this.props;
+		const { firstInput, secondInput } = this.state;
+		const { setInputs, selectedRuleIndex } = this.props;
 		return (
 			<div style={styles.contentContainer}>
 				<div style={styles.contentTitle}>Set parameters</div>
@@ -51,10 +51,10 @@ export default class extends Component {
 				<div style={styles.inputContainer}>
 					<FormControl style={styles.formControl}>
 						<Input
-							name="input"
-							type="number"
+							name="firstInput"
+							type={ruleOptions[selectedRuleIndex].firstParamType}
 							onChange={this.valueChange}
-							value={input}
+							value={firstInput}
 							startAdornment={
 								selectedRuleIndex === 0 ? (
 									<InputAdornment position="start">
@@ -67,17 +67,18 @@ export default class extends Component {
 					{(selectedRuleIndex === 0 || selectedRuleIndex === 1) && (
 						<FormControl style={styles.formControl}>
 							<Select
-								value={per_period}
+								value={secondInput}
 								onChange={this.valueChange}
 								inputProps={{
-									name: "per_period",
-									id: "per_period",
+									name: "secondInput",
+									id: "secondInput",
 									style: { textAlign: "center" }
 								}}
 							>
-								<MenuItem value={"day"}>Per Day</MenuItem>
-								<MenuItem value={"month"}>Per Month</MenuItem>
-								<MenuItem value={"year"}>Per Year</MenuItem>
+								<MenuItem value={1}>Per Day</MenuItem>
+								<MenuItem value={7}>Per Week</MenuItem>
+								<MenuItem value={30}>Per Month</MenuItem>
+								<MenuItem value={365}>Per Year</MenuItem>
 							</Select>
 						</FormControl>
 					)}
@@ -87,7 +88,7 @@ export default class extends Component {
 					variant="contained"
 					size="large"
 					style={styles.orangeButton}
-					onClick={goForward}
+					onClick={() => setInputs(firstInput, secondInput)}
 				>
 					Set Parameter
 				</Button>

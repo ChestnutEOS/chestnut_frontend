@@ -29,8 +29,8 @@ export default class extends Component {
 		super(props);
 		this.state = {
 			pageView: -1,
-			spend_max: "",
-			per_period: "month",
+			firstInput: "",
+			secondInput: 7,
 			selectedRuleIndex: null,
 			account: null
 		};
@@ -65,14 +65,32 @@ export default class extends Component {
 		this.setState({ [event.target.name]: event.target.value });
 	};
 
+	setInputs = (firstInput, secondInput) => {
+		this.setState({ firstInput, secondInput });
+		this.goForward();
+	};
+
 	setParameter = async event => {
 		event.preventDefault();
+		const {
+			firstInput,
+			secondInput,
+			account,
+			selectedRuleIndex
+		} = this.state;
 
-		const result = await this.eosio.chestnutTransaction("addtxlimit", {
-			user: this.state.account.name,
-			tx_limit: `50`,
-			days: "5"
-		});
+		let data = {};
+		data.user = account.name;
+		data[ruleOptions[selectedRuleIndex].firstParam] = firstInput;
+		if (secondInput)
+			data[ruleOptions[selectedRuleIndex].secondParam] = secondInput;
+
+		const result = await this.eosio.chestnutTransaction(
+			ruleOptions[selectedRuleIndex].add,
+			data
+		);
+
+		this.goForward();
 
 		console.log(result);
 
@@ -89,7 +107,7 @@ export default class extends Component {
 		// // let privateKey = accounts[0].privateKey;
 		// let account = this.eosio.account.name;
 		// let privateKey = null;
-		// let spend_max = this.state.spend_max;
+		// let firstInput = this.state.firstInput;
 		// let trans_max = 0;
 
 		// let actionName = "";
@@ -100,7 +118,7 @@ export default class extends Component {
 		// actionName = "update";
 		// actionData = {
 		// 	_user: account,
-		// 	_spend_max: spend_max,
+		// 	_firstInput: firstInput,
 		// 	_trans_max: trans_max
 		// };
 		// // break;
@@ -147,11 +165,51 @@ export default class extends Component {
 	render() {
 		const {
 			pageView,
-			spend_max,
-			per_period,
+			firstInput,
+			secondInput,
 			selectedRuleIndex,
 			account
 		} = this.state;
+
+		let secondInputText;
+		switch (secondInput) {
+			case 1:
+				secondInputText = "Day";
+				break;
+			case 7:
+				secondInputText = "Week";
+				break;
+			case 30:
+				secondInputText = "Month";
+				break;
+			case 365:
+				secondInputText = "Year";
+				break;
+			default:
+				secondInputText === null;
+		}
+
+		let ruleInput;
+		if (
+			(selectedRuleIndex || selectedRuleIndex === 0) &&
+			ruleOptions[selectedRuleIndex].add === "addeoslimit"
+		)
+			ruleInput = `${firstInput} EOS / ${secondInputText}`;
+		if (
+			(selectedRuleIndex || selectedRuleIndex === 0) &&
+			ruleOptions[selectedRuleIndex].add === "addtxlimit"
+		)
+			ruleInput = `${firstInput} Tx / ${secondInputText}`;
+		if (
+			(selectedRuleIndex || selectedRuleIndex === 0) &&
+			ruleOptions[selectedRuleIndex].add === "addwhitelist"
+		)
+			ruleInput = `${firstInput}`;
+		if (
+			(selectedRuleIndex || selectedRuleIndex === 0) &&
+			ruleOptions[selectedRuleIndex].add === "addblacklist"
+		)
+			ruleInput = `${firstInput}`;
 
 		if (pageView === -1) return <LandingPage goClicked={this.goForward} />;
 		return (
@@ -243,7 +301,7 @@ export default class extends Component {
 
 				{pageView === 2 && (
 					<SetParameter
-						goForward={this.goForward}
+						setInputs={this.setInputs}
 						selectedRuleIndex={selectedRuleIndex}
 					/>
 				)}
@@ -261,7 +319,7 @@ export default class extends Component {
 						<div style={styles.ruleCardsContainer}>
 							<RuleCard
 								text={ruleOptions[selectedRuleIndex].text}
-								ruleInput={`${spend_max} EOS / ${per_period}`}
+								ruleInput={ruleInput}
 								icon={ruleOptions[selectedRuleIndex].icon}
 								description={
 									ruleOptions[selectedRuleIndex].description
