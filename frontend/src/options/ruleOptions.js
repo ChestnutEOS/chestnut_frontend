@@ -1,3 +1,4 @@
+// Should turn this into an Object of Objects instead with key being things like eoslimit:, txlimit:, etc
 export default [
 	{
 		text: "Spending Limit",

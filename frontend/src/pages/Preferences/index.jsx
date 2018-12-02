@@ -25,6 +25,8 @@ import ActivityItem from "../../components/ActivityItem";
 
 import ruleOptions from "../../options/ruleOptions";
 
+const ruleMapping = { eoslimits: 0, txlimits: 1, whitelist: 2, blacklist: 3 }; // Only need this until turn ruleOptions into object of objects.
+
 class Preferences extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +67,6 @@ class Preferences extends Component {
       table: table, // name of the table as specified by the contract abi
       limit: 100
     });
-    console.log(result.rows);
     this.setState({ [table]: result.rows });
   };
 
@@ -122,48 +123,6 @@ class Preferences extends Component {
     // });
   };
 
-  sendEos = async event => {
-    // event.preventDefault();
-    // let account = accounts[0].name;
-    // let privateKey = accounts[0].privateKey;
-    // const eos = Eos({ keyProvider: privateKey });
-    // const toSend = this.state.eosToSend * 1;
-    // const data =
-    //   this.state.prefTable && this.state.prefTable[0]
-    //     ? this.state.prefTable[0]
-    //     : null;
-    // if (data && data.spend_max && toSend > data.spend_max * 1)
-    //   return alert(
-    //     "This exceeds your maximum spend threshold.  Transaction denied."
-    //   ); // Not the long-term way of doing this
-    // await eos.transaction(
-    //   {
-    //     // ...headers,
-    //     // context_free_actions: [],
-    //     actions: [
-    //       {
-    //         account: "tokenacc",
-    //         name: "transfer",
-    //         authorization: [
-    //           {
-    //             actor: account,
-    //             permission: "active"
-    //           }
-    //         ],
-    //         data: {
-    //           from: account,
-    //           to: accounts[1].name,
-    //           quantity: `${toSend.toFixed(4)} EOS`,
-    //           memo: ""
-    //         }
-    //       }
-    //     ]
-    //   }
-    //   // config -- example: {broadcast: false, sign: true}
-    // );
-    // this.getBalance();
-  };
-
   valueChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -176,7 +135,11 @@ class Preferences extends Component {
       tokenBalance,
       eosToSend,
       activities,
-      actions
+      actions,
+      txlimits,
+      eoslimits,
+      whitelist,
+      blacklist
     } = this.state;
 
     let activitySanitizer = {};
@@ -209,6 +172,8 @@ class Preferences extends Component {
     //   generateCard(i, row.timestamp, row.user, row.spend_max, row.trans_max)
     // );
 
+    console.log(eoslimits);
+
     return (
       <div style={styles.preferencesContainer}>
         <div style={styles.leftContainer}>
@@ -234,22 +199,35 @@ class Preferences extends Component {
             </Tooltip>
             <div style={styles.contentTitle}>My rules</div>
             <div style={styles.ruleCardContainer}>
-              <RuleCard
-                text={ruleOptions[0].text}
-                style={styles.ruleCard}
-                ruleInput={`${spend_max} EOS / month`}
-                icon={ruleOptions[0].icon}
-                description={ruleOptions[0].description}
-                // modifyButton
-                checked={true}
-              />
+              {/*} EOS Limit (over time) */}
+              {eoslimits && (
+                <RuleCard
+                  text={ruleOptions[0].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${
+                    eoslimits[0].total_EOS_allowed_to_spend
+                  } EOS / month`}
+                  icon={ruleOptions[0].icon}
+                  description={ruleOptions[0].description}
+                  checked={true}
+                />
+              )}
+              {/* Whitelist */}
               <RuleCard
                 text={ruleOptions[2].text}
                 style={styles.ruleCard}
-                ruleInput={`3 Accounts`}
+                ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
                 icon={ruleOptions[2].icon}
                 description={ruleOptions[2].description}
-                // modifyButton
+                checked={false}
+              />
+              {/* Blacklist */}
+              <RuleCard
+                text={ruleOptions[3].text}
+                style={styles.ruleCard}
+                ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
+                icon={ruleOptions[3].icon}
+                description={ruleOptions[3].description}
                 checked={false}
               />
               <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
