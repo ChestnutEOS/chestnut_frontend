@@ -43,6 +43,16 @@ export default [
 		icon: "checklist.png",
 		description:
 			"Create a list of denied 'blacklist' accounts.  Any transactions with accounts on this list will fail."
+	},
+	{
+		text: "Tokens per Transaction",
+		add: "addtknlimit",
+		remove: "rmtknlimit",
+		firstParam: "quantity",
+		firstParamType: "number",
+		icon: "dollarStack.png",
+		description:
+			"Set a maximum amount of tokens that can be sent per transaction."
 	}
 	// {
 	// 	text: "Balance Notifications",

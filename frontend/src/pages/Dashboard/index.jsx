@@ -81,7 +81,14 @@ export default class extends Component {
 
 		let data = {};
 		data.user = account.name;
-		data[ruleOptions[selectedRuleIndex].firstParam] = firstInput;
+
+		let first = firstInput;
+		let ruleAdd = ruleOptions[selectedRuleIndex].add;
+
+		if (ruleAdd === "addeoslimit" || ruleAdd === "addtknlimit")
+			first = first.toString() + ".0000 EOS";
+
+		data[ruleOptions[selectedRuleIndex].firstParam] = first;
 		if (secondInput)
 			data[ruleOptions[selectedRuleIndex].secondParam] = secondInput;
 
@@ -210,6 +217,11 @@ export default class extends Component {
 			ruleOptions[selectedRuleIndex].add === "addblacklist"
 		)
 			ruleInput = `${firstInput}`;
+		if (
+			(selectedRuleIndex || selectedRuleIndex === 0) &&
+			ruleOptions[selectedRuleIndex].add === "addtknlimit"
+		)
+			ruleInput = `${firstInput} EOS / Tx`;
 
 		if (pageView === -1) return <LandingPage goClicked={this.goForward} />;
 		return (

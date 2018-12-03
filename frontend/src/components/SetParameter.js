@@ -56,7 +56,8 @@ export default class extends Component {
 							onChange={this.valueChange}
 							value={firstInput}
 							startAdornment={
-								selectedRuleIndex === 0 ? (
+								selectedRuleIndex === 0 ||
+								selectedRuleIndex === 4 ? (
 									<InputAdornment position="start">
 										EOS
 									</InputAdornment>
