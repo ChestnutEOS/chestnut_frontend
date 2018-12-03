@@ -9,6 +9,32 @@ $./testnet.sh set account permission chestnutdemo active '{"threshold": 1, "acco
 
 **Actions**
 
+TODO: Add a single EOS tx limit (support all tokens in the future)
+---
+Create a maximum EOS spending limit parameter for a Chestnut account
+### addtknlimit
+ex: send no more than ( <= ) 100.0000 EOS in a single transfer
+```bash
+cleos push action smartaccount addtknlimit '["smartaccount","100.0000 EOS"]' -p smartaccount
+```
+
+### rmtknlimit
+ex: remove token limit
+```bash
+cleos push action smartaccount rmtknlimit '["smartaccount","4,EOS"]' -p smartaccount
+```
+
+### locktknlimit
+ex: lock eos limit
+```bash
+cleos push action smartaccount locktknlimit '["smartaccount","4,EOS","1"]' -p smartaccount
+```
+ex: unlock eos limit
+```bash
+cleos push action smartaccount locktknlimit '["smartaccount","4,EOS","0"]' -p smartaccount
+```
+
+
 ---
 Create a limit to the number of transactions that can take place on a Chestnut account within a timeframe
 ### addtxlimit
@@ -129,8 +155,17 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     ]
 }
 ```
+```json
+{
+    "name": "settings",
+    "type": "settings",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
+}
+```
 
-### txlimit
+### txlimits
 ```json
 {
     "name": "txlimit",
@@ -149,6 +184,10 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
             "type": "bool"
         },
         {
+            "name": "days",
+            "type": "uint64"
+        },
+        {
             "name": "end_time",
             "type": "time_point"
         },
@@ -163,8 +202,45 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     ]
 }
 ```
+```json
+{
+    "name": "txlimits",
+    "type": "txlimit",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
+}
+```
 
-### eoslimit
+
+### tokenlimits
+```json
+{
+    "name": "tokenlimit",
+    "base": "",
+    "fields": [
+        {
+            "name": "max_transfer",
+            "type": "asset"
+        },
+        {
+            "name": "is_locked",
+            "type": "bool"
+        }
+    ]
+}
+```
+```
+{
+    "name": "tokenlimits",
+    "type": "tokenlimit",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
+}
+```
+
+### eoslimits
 ```json
 {
     "name": "eoslimit",
@@ -183,6 +259,10 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
             "type": "bool"
         },
         {
+            "name": "days",
+            "type": "uint64"
+        },
+        {
             "name": "end_time",
             "type": "time_point"
         },
@@ -195,6 +275,15 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
             "type": "asset"
         }
     ]
+}
+```
+```json
+{
+    "name": "eoslimits",
+    "type": "eoslimit",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
 }
 ```
 
@@ -215,6 +304,15 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     ]
 }
 ```
+```json
+{
+    "name": "whitelist",
+    "type": "whitelist",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
+}
+```
 
 ### blacklist
 ```json
@@ -231,5 +329,14 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
             "type": "bool"
         }
     ]
+}
+```
+```json
+{
+    "name": "blacklist",
+    "type": "blacklist",
+    "index_type": "i64",
+    "key_names": [],
+    "key_types": []
 }
 ```

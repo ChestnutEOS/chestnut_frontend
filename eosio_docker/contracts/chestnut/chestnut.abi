@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Dec  2 09:43:50 2018",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Dec  3 08:33:10 2018",
     "version": "eosio::abi/1.0",
     "structs": [
         {
@@ -31,6 +31,20 @@
                 {
                     "name": "days",
                     "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "addtknlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
                 }
             ]
         },
@@ -107,6 +121,10 @@
                     "type": "bool"
                 },
                 {
+                    "name": "days",
+                    "type": "uint64"
+                },
+                {
                     "name": "end_time",
                     "type": "time_point"
                 },
@@ -146,6 +164,24 @@
                 {
                     "name": "user",
                     "type": "name"
+                },
+                {
+                    "name": "lock",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "locktknlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "sym",
+                    "type": "symbol"
                 },
                 {
                     "name": "lock",
@@ -206,6 +242,20 @@
                 {
                     "name": "id",
                     "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "rmtknlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "name"
+                },
+                {
+                    "name": "sym",
+                    "type": "symbol"
                 }
             ]
         },
@@ -284,6 +334,20 @@
             ]
         },
         {
+            "name": "tokenlimit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "max_transfer",
+                    "type": "asset"
+                },
+                {
+                    "name": "is_locked",
+                    "type": "bool"
+                }
+            ]
+        },
+        {
             "name": "transfer",
             "base": "",
             "fields": [
@@ -320,6 +384,10 @@
                 {
                     "name": "is_locked",
                     "type": "bool"
+                },
+                {
+                    "name": "days",
+                    "type": "uint64"
                 },
                 {
                     "name": "end_time",
@@ -377,6 +445,11 @@
             "ricardian_contract": ""
         },
         {
+            "name": "addtknlimit",
+            "type": "addtknlimit",
+            "ricardian_contract": ""
+        },
+        {
             "name": "addtxlimit",
             "type": "addtxlimit",
             "ricardian_contract": ""
@@ -412,6 +485,11 @@
             "ricardian_contract": ""
         },
         {
+            "name": "locktknlimit",
+            "type": "locktknlimit",
+            "ricardian_contract": ""
+        },
+        {
             "name": "locktxlimit",
             "type": "locktxlimit",
             "ricardian_contract": ""
@@ -429,6 +507,11 @@
         {
             "name": "rmeoslimit",
             "type": "rmeoslimit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmtknlimit",
+            "type": "rmtknlimit",
             "ricardian_contract": ""
         },
         {
@@ -480,6 +563,13 @@
         {
             "name": "settings",
             "type": "settings",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "tokenlimits",
+            "type": "tokenlimit",
             "index_type": "i64",
             "key_names": [],
             "key_types": []

@@ -106,6 +106,44 @@ sleep 0.5
 cleos get table smartaccount smartaccount eoslimits
 
 
+echo 'push action smartaccount rmeoslimit ["smartaccount","0"] -p smartaccount'
+cleos push action smartaccount rmeoslimit '["smartaccount","1"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount rmeoslimit '["smartaccount","2"]' -p smartaccount
+sleep 0.5
+cleos push action smartaccount rmeoslimit '["smartaccount","3"]' -p smartaccount
+sleep 0.5
+
+
+echo '=== Single EOS Transfer Limits ==='
+echo 'cleos push action smartaccount addtknlimit ["smartaccount","100.0000 EOS"] -p smartaccount'
+cleos push action smartaccount addtknlimit '["smartaccount","100.0000 EOS"]' -p smartaccount
+sleep 0.5
+
+
+echo 'cleos push action smartaccount rmtknlimit ["smartaccount","4,EOS"] -p smartaccount'
+cleos push action smartaccount rmtknlimit '["smartaccount","4,EOS"]' -p smartaccount
+
+echo 'cleos push action smartaccount addtknlimit ["smartaccount","100.0000 EOS"] -p smartaccount'
+cleos push action smartaccount addtknlimit '["smartaccount","100.0000 EOS"]' -p smartaccount
+sleep 0.5
+
+echo 'cleos get table smartaccount smartaccount tokenlimits'
+cleos get table smartaccount smartaccount tokenlimits
+
+cleos push action eosio.token transfer '["smartaccount","daniel","99.0000 EOS","memo"]' -p smartaccount
+sleep 0.5
+echo 'cleos get table smartaccount smartaccount tokenlimits'
+cleos get table smartaccount smartaccount tokenlimits
+
+echo 'cleos push action smartaccount locktknlimit ["smartaccount","4,EOS","1"] -p smartaccount'
+sleep 0.5
+cleos push action smartaccount locktknlimit '["smartaccount","4,EOS","1"]' -p smartaccount
+echo 'cleos get table smartaccount smartaccount tokenlimits'
+cleos get table smartaccount smartaccount tokenlimits
+sleep 0.5
+
+
 
 echo '=== Whitelist transactions ==='
 cleos push action smartaccount addwhitelist '["smartaccount","trish"]' -p smartaccount

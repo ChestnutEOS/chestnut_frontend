@@ -18,6 +18,24 @@ CONTRACT chestnut : public eosio::contract {
      *                            F U N C T I O N S
      ***************************************************************************/
 
+    void validate_single_transfer( name to, asset quantity ) {
+      auto sym = quantity.symbol;
+      eosio_assert( sym.is_valid(), "invalid symbol name" );
+
+      tokenlimits_index tokenlimits_table( _self, _self.value );
+      auto token_limit = tokenlimits_table.find( sym.code().raw() );
+
+      if ( token_limit != tokenlimits_table.end() ) {
+        // only check if txlimit is "unlocked"
+        if ( !token_limit->is_locked ) {
+          eosio_assert( quantity <= token_limit->max_transfer, "exceeded maxmimun transfer");
+        }
+      } else {
+        print("no token limit imposed\n");
+      }
+
+    }
+
     void validate_transfer( name to, asset quantity ) {
       eoslimit_index eoslimit_table( _self, _self.value );
       auto eos_limit = eoslimit_table.begin();
@@ -73,6 +91,7 @@ CONTRACT chestnut : public eosio::contract {
       uint64_t    id;
       name        user;
       bool        is_locked = 0;
+      uint64_t    days;
       time_point  end_time;
       uint64_t    tx_number_limit;
       uint64_t    tx_number = 0;
@@ -85,6 +104,7 @@ CONTRACT chestnut : public eosio::contract {
       uint64_t    id;
       name        user;
       bool        is_locked = 0;
+      uint64_t    days;
       time_point  end_time;
       asset       total_EOS_allowed_to_spend;
       asset       current_EOS_spent = asset(0,EOS_SYMBOL);
@@ -92,6 +112,14 @@ CONTRACT chestnut : public eosio::contract {
       uint64_t primary_key() const { return id; }
       uint64_t get_by_user() const { return user.value; }
     };
+
+    TABLE tokenlimit {
+      asset    max_transfer;
+      bool     is_locked;
+
+      uint64_t primary_key() const { return max_transfer.symbol.code().raw(); }
+    };
+
 
     TABLE whitelist {
       name        account;
@@ -122,6 +150,7 @@ CONTRACT chestnut : public eosio::contract {
                                        &eoslimit::get_by_user >
                       >
                                                                 >    eoslimit_index;
+    typedef eosio::multi_index< name("tokenlimits"), tokenlimit > tokenlimits_index;
     typedef eosio::multi_index< name("whitelist"),   whitelist  >   whitelist_index;
     typedef eosio::multi_index< name("blacklist"),   blacklist  >   blacklist_index;
 
@@ -216,6 +245,7 @@ CONTRACT chestnut : public eosio::contract {
 
       if ( from == _self ) {
         // out-going tx, validate
+        validate_single_transfer( to, quantity );
         validate_transfer( to, quantity );
       }
 
@@ -233,6 +263,9 @@ CONTRACT chestnut : public eosio::contract {
       print("hello world\n");
     }
 
+    /****************************************************************************
+     *  txlimits
+     ***************************************************************************/
 
     ACTION addtxlimit( name user, uint64_t tx_limit, uint32_t days ) {
       print("!!addtxlimit!! - Chestnut\n");
@@ -244,6 +277,7 @@ CONTRACT chestnut : public eosio::contract {
       txlimit_table.emplace( user, [&]( auto& tx ) {
         tx.id              = txlimit_table.available_primary_key();
         tx.user            = user;
+        tx.days            = days;
         tx.end_time        = ct + duration;
         tx.tx_number_limit = tx_limit;
       });
@@ -279,6 +313,10 @@ CONTRACT chestnut : public eosio::contract {
     }
 
 
+    /****************************************************************************
+     *  eoslimits
+     ***************************************************************************/
+
     ACTION addeoslimit( name user, asset quantity, uint32_t days ) {
       print("!!addeoslimit!! - Chestnut\n");
       require_auth( _self );
@@ -289,6 +327,7 @@ CONTRACT chestnut : public eosio::contract {
       eoslimit_table.emplace( user, [&]( auto& e ) {
         e.id                         = eoslimit_table.available_primary_key();
         e.user                       = user;
+        e.days                       = days;
         e.end_time                   = ct + duration;
         e.total_EOS_allowed_to_spend = quantity;
       });
@@ -322,6 +361,55 @@ CONTRACT chestnut : public eosio::contract {
       }
     }
 
+
+    /****************************************************************************
+     *  tokenlimits
+     ***************************************************************************/
+
+    ACTION addtknlimit( name user, asset quantity ) {
+      print("!!addtknlimit!! - Chestnut\n");
+      require_auth( _self );
+      auto sym = quantity.symbol;
+      eosio_assert( sym.is_valid(), "invalid symbol name" );
+
+      tokenlimits_index tokenlimits_table( _self, _self.value );
+
+      tokenlimits_table.emplace( user, [&]( auto& tk ) {
+        tk.max_transfer              = quantity;
+        tk.is_locked                 = false;
+      });
+    }
+
+    ACTION rmtknlimit( name user, symbol sym ) {
+      print("!!rmtknlimit!! - Chestnut\n");
+      require_auth( _self );
+      eosio_assert( sym.is_valid(), "invalid symbol name" );
+
+      tokenlimits_index tokenlimits_table( _self, _self.value );
+      auto token_to_delete = tokenlimits_table.find( sym.code().raw() );
+
+      eosio_assert( token_to_delete != tokenlimits_table.end() , "cannot find token to delete");
+
+      tokenlimits_table.erase( token_to_delete );
+    }
+
+    ACTION locktknlimit( name user, symbol sym, bool lock ) {
+      print("!!locktknlimit!! - Chestnut\n");
+      require_auth( _self );
+      tokenlimits_index tokenlimits_table( _self, _self.value );
+      auto token_to_delete = tokenlimits_table.find( sym.code().raw() );
+
+      eosio_assert( token_to_delete != tokenlimits_table.end() , "cannot find token to delete");
+
+      tokenlimits_table.modify( *token_to_delete, same_payer, [&]( auto& tk ) {
+        tk.is_locked =  lock ? true : false ;
+      });
+
+    }
+
+    /****************************************************************************
+     *  whitelist
+     ***************************************************************************/
 
     ACTION addwhitelist( name user, name account_to_whitelist ) {
       print("!!addwhitelist!! - Chestnut\n");
@@ -359,6 +447,10 @@ CONTRACT chestnut : public eosio::contract {
       }
     }
 
+
+    /****************************************************************************
+     *  blacklist
+     ***************************************************************************/
 
     ACTION addblacklist( name user, name account_to_blacklist ) {
       print("!!addblacklist!! - Chestnut\n");
@@ -437,7 +529,7 @@ extern "C" {
     else if( code==receiver && action== name("safetransfer").value ) {
       execute_action( name(receiver), name(code), &chestnut::safetransfer );
     }
-    else if( code==name("eosio.token").value && action== name("transfer").value ) {
+    else if( /*code==name("eosio.token").value &&*/ action== name("transfer").value ) {
       execute_action( name(receiver), name(code), &chestnut::transfer );
     }
 
@@ -463,6 +555,17 @@ extern "C" {
     else if( code==receiver && action== name("lockeoslimit").value ) {
       execute_action( name(receiver), name(code), &chestnut::lockeoslimit );
     }
+
+    else if( code==receiver && action== name("addtknlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::addtknlimit );
+    }
+    else if( code==receiver && action== name("rmtknlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::rmtknlimit );
+    }
+    else if( code==receiver && action== name("locktknlimit").value ) {
+      execute_action( name(receiver), name(code), &chestnut::locktknlimit );
+    }
+
     else if( code==receiver && action== name("addwhitelist").value ) {
       execute_action( name(receiver), name(code), &chestnut::addwhitelist );
     }
