@@ -373,11 +373,19 @@ CONTRACT chestnut : public eosio::contract {
       eosio_assert( sym.is_valid(), "invalid symbol name" );
 
       tokenlimits_index tokenlimits_table( _self, _self.value );
+      auto token_limit = tokenlimits_table.find( sym.code().raw() );
 
-      tokenlimits_table.emplace( user, [&]( auto& tk ) {
-        tk.max_transfer              = quantity;
-        tk.is_locked                 = false;
-      });
+      if ( token_limit == tokenlimits_table.end() ) {
+        tokenlimits_table.emplace( user, [&]( auto& tk ) {
+          tk.max_transfer              = quantity;
+          tk.is_locked                 = false;
+        });
+      } else {
+        tokenlimits_table.modify( token_limit, same_payer, [&]( auto& tk ) {
+          tk.max_transfer              = quantity;
+        });
+      }
+
     }
 
     ACTION rmtknlimit( name user, symbol sym ) {

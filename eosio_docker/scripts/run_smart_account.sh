@@ -120,7 +120,6 @@ echo 'cleos push action smartaccount addtknlimit ["smartaccount","100.0000 EOS"]
 cleos push action smartaccount addtknlimit '["smartaccount","100.0000 EOS"]' -p smartaccount
 sleep 0.5
 
-
 echo 'cleos push action smartaccount rmtknlimit ["smartaccount","4,EOS"] -p smartaccount'
 cleos push action smartaccount rmtknlimit '["smartaccount","4,EOS"]' -p smartaccount
 
@@ -135,6 +134,10 @@ cleos push action eosio.token transfer '["smartaccount","daniel","99.0000 EOS","
 sleep 0.5
 echo 'cleos get table smartaccount smartaccount tokenlimits'
 cleos get table smartaccount smartaccount tokenlimits
+
+echo 'update token limit form 100.0000 EOS to 10.0000 EOS'
+echo 'cleos push action smartaccount addtknlimit ["smartaccount","10.0000 EOS"] -p smartaccount'
+cleos push action smartaccount addtknlimit '["smartaccount","10.0000 EOS"]' -p smartaccount
 
 echo 'cleos push action smartaccount locktknlimit ["smartaccount","4,EOS","1"] -p smartaccount'
 sleep 0.5
