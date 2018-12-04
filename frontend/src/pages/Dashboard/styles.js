@@ -2,50 +2,129 @@ const fontFamily = "Proxima Nova Lt";
 const nexa = "Nexa";
 const fontFamilyHeavy = "NexaHeavy";
 
+// export default {
+// 	formContainer: {
+// 		display: "flex",
+// 		flexDirection: "column"
+// 	}
+// };
+
+// export default theme => ({
+// card: {
+// 	margin: "auto",
+// 	marginTop: 20,
+// 	width: "90%",
+// 	maxWidth: 700
+// },
+// paper: {
+// 	...theme.mixins.gutters(),
+// 	paddingTop: theme.spacing.unit * 2,
+// 	paddingBottom: theme.spacing.unit * 2,
+// 	margin: "auto",
+// 	marginTop: 30,
+// 	width: "90%",
+// 	maxWidth: 500
+// },
+// formContainer: {
+// 	display: "flex",
+// 	flexDirection: "column",
+// 	margin: "auto",
+// 	width: "90%",
+// 	maxWidth: 300
+// },
+// formControl: {
+// 	margin: theme.spacing.unit
+// },
+// formButton: {
+// 	marginTop: theme.spacing.unit
+// },
+// pre: {
+// 	background: "#ccc",
+// 	padding: 10,
+// 	marginBottom: 0
+// }
+// });
+
 export default {
-	contentContainer: {
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "space-between",
-		alignItems: "center",
-		maxWidth: 700,
-		width: "90%",
-		margin: "auto",
-		height: "90%"
-	},
-	landingPage: {
-		width: "100%"
-	},
-	contentTitle: {
-		fontSize: 40,
-		margin: 10,
-		marginBottom: 20,
-		marginTop: "20%",
-		fontFamily: fontFamilyHeavy
-	},
-	orangeButton: { margin: 10, borderRadius: 0, marginTop: 50, padding: 15 },
-	stepText: {
-		fontFamily: fontFamily,
-		marginBottom: 45,
-		fontWeight: 600
-	},
-	ruleCardsContainer: {
+	dashboardContainer: {
 		display: "flex",
 		flexDirection: "row",
-		borderRadius: 0
+		margin: 20,
+		marginLeft: 75,
+		marginRight: 75
 	},
-	buttonWrapper: { background: "none", border: "none", padding: 2 },
-	parameterHeading: { fontFamily: fontFamily, fontWeight: 600, fontSize: 20 },
-	formControl: { margin: 20, marginBottom: 60, width: 180 },
-	backButton: {
-		position: "absolute",
-		top: "35%",
-		left: 40
+	leftContainer: {
+		width: "60%",
+		flexDirection: "column",
+		justifyContent: "flex-start"
 	},
-	backText: {
-		paddingTop: 2
+	leftContent: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "flex-start",
+		alignItems: "flex-start"
 	},
-	cancelButton: {
-		cursor: "pointer"
+	freezeWrapper: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		margin: 20,
+		marginRight: 50
+	},
+	freezeText: {
+		fontFamily: fontFamilyHeavy,
+		fontSize: 20
+	},
+	contentTitle: {
+		fontSize: 45,
+		margin: 10,
+		marginLeft: 20,
+		marginBottom: 50,
+		fontFamily: fontFamilyHeavy
+	},
+	activityContent: {
+		width: "40%",
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		backgroundColor: "#E3E3E3"
+	},
+	balanceWrapper: {
+		backgroundColor: "white",
+		height: 25,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "85%",
+		margin: 25,
+		padding: 15
+	},
+	balanceText: { fontFamily: fontFamilyHeavy },
+	activityText: {
+		textAlign: "left",
+		marginBottom: 5
+	},
+	activitiesWrapper: {
+		width: "85%"
+	},
+	ruleCardContainer: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		flexWrap: "wrap",
+		width: "75%"
+	},
+	questionMark: {
+		width: 15,
+		marginRight: 10,
+		marginBottom: 5,
+		height: "auto"
+	},
+	questionMarkTitle: {
+		width: 15,
+		marginRight: 10,
+		marginBottom: -20,
+		height: "auto"
 	}
 };

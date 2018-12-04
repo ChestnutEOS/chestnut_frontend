@@ -1,378 +1,278 @@
 import React, { Component } from "react";
 import Eos from "eosjs"; // https://github.com/EOSIO/eosjs
+import { JsonRpc } from "eosjs";
+import moment from "moment";
 
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import ArrowLeft from "@material-ui/icons/ArrowBackIos";
+import styled from "styled-components";
 
-import Preferences from "../Preferences";
-import Header from "../../components/Header";
-import RuleCard from "../../components/RuleCard";
-import SetParameter from "../../components/SetParameter";
-import LandingPage from "../LandingPage";
-import Tools from "../Tools";
+import { withStyles } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Card,
+  CardContent,
+  FormControl,
+  Input,
+  InputLabel,
+  Paper,
+  Button,
+  Switch,
+  InputAdornment,
+  Tooltip,
+  CircularProgress
+} from "@material-ui/core";
 
 import styles from "./styles";
-// import accounts from "../../accounts";
+import accounts from "../../accounts";
+import RuleCard from "../../components/RuleCard";
+import ActivityItem from "../../components/ActivityItem";
+
 import ruleOptions from "../../options/ruleOptions";
 
-import EOSIOClient from "../../utils/eosio-client";
+const ruleMapping = { eoslimits: 0, txlimits: 1, whitelist: 2, blacklist: 3 }; // Only need this until turn ruleOptions into object of objects.
 
-export default class extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			pageView: -1,
-			firstInput: "",
-			secondInput: 7,
-			selectedRuleIndex: null,
-			account: null
-		};
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      prefTable: [], // to store the table rows from smart contract,
+      spend_max: 100,
+      trans_max: 10,
+      tokenBalance: 0,
+      eosToSend: 3,
+      actions: []
+    };
+    this.eosioHistory = new JsonRpc("https://junglehistory.cryptolions.io:443");
+  }
 
-		// this.eosio = null;
-		// this.eosio = { account: { name: "" } };
-		this.eosio = new EOSIOClient("Chestnut");
-		// this.eosio.login();
-	}
+  componentDidUpdate(props) {
+    if (this.props != props) {
+      this.getBalance();
+      this.getAccountInfo();
+      this.getActions();
+      this.getTables();
+    }
+  }
 
-	// Key generator https://ipfs.io/ipfs/QmW4XxaEg8cWsYisfjnjqLFi1MbHMYjt7nbCh8ZHwgg9c2
+  componentDidMount() {
+    this.getBalance();
+    this.getAccountInfo();
+    this.getActions();
+    this.getTables();
+  }
 
-	goHome = () => {
-		this.setState({ pageView: 0 });
-	};
+  getTable = async (account, table) => {
+    const result = await this.props.eosio.rpc.get_table_rows({
+      json: true,
+      code: account.name, // contract who owns the table
+      scope: account.name, // scope of the table
+      table: table, // name of the table as specified by the contract abi
+      limit: 100
+    });
+    this.setState({ [table]: result.rows });
+  };
 
-	goBack = () => {
-		this.setState({ pageView: this.state.pageView - 1 });
-	};
+  getTables = () => {
+    const { account } = this.props;
+    if (!account) return;
 
-	goForward = () => {
-		this.setState({ pageView: this.state.pageView + 1 });
-	};
+    this.getTable(account, "txlimits");
+    this.getTable(account, "eoslimits");
+    this.getTable(account, "settings");
+    this.getTable(account, "blacklist");
+    this.getTable(account, "whitelist");
+  };
 
-	goTo = pageView => {
-		this.setState({ pageView });
-	};
+  getBalance = () => {
+    const { account } = this.props;
+    if (!account) return;
+    let accountName = account.name;
+    this.eosioHistory
+      .get_currency_balance("eosio.token", accountName, "EOS")
+      .then(result => {
+        console.log(result);
+        this.setState({ tokenBalance: result[0] });
+      });
+  };
 
-	selectRule = selectedRuleIndex => {
-		this.setState({ pageView: this.state.pageView + 1, selectedRuleIndex });
-	};
+  getAccountInfo = () => {
+    const { account } = this.props;
+    if (!account) return;
+    let accountName = account.name;
+    this.eosioHistory.get_account(accountName).then(result => {
+      console.log(result);
+    });
+  };
 
-	valueChange = event => {
-		this.setState({ [event.target.name]: event.target.value });
-	};
+  // Need to use /history instead of /chain
+  // Check out network activity at https://jungle.bloks.io/account/chestnutdemo
+  getActions = () => {
+    const { account } = this.props;
+    if (!account) return;
+    let accountName = account.name;
 
-	setInputs = (firstInput, secondInput) => {
-		this.setState({ firstInput, secondInput });
-		this.goForward();
-	};
+    // Only pull last 50 transactions
+    this.eosioHistory.history_get_actions(accountName, -1, -50).then(result => {
+      console.log(result);
+      let actions = result.actions.sort((a, b) => {
+        return b.account_action_seq - a.account_action_seq;
+      });
 
-	setParameter = async event => {
-		event.preventDefault();
-		const {
-			firstInput,
-			secondInput,
-			account,
-			selectedRuleIndex
-		} = this.state;
+      this.setState({ actions });
+    });
+    // eosio.eos.history_get_actions(accountName).then(result => {
+    //   console.log(result);
+    // });
+  };
 
-		let data = {};
-		data.user = account.name;
+  valueChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-		let first = firstInput;
-		let ruleAdd = ruleOptions[selectedRuleIndex].add;
+  render() {
+    const {
+      prefTable,
+      spend_max,
+      trans_max,
+      tokenBalance,
+      eosToSend,
+      activities,
+      actions,
+      txlimits,
+      eoslimits,
+      whitelist,
+      blacklist
+    } = this.state;
 
-		if (ruleAdd === "addeoslimit" || ruleAdd === "addtknlimit")
-			first = first.toString() + ".0000 EOS";
+    let activitySanitizer = {};
 
-		data[ruleOptions[selectedRuleIndex].firstParam] = first;
-		if (secondInput)
-			data[ruleOptions[selectedRuleIndex].secondParam] = secondInput;
+    console.log(eoslimits);
 
-		const result = await this.eosio.chestnutTransaction(
-			ruleOptions[selectedRuleIndex].add,
-			data
-		);
+    return (
+      <div style={styles.dashboardContainer}>
+        <div style={styles.leftContainer}>
+          <div style={styles.freezeWrapper}>
+            <Tooltip title="Temporarily freeze your account and prevent any transactions from happening!">
+              <img style={styles.questionMark} src="questionMark.png" />
+            </Tooltip>
+            <Typography
+              style={styles.freezeText}
+              variant="subheading"
+              component="h2"
+            >
+              freeze account
+            </Typography>
+            <Switch />
+          </div>
+          <div style={styles.leftContent}>
+            <Tooltip
+              title="Protect your account by setting your own rules. You are your own bank!"
+              placement="top"
+            >
+              <img style={styles.questionMarkTitle} src="questionMark.png" />
+            </Tooltip>
+            <div style={styles.contentTitle}>Account Rules</div>
+            <div style={styles.ruleCardContainer}>
+              {/*} EOS Limit (over time) */}
+              {eoslimits && (
+                <RuleCard
+                  text={ruleOptions[0].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${
+                    eoslimits[0].total_EOS_allowed_to_spend
+                  } EOS / month`}
+                  icon={ruleOptions[0].icon}
+                  description={ruleOptions[0].description}
+                  checked={true}
+                />
+              )}
+              {/*} Tx Limit (over time) */}
+              {txlimits && (
+                <RuleCard
+                  text={ruleOptions[1].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${txlimits[0].tx_number_limit
+                    .toString()
+                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")} Tx / month`}
+                  icon={ruleOptions[1].icon}
+                  description={ruleOptions[1].description}
+                  checked={true}
+                />
+              )}
+              {/* Whitelist */}
+              {whitelist && (
+                <RuleCard
+                  text={ruleOptions[2].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
+                  icon={ruleOptions[2].icon}
+                  description={ruleOptions[2].description}
+                  checked={false}
+                />
+              )}
+              {/* Blacklist */}
+              {blacklist && (
+                <RuleCard
+                  text={ruleOptions[3].text}
+                  style={styles.ruleCard}
+                  ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
+                  icon={ruleOptions[3].icon}
+                  description={ruleOptions[3].description}
+                  checked={false}
+                />
+              )}
+              <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
+            </div>
+          </div>
+        </div>
+        <div style={styles.activityContent}>
+          <div style={styles.balanceWrapper}>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              my EOS balance
+            </Typography>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              {tokenBalance}
+            </Typography>
+          </div>
 
-		this.goForward();
-
-		console.log(result);
-
-		// if (result.processed.receipt.status === "executed") {
-		// 	this.setState({ success: result.transaction_id, failure: null });
-		// } else {
-		// 	this.setState({
-		// 		success: null,
-		// 		failure: "Error sending transaction.  Please try again."
-		// 	});
-		// }
-		// this.getAccountInfo();
-		// // let account = accounts[0].name;
-		// // let privateKey = accounts[0].privateKey;
-		// let account = this.eosio.account.name;
-		// let privateKey = null;
-		// let firstInput = this.state.firstInput;
-		// let trans_max = 0;
-
-		// let actionName = "";
-		// let actionData = {};
-
-		// // switch (event.type) {
-		// // 	case "submit":
-		// actionName = "update";
-		// actionData = {
-		// 	_user: account,
-		// 	_firstInput: firstInput,
-		// 	_trans_max: trans_max
-		// };
-		// // break;
-		// // 	default:
-		// // 		return;
-		// // }
-
-		// // const eos = Eos({ keyProvider: privateKey });
-		// const result = await this.eosio.transaction({
-		// 	actions: [
-		// 		{
-		// 			account: "chestnutDemo",
-		// 			name: actionName,
-		// 			authorization: [
-		// 				{
-		// 					actor: account,
-		// 					permission: "active"
-		// 				}
-		// 			],
-		// 			data: actionData
-		// 		}
-		// 	]
-		// });
-
-		// console.log(result);
-		// this.goForward();
-
-		// this.getTable();
-	};
-
-	cancel = () => {
-		this.setState({ pageView: 1 });
-	};
-
-	attachAccount = () => {
-		// console.log("hi");
-		this.eosio.login(account => {
-			console.log(account);
-			this.setState({ account });
-		});
-		// this.setState({ eosio: new EOSIOClient("chestnut") });
-	};
-
-	render() {
-		const {
-			pageView,
-			firstInput,
-			secondInput,
-			selectedRuleIndex,
-			account
-		} = this.state;
-
-		let secondInputText;
-		switch (secondInput) {
-			case 1:
-				secondInputText = "Day";
-				break;
-			case 7:
-				secondInputText = "Week";
-				break;
-			case 30:
-				secondInputText = "Month";
-				break;
-			case 365:
-				secondInputText = "Year";
-				break;
-			default:
-				secondInputText === null;
-		}
-
-		let ruleInput;
-		if (
-			(selectedRuleIndex || selectedRuleIndex === 0) &&
-			ruleOptions[selectedRuleIndex].add === "addeoslimit"
-		)
-			ruleInput = `${firstInput} EOS / ${secondInputText}`;
-		if (
-			(selectedRuleIndex || selectedRuleIndex === 0) &&
-			ruleOptions[selectedRuleIndex].add === "addtxlimit"
-		)
-			ruleInput = `${firstInput} Tx / ${secondInputText}`;
-		if (
-			(selectedRuleIndex || selectedRuleIndex === 0) &&
-			ruleOptions[selectedRuleIndex].add === "addwhitelist"
-		)
-			ruleInput = `${firstInput}`;
-		if (
-			(selectedRuleIndex || selectedRuleIndex === 0) &&
-			ruleOptions[selectedRuleIndex].add === "addblacklist"
-		)
-			ruleInput = `${firstInput}`;
-		if (
-			(selectedRuleIndex || selectedRuleIndex === 0) &&
-			ruleOptions[selectedRuleIndex].add === "addtknlimit"
-		)
-			ruleInput = `${firstInput} EOS / Tx`;
-
-		if (pageView === -1) return <LandingPage goClicked={this.goForward} />;
-		return (
-			<div>
-				<Header
-					userName={account ? account.name : null}
-					userKey={account ? account.publicKey : null}
-					goTo={this.goTo}
-					attachAccount={this.attachAccount}
-					pageView={pageView}
-				/>
-				{pageView < 4 &&
-					pageView > 1 && (
-						<Button style={styles.backButton} onClick={this.goBack}>
-							<ArrowLeft />
-							<div style={styles.backText}>Back</div>
-						</Button>
-					)}
-				{pageView === 0 &&
-					account && (
-						<div style={styles.contentContainer}>
-							<div style={styles.contentTitle}>
-								Ready to create your first rule?
-							</div>
-							<Button
-								color="secondary"
-								variant="contained"
-								size="large"
-								style={styles.orangeButton}
-								onClick={this.goForward}
-							>
-								Get Started
-							</Button>
-							<Typography
-								color="secondary"
-								variant="body1"
-								component="h2"
-							>
-								what is a rule?
-							</Typography>
-						</div>
-					)}
-
-				{pageView === 0 &&
-					!account && (
-						<div style={styles.contentContainer}>
-							<div style={styles.contentTitle}>Register</div>
-							<Button
-								color="secondary"
-								variant="contained"
-								size="large"
-								style={styles.orangeButton}
-								onClick={this.attachAccount}
-							>
-								Connect Scatter
-							</Button>
-						</div>
-					)}
-
-				{pageView === 1 && (
-					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Select a rule</div>
-						<Typography
-							variant="body1"
-							style={styles.stepText}
-							component="h3"
-						>
-							STEP {pageView} OF 3
-						</Typography>
-						<div style={styles.ruleCardsContainer}>
-							{ruleOptions.map((item, index) => {
-								return (
-									<button
-										style={styles.buttonWrapper}
-										onClick={() => this.selectRule(index)}
-										key={index}
-									>
-										<RuleCard
-											text={item.text}
-											icon={item.icon}
-											description={item.description}
-										/>
-									</button>
-								);
-							})}
-						</div>
-					</div>
-				)}
-
-				{pageView === 2 && (
-					<SetParameter
-						setInputs={this.setInputs}
-						selectedRuleIndex={selectedRuleIndex}
-					/>
-				)}
-
-				{pageView === 3 && (
-					<div style={styles.contentContainer}>
-						<div style={styles.contentTitle}>Rule review</div>
-						<Typography
-							variant="body1"
-							style={styles.stepText}
-							component="h3"
-						>
-							STEP {pageView} OF 3
-						</Typography>
-						<div style={styles.ruleCardsContainer}>
-							<RuleCard
-								text={ruleOptions[selectedRuleIndex].text}
-								ruleInput={ruleInput}
-								icon={ruleOptions[selectedRuleIndex].icon}
-								description={
-									ruleOptions[selectedRuleIndex].description
-								}
-							/>
-						</div>
-						<Button
-							color="secondary"
-							variant="contained"
-							size="small"
-							style={styles.orangeButton}
-							onClick={this.setParameter}
-						>
-							Turn Rule On
-						</Button>
-						<Button onClick={this.cancel}>
-							<Typography
-								color="secondary"
-								variant="body1"
-								component="h2"
-								style={styles.cancelButton}
-							>
-								cancel
-							</Typography>
-						</Button>
-					</div>
-				)}
-
-				{pageView === 4 && (
-					<Preferences
-						addRuleClicked={() => this.goTo(1)}
-						account={account}
-						eosio={this.eosio}
-					/>
-				)}
-				{pageView === 5 && (
-					<Tools eosio={this.eosio} account={account} />
-				)}
-			</div>
-		);
-	}
+          <div style={styles.activitiesWrapper}>
+            <Typography
+              variant="body1"
+              style={styles.activityText}
+              component="h2"
+            >
+              Activity
+            </Typography>
+            {actions.length === 0 && <CircularProgress color="secondary" />}
+            {actions.length > 0 &&
+              actions.map((item, index) => {
+                if (
+                  activitySanitizer[item.action_trace.receipt.act_digest] ||
+                  item.action_trace.act.name === "buyrambytes" ||
+                  item.action_trace.act.name === "sellram"
+                )
+                  return null;
+                {
+                  activitySanitizer[
+                    item.action_trace.receipt.act_digest
+                  ] = true;
+                }
+                return <ActivityItem key={index} item={item} />;
+              })}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
+
+export default withStyles(styles)(Dashboard);

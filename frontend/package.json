@@ -13,7 +13,7 @@
     "scatter-js": "^2.5.2",
     "scatterjs-core": "^2.3.8",
     "scatterjs-plugin-eosjs2": "^1.1.6",
-    "styled-components": "^4.1.1"
+    "styled-components": "^4.1.2"
   },
   "scripts": {
     "start": "react-scripts start",

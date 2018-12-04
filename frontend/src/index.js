@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Preferences from "./pages/Preferences";
-import Dashboard from "./pages/Dashboard";
+import Main from "./pages/Main";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
@@ -24,7 +24,7 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
 	<MuiThemeProvider theme={theme}>
-		<Dashboard />
+		<Main />
 	</MuiThemeProvider>,
 	document.getElementById("root")
 );
