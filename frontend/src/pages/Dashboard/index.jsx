@@ -32,6 +32,16 @@ import ruleOptions from "../../options/ruleOptions";
 
 const ruleMapping = { eoslimits: 0, txlimits: 1, whitelist: 2, blacklist: 3 }; // Only need this until turn ruleOptions into object of objects.
 
+const ContentTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -133,8 +143,6 @@ class Dashboard extends Component {
   render() {
     const {
       prefTable,
-      spend_max,
-      trans_max,
       tokenBalance,
       eosToSend,
       activities,
@@ -151,20 +159,27 @@ class Dashboard extends Component {
 
     return (
       <div style={styles.dashboardContainer}>
-        <div style={styles.leftContainer}>
-          <div style={styles.freezeWrapper}>
-            <Tooltip title="Temporarily freeze your account and prevent any transactions from happening!">
-              <img style={styles.questionMark} src="questionMark.png" />
-            </Tooltip>
+        <TopContainer>
+          <div style={styles.balanceWrapper}>
             <Typography
-              style={styles.freezeText}
               variant="subheading"
+              style={styles.balanceText}
               component="h2"
             >
-              freeze account
+              my EOS balance
             </Typography>
-            <Switch />
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              {tokenBalance}
+            </Typography>
           </div>
+          <div />
+          <div />
+        </TopContainer>
+        <div style={styles.leftContainer}>
           <div style={styles.leftContent}>
             <Tooltip
               title="Protect your account by setting your own rules. You are your own bank!"
@@ -172,7 +187,22 @@ class Dashboard extends Component {
             >
               <img style={styles.questionMarkTitle} src="questionMark.png" />
             </Tooltip>
-            <div style={styles.contentTitle}>Account Rules</div>
+            <ContentTitleWrapper>
+              <div style={styles.contentTitle}>Account Rules</div>
+              <div style={styles.freezeWrapper}>
+                <Tooltip title="Temporarily freeze your account and prevent any transactions from happening!">
+                  <img style={styles.questionMark} src="questionMark.png" />
+                </Tooltip>
+                <Typography
+                  style={styles.freezeText}
+                  variant="subheading"
+                  component="h2"
+                >
+                  freeze account
+                </Typography>
+                <Switch />
+              </div>
+            </ContentTitleWrapper>
             <div style={styles.ruleCardContainer}>
               {/*} EOS Limit (over time) */}
               {eoslimits && (
@@ -227,30 +257,13 @@ class Dashboard extends Component {
           </div>
         </div>
         <div style={styles.activityContent}>
-          <div style={styles.balanceWrapper}>
-            <Typography
-              variant="subheading"
-              style={styles.balanceText}
-              component="h2"
-            >
-              my EOS balance
-            </Typography>
-            <Typography
-              variant="subheading"
-              style={styles.balanceText}
-              component="h2"
-            >
-              {tokenBalance}
-            </Typography>
-          </div>
-
           <div style={styles.activitiesWrapper}>
             <Typography
-              variant="body1"
-              style={styles.activityText}
-              component="h2"
+              variant="title"
+              component="h1"
+              style={styles.activitiesTitle}
             >
-              Activity
+              Recent Activity
             </Typography>
             {actions.length === 0 && <CircularProgress color="secondary" />}
             {actions.length > 0 &&

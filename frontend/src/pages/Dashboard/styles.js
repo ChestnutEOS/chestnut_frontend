@@ -48,13 +48,22 @@ const fontFamilyHeavy = "NexaHeavy";
 export default {
 	dashboardContainer: {
 		display: "flex",
-		flexDirection: "row",
+		flexDirection: "column",
 		margin: 20,
-		marginLeft: 75,
-		marginRight: 75
+		backgroundColor: "rgb(240,240,240)"
 	},
+	balanceWrapper: {
+		backgroundColor: "white",
+		height: 25,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "85%",
+		margin: 25,
+		padding: 15
+	},
+	balanceText: { fontFamily: fontFamilyHeavy },
 	leftContainer: {
-		width: "60%",
 		flexDirection: "column",
 		justifyContent: "flex-start"
 	},
@@ -77,43 +86,40 @@ export default {
 		fontSize: 20
 	},
 	contentTitle: {
-		fontSize: 45,
+		fontSize: 25,
 		margin: 10,
 		marginLeft: 20,
-		marginBottom: 50,
 		fontFamily: fontFamilyHeavy
-	},
-	activityContent: {
-		width: "40%",
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		backgroundColor: "#E3E3E3"
-	},
-	balanceWrapper: {
-		backgroundColor: "white",
-		height: 25,
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "space-between",
-		width: "85%",
-		margin: 25,
-		padding: 15
-	},
-	balanceText: { fontFamily: fontFamilyHeavy },
-	activityText: {
-		textAlign: "left",
-		marginBottom: 5
-	},
-	activitiesWrapper: {
-		width: "85%"
 	},
 	ruleCardContainer: {
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-between",
 		flexWrap: "wrap",
-		width: "75%"
+		width: "90%"
+	},
+	activityContent: {
+		width: "40%",
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		backgroundColor: "white",
+		marginTop: 20
+	},
+	activitiesTitle: {
+		fontSize: 25,
+		margin: 10,
+		marginLeft: 20,
+		fontFamily: fontFamilyHeavy,
+		paddingTop: 30,
+		paddingBottom: 20
+	},
+	activityText: {
+		textAlign: "left",
+		marginBottom: 5
+	},
+	activitiesWrapper: {
+		width: "85%"
 	},
 	questionMark: {
 		width: 15,
