@@ -17,6 +17,7 @@ import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Tooltip from "@material-ui/core/Tooltip";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import styles from "./styles";
 import accounts from "../../accounts";
@@ -277,18 +278,22 @@ class Preferences extends Component {
             >
               Activity
             </Typography>
-            {actions.map((item, index) => {
-              if (
-                activitySanitizer[item.action_trace.receipt.act_digest] ||
-                item.action_trace.act.name === "buyrambytes" ||
-                item.action_trace.act.name === "sellram"
-              )
-                return null;
-              {
-                activitySanitizer[item.action_trace.receipt.act_digest] = true;
-              }
-              return <ActivityItem key={index} item={item} />;
-            })}
+            {actions.length === 0 && <CircularProgress color="secondary" />}
+            {actions.length > 0 &&
+              actions.map((item, index) => {
+                if (
+                  activitySanitizer[item.action_trace.receipt.act_digest] ||
+                  item.action_trace.act.name === "buyrambytes" ||
+                  item.action_trace.act.name === "sellram"
+                )
+                  return null;
+                {
+                  activitySanitizer[
+                    item.action_trace.receipt.act_digest
+                  ] = true;
+                }
+                return <ActivityItem key={index} item={item} />;
+              })}
           </div>
         </div>
       </div>

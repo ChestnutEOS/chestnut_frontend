@@ -41,6 +41,8 @@ export default class extends Component {
 		// this.eosio.login();
 	}
 
+	// Key generator https://ipfs.io/ipfs/QmW4XxaEg8cWsYisfjnjqLFi1MbHMYjt7nbCh8ZHwgg9c2
+
 	goHome = () => {
 		this.setState({ pageView: 0 });
 	};
