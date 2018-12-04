@@ -1,15 +1,41 @@
 # chestnut
 
+Description
+
+The **chestnut** smart contract is meant to be deployed on an eosio users account to automatically prevent them from making mistakes
+such as sending EOS to the wrong account, or sending an incorrect amount.  As smart contracts evolve and become more compelex, users
+may not trust a smart contract to automatically send their eos for them, since the contract could send more then money
+than orginally advertised.  A relevent example would be transfering tokens to a decentralized exchange that could accidently
+send more EOS than the user indented due to bugs or malicous code.
+
+Chestnut, prevents these mistakes by giving the user the power of a smart contract to set spending limits, transaction limits, whitelists,
+blacklists, ect.
+
+
+## Multi-sig account example (not needed)
+This will give the active permission of *chestnutdemo* to both *dantestaccnt* and *jacktestacnt*
 ---
 ```bash
-$./testnet.sh set account permission chestnutdemo active '{"threshold": 1, "accounts": [{"permission": {"actor":"dantestaccnt","permission":"active"},"weight":1},{"permission":{"actor":"jacktestacnt","permission":"active"},"weight":1}]}' -p chestnutdemo@active
+cleos set account permission chestnutdemo active '{"threshold": 1, "accounts": [{"permission": {"actor":"dantestaccnt","permission":"active"},"weight":1},{"permission":{"actor":"jacktestacnt","permission":"active"},"weight":1}]}' -p chestnutdemo@active
 ```
 ---
 
 
 **Actions**
 
-TODO: Add a single EOS tx limit (support all tokens in the future)
+---
+Freeze all transactions on Chestnut account
+### update
+ex: freeze
+```bash
+cleos push action smartaccount update '["smartaccount","1"]' -p smartaccount
+```
+
+ex: unfreeze
+```bash
+cleos push action smartaccount update '["smartaccount","0"]' -p smartaccount
+```
+
 ---
 Create a maximum EOS spending limit parameter for a Chestnut account
 ### addtknlimit
