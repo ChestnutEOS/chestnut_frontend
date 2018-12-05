@@ -28,7 +28,14 @@ CONTRACT chestnut : public eosio::contract {
       if ( token_limit != tokenlimits_table.end() ) {
         // only check if txlimit is "unlocked"
         if ( !token_limit->is_locked ) {
-          eosio_assert( quantity <= token_limit->max_transfer, "exceeded maxmimun transfer");
+          // eosio_assert( quantity <= token_limit->max_transfer,
+          //               error );
+          if ( quantity > token_limit->max_transfer ) {
+            const char *error = ("exceeded maxmimun transfer limit: attempting to send "
+                                 + std::to_string(quantity.amount / 10000)
+                                 + " EOS").c_str();
+            eosio_assert( false, error );
+          }
         }
       } else {
         print("no token limit imposed\n");
@@ -49,10 +56,17 @@ CONTRACT chestnut : public eosio::contract {
           if ( current_time_point() <= eos_limit->end_time ) {
             //print("eos_limit->current_EOS_spent: ", eos_limit->current_EOS_spent, "\n");
             //print("eos_limit->total_EOS_allowed_to_spend: ", eos_limit->total_EOS_allowed_to_spend, "\n");
-            eosio_assert( quantity + eos_limit->current_EOS_spent <= eos_limit->total_EOS_allowed_to_spend,
-                          "exceeded maximum transaction number" );
-            eosio_assert( eos_limit->current_EOS_spent <= eos_limit->total_EOS_allowed_to_spend,
-                          "exceeded maximum transaction number" );
+            // eosio_assert( quantity + eos_limit->current_EOS_spent <= eos_limit->total_EOS_allowed_to_spend,
+            //               "exceeded maximum transaction number" );
+            if ( quantity + eos_limit->current_EOS_spent > eos_limit->total_EOS_allowed_to_spend ) {
+              const char *error = ("exceeded maxmimun spending limit of "
+                                   + std::to_string(eos_limit->total_EOS_allowed_to_spend.amount / 10000)
+                                   + " EOS over " + std::to_string(eos_limit->days) + ". "
+                                   + " attempted to send "
+                                   + std::to_string(quantity.amount / 10000)
+                                   + " EOS").c_str();
+              eosio_assert( false, error );
+            }
             // increase transaction count
             eoslimit_table.modify( eos_limit, same_payer, [&]( auto& e ) {
               e.current_EOS_spent = e.current_EOS_spent + quantity;
@@ -60,6 +74,14 @@ CONTRACT chestnut : public eosio::contract {
           }
         }
       }
+    }
+
+    void validate_whitelist( name to ) {
+
+    }
+
+    void validate_blacklist( name from ) {
+
     }
 
     time_point current_time_point() {
@@ -183,7 +205,13 @@ CONTRACT chestnut : public eosio::contract {
           if ( current_time_point() <= tx_limit->end_time ) {
             //print("tx_limit->tx_number: ", tx_limit->tx_number, "\n");
             //print("tx_limit->tx_number_limit: ", tx_limit->tx_number_limit, "\n");
-            eosio_assert( tx_limit->tx_number < tx_limit->tx_number_limit, "exceeded maximum transaction number" );
+            // eosio_assert( tx_limit->tx_number < tx_limit->tx_number_limit, "exceeded maximum transaction number" );
+            if ( tx_limit->tx_number > tx_limit->tx_number_limit ) {
+              const char *error = ("exceeded maxmimun transaction limit of "
+                                  + std::to_string(tx_limit->tx_number_limit)
+                                  + " transaction over " + std::to_string(tx_limit->days)).c_str();
+              eosio_assert( false, error );
+            }
             // increase transaction count
             txlimit_table.modify( tx_limit, same_payer, [&]( auto& tx ) {
               tx.tx_number = tx.tx_number + 1;
@@ -247,11 +275,12 @@ CONTRACT chestnut : public eosio::contract {
         // out-going tx, validate
         validate_single_transfer( to, quantity );
         validate_transfer( to, quantity );
+        validate_whitelist( to );
       }
 
       if ( to == _self ) {
         // in-comming tx
-        return;
+        validate_blacklist( from );
       }
     }
 
