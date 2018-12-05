@@ -54,13 +54,15 @@ export default {
 	},
 	balanceWrapper: {
 		backgroundColor: "white",
-		height: 25,
 		display: "flex",
-		flexDirection: "row",
+		flexDirection: "column",
+		alignItems: "flex-start",
 		justifyContent: "space-between",
-		width: "85%",
+		width: "50%",
 		margin: 25,
-		padding: 15
+		padding: 15,
+		paddingLeft: 30,
+		paddingRight: 30
 	},
 	balanceText: { fontFamily: fontFamilyHeavy },
 	leftContainer: {
@@ -94,12 +96,12 @@ export default {
 	ruleCardContainer: {
 		display: "flex",
 		flexDirection: "row",
-		justifyContent: "space-between",
+		justifyContent: "flex-start",
 		flexWrap: "wrap",
-		width: "90%"
+		width: "100%"
 	},
 	activityContent: {
-		width: "40%",
+		width: "49%",
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -109,7 +111,15 @@ export default {
 	activitiesTitle: {
 		fontSize: 25,
 		margin: 10,
-		marginLeft: 20,
+		marginLeft: 0,
+		fontFamily: fontFamilyHeavy,
+		paddingTop: 30,
+		paddingBottom: 20
+	},
+	resourcesTitle: {
+		fontSize: 25,
+		margin: 10,
+		marginLeft: 0,
 		fontFamily: fontFamilyHeavy,
 		paddingTop: 30,
 		paddingBottom: 20
@@ -132,5 +142,16 @@ export default {
 		marginRight: 10,
 		marginBottom: -20,
 		height: "auto"
+	},
+	resourcesContainer: {
+		width: "49%",
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		backgroundColor: "white",
+		marginTop: 20
+	},
+	resourcesWrapper: {
+		width: "85%"
 	}
 };

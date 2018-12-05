@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Preferences from "./pages/Preferences";
 import Main from "./pages/Main";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";

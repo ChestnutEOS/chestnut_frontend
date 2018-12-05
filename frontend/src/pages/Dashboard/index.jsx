@@ -27,6 +27,7 @@ import styles from "./styles";
 import accounts from "../../accounts";
 import RuleCard from "../../components/RuleCard";
 import ActivityItem from "../../components/ActivityItem";
+import AccountInfo from "./AccountInfo";
 
 import ruleOptions from "../../options/ruleOptions";
 
@@ -40,6 +41,12 @@ const ContentTitleWrapper = styled.div`
 const TopContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 class Dashboard extends Component {
@@ -110,8 +117,8 @@ class Dashboard extends Component {
     const { account } = this.props;
     if (!account) return;
     let accountName = account.name;
-    this.eosioHistory.get_account(accountName).then(result => {
-      console.log(result);
+    this.eosioHistory.get_account(accountName).then(accountInfo => {
+      this.setState({ accountInfo });
     });
   };
 
@@ -150,12 +157,11 @@ class Dashboard extends Component {
       txlimits,
       eoslimits,
       whitelist,
-      blacklist
+      blacklist,
+      accountInfo
     } = this.state;
 
     let activitySanitizer = {};
-
-    console.log(eoslimits);
 
     return (
       <div style={styles.dashboardContainer}>
@@ -166,7 +172,7 @@ class Dashboard extends Component {
               style={styles.balanceText}
               component="h2"
             >
-              my EOS balance
+              Account Name
             </Typography>
             <Typography
               variant="subheading"
@@ -176,8 +182,38 @@ class Dashboard extends Component {
               {tokenBalance}
             </Typography>
           </div>
-          <div />
-          <div />
+          <div style={styles.balanceWrapper}>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              Account Type
+            </Typography>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              Seed
+            </Typography>
+          </div>
+          <div style={styles.balanceWrapper}>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              Balance
+            </Typography>
+            <Typography
+              variant="subheading"
+              style={styles.balanceText}
+              component="h2"
+            >
+              {tokenBalance}
+            </Typography>
+          </div>
         </TopContainer>
         <div style={styles.leftContainer}>
           <div style={styles.leftContent}>
@@ -207,6 +243,7 @@ class Dashboard extends Component {
               {/*} EOS Limit (over time) */}
               {eoslimits && (
                 <RuleCard
+                  marginRight
                   text={ruleOptions[0].text}
                   style={styles.ruleCard}
                   ruleInput={`${
@@ -220,6 +257,7 @@ class Dashboard extends Component {
               {/*} Tx Limit (over time) */}
               {txlimits && (
                 <RuleCard
+                  marginRight
                   text={ruleOptions[1].text}
                   style={styles.ruleCard}
                   ruleInput={`${txlimits[0].tx_number_limit
@@ -233,6 +271,7 @@ class Dashboard extends Component {
               {/* Whitelist */}
               {whitelist && (
                 <RuleCard
+                  marginRight
                   text={ruleOptions[2].text}
                   style={styles.ruleCard}
                   ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
@@ -244,6 +283,7 @@ class Dashboard extends Component {
               {/* Blacklist */}
               {blacklist && (
                 <RuleCard
+                  marginRight
                   text={ruleOptions[3].text}
                   style={styles.ruleCard}
                   ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
@@ -256,33 +296,49 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <div style={styles.activityContent}>
-          <div style={styles.activitiesWrapper}>
-            <Typography
-              variant="title"
-              component="h1"
-              style={styles.activitiesTitle}
-            >
-              Recent Activity
-            </Typography>
-            {actions.length === 0 && <CircularProgress color="secondary" />}
-            {actions.length > 0 &&
-              actions.map((item, index) => {
-                if (
-                  activitySanitizer[item.action_trace.receipt.act_digest] ||
-                  item.action_trace.act.name === "buyrambytes" ||
-                  item.action_trace.act.name === "sellram"
-                )
-                  return null;
-                {
-                  activitySanitizer[
-                    item.action_trace.receipt.act_digest
-                  ] = true;
-                }
-                return <ActivityItem key={index} item={item} />;
-              })}
+        <BottomContainer>
+          <div style={styles.activityContent}>
+            <div style={styles.activitiesWrapper}>
+              <Typography
+                variant="title"
+                component="h1"
+                style={styles.activitiesTitle}
+              >
+                Recent Activity
+              </Typography>
+              {actions.length === 0 && <CircularProgress color="secondary" />}
+              {actions.length > 0 &&
+                actions.map((item, index) => {
+                  if (
+                    activitySanitizer[item.action_trace.receipt.act_digest] ||
+                    item.action_trace.act.name === "buyrambytes" ||
+                    item.action_trace.act.name === "sellram"
+                  )
+                    return null;
+                  {
+                    activitySanitizer[
+                      item.action_trace.receipt.act_digest
+                    ] = true;
+                  }
+                  return <ActivityItem key={index} item={item} />;
+                })}
+            </div>
           </div>
-        </div>
+
+          <div style={styles.resourcesContainer}>
+            <div style={styles.resourcesWrapper}>
+              <Typography
+                variant="title"
+                component="h1"
+                style={styles.resourcesTitle}
+              >
+                Network Resources
+              </Typography>
+              {!accountInfo && <CircularProgress color="secondary" />}
+              {accountInfo && <AccountInfo accountInfo={accountInfo} />}
+            </div>
+          </div>
+        </BottomContainer>
       </div>
     );
   }

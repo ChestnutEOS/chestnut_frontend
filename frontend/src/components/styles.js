@@ -93,6 +93,21 @@ export default {
 		cursor: "pointer",
 		borderRadius: 0
 	},
+	ruleCardContainerMarginRight: {
+		background: tealLight,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "center",
+		height: 150,
+		padding: 15,
+		width: 150,
+		margin: 0,
+		marginBottom: 15,
+		marginRight: 20,
+		cursor: "pointer",
+		borderRadius: 0
+	},
 	ruleIcon: {
 		height: 65,
 		width: "auto",

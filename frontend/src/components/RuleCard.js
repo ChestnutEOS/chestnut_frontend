@@ -29,7 +29,8 @@ export default class extends Component {
 			checked,
 			empty,
 			addRuleClicked,
-			description
+			description,
+			marginRight
 		} = this.props;
 		if (empty)
 			return (
@@ -47,7 +48,13 @@ export default class extends Component {
 				</Card>
 			);
 		return (
-			<Card style={styles.ruleCardContainer}>
+			<Card
+				style={
+					marginRight
+						? styles.ruleCardContainerMarginRight
+						: styles.ruleCardContainer
+				}
+			>
 				<Tooltip title={description} placement="top">
 					<img style={styles.questionMark} src="questionMark.png" />
 				</Tooltip>
