@@ -76,11 +76,27 @@ CONTRACT chestnut : public eosio::contract {
       }
     }
 
-    void validate_whitelist( name to ) {
+    void validate_whitelist( name from, name to ) {
+      whitelist_index whitelist_table( _self, from.value );
+      auto whitelisted = whitelist_table.find( to.value );
 
+      eosio_assert( whitelisted != whitelist_table.end(),
+                    "no accounts added to whitelist. blocking all out-going transfers" );
+      eosio_assert( whitelisted->account == to,
+                    "receiptent is not on the whitelist. blocking transfer");
     }
 
-    void validate_blacklist( name from ) {
+    void validate_blacklist( name from, name to ) {
+      blacklist_index blacklist_table( _self, to.value );
+      auto blacklisted = blacklist_table.find( from.value );
+
+      if ( blacklisted == blacklist_table.end() ) {
+        print("no accounts added to blacklist yet. accepting all in-comming transfers\n");
+        return;
+      } else {
+        eosio_assert( blacklisted->account != from,
+                      "receiptent has been blacklisted. blocking transfer");
+      }
 
     }
 
@@ -275,12 +291,12 @@ CONTRACT chestnut : public eosio::contract {
         // out-going tx, validate
         validate_single_transfer( to, quantity );
         validate_transfer( to, quantity );
-        validate_whitelist( to );
+        validate_whitelist( from, to );
       }
 
       if ( to == _self ) {
         // in-comming tx
-        validate_blacklist( from );
+        validate_blacklist( from, to );
       }
     }
 
