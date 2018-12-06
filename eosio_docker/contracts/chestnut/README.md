@@ -12,7 +12,7 @@ Chestnut, prevents these mistakes by giving the user the power of a smart contra
 blacklists, ect.
 
 
-## Multi-sig account example (not needed)
+### Multi-sig account example (not needed)
 
 This will give the active permission of *chestnutdemo* to both *dantestaccnt* and *jacktestacnt*
 
