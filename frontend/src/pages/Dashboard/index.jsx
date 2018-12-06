@@ -96,7 +96,9 @@ class Dashboard extends Component {
       table: table, // name of the table as specified by the contract abi
       limit: 100
     });
-    this.setState({ [table]: result.rows });
+    let toSet = result.rows;
+    if (!toSet) toSet = null;
+    this.setState({ [table]: toSet });
   };
 
   getTables = () => {
@@ -159,7 +161,10 @@ class Dashboard extends Component {
     let data = {};
     data.user = account.name;
 
-    if (index === 0 || index === 1) data[ruleOptions[index].removeParam] = 0;
+    console.log(ruleOptions[index].remove);
+
+    if (index === 0) data[ruleOptions[index].removeParam] = eoslimits[0].id;
+    if (index === 1) data[ruleOptions[index].removeParam] = txlimits[0].id;
     if (index === 2)
       data[ruleOptions[index].removeParam] = whitelist[0].account;
     if (index === 3)
@@ -300,69 +305,73 @@ class Dashboard extends Component {
             </ContentTitleWrapper>
             <div style={styles.ruleCardContainer}>
               {/*} EOS Limit (over time) */}
-              {eoslimits && (
-                <RuleCard
-                  marginRight
-                  text={ruleOptions[0].text}
-                  style={styles.ruleCard}
-                  ruleInput={`${
-                    eoslimits[0].total_EOS_allowed_to_spend
-                  } EOS / month`}
-                  icon={ruleOptions[0].icon}
-                  description={ruleOptions[0].description}
-                  modifyButton
-                  checked={!eoslimits[0].is_locked}
-                  delete
-                  onDelete={() => this.onDelete(0)}
-                />
-              )}
+              {eoslimits &&
+                eoslimits.length > 0 && (
+                  <RuleCard
+                    marginRight
+                    text={ruleOptions[0].text}
+                    style={styles.ruleCard}
+                    ruleInput={`${
+                      eoslimits[0].total_EOS_allowed_to_spend
+                    } / month`}
+                    icon={ruleOptions[0].icon}
+                    description={ruleOptions[0].description}
+                    modifyButton
+                    checked={!eoslimits[0].is_locked}
+                    showDelete
+                    onDelete={() => this.onDelete(0)}
+                  />
+                )}
               {/*} Tx Limit (over time) */}
-              {txlimits && (
-                <RuleCard
-                  marginRight
-                  text={ruleOptions[1].text}
-                  style={styles.ruleCard}
-                  ruleInput={`${txlimits[0].tx_number_limit
-                    .toString()
-                    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")} Tx / month`}
-                  icon={ruleOptions[1].icon}
-                  description={ruleOptions[1].description}
-                  modifyButton
-                  checked={txlimits[0].is_locked}
-                  delete
-                  onDelete={() => this.onDelete(1)}
-                />
-              )}
+              {txlimits &&
+                txlimits.length > 0 && (
+                  <RuleCard
+                    marginRight
+                    text={ruleOptions[1].text}
+                    style={styles.ruleCard}
+                    ruleInput={`${txlimits[0].tx_number_limit
+                      .toString()
+                      .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")} Tx / month`}
+                    icon={ruleOptions[1].icon}
+                    description={ruleOptions[1].description}
+                    modifyButton
+                    checked={txlimits[0].is_locked}
+                    showDelete
+                    onDelete={() => this.onDelete(1)}
+                  />
+                )}
               {/* Whitelist */}
-              {whitelist && (
-                <RuleCard
-                  marginRight
-                  text={ruleOptions[2].text}
-                  style={styles.ruleCard}
-                  ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
-                  icon={ruleOptions[2].icon}
-                  description={ruleOptions[2].description}
-                  modifyButton
-                  checked={whitelist[0].is_locked}
-                  delete
-                  onDelete={() => this.onDelete(2)}
-                />
-              )}
+              {whitelist &&
+                whitelist.length > 0 && (
+                  <RuleCard
+                    marginRight
+                    text={ruleOptions[2].text}
+                    style={styles.ruleCard}
+                    ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
+                    icon={ruleOptions[2].icon}
+                    description={ruleOptions[2].description}
+                    modifyButton
+                    checked={whitelist[0].is_locked}
+                    showDelete
+                    onDelete={() => this.onDelete(2)}
+                  />
+                )}
               {/* Blacklist */}
-              {blacklist && (
-                <RuleCard
-                  marginRight
-                  text={ruleOptions[3].text}
-                  style={styles.ruleCard}
-                  ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
-                  icon={ruleOptions[3].icon}
-                  description={ruleOptions[3].description}
-                  modifyButton
-                  checked={blacklist[0].is_locked}
-                  delete
-                  onDelete={() => this.onDelete(3)}
-                />
-              )}
+              {blacklist &&
+                blacklist.length > 0 && (
+                  <RuleCard
+                    marginRight
+                    text={ruleOptions[3].text}
+                    style={styles.ruleCard}
+                    ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
+                    icon={ruleOptions[3].icon}
+                    description={ruleOptions[3].description}
+                    modifyButton
+                    checked={blacklist[0].is_locked}
+                    showDelete
+                    onDelete={() => this.onDelete(3)}
+                  />
+                )}
               <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
             </div>
           </div>

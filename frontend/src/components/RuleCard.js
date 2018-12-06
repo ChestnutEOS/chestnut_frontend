@@ -30,7 +30,9 @@ export default class extends Component {
 			empty,
 			addRuleClicked,
 			description,
-			marginRight
+			marginRight,
+			showDelete,
+			onDelete
 		} = this.props;
 		if (empty)
 			return (
@@ -55,6 +57,15 @@ export default class extends Component {
 						: styles.ruleCardContainer
 				}
 			>
+				{showDelete && (
+					<Tooltip title="Delete this parameter" placement="top">
+						<img
+							onClick={onDelete}
+							style={styles.closeXImage}
+							src="Delete.png"
+						/>
+					</Tooltip>
+				)}
 				<Tooltip title={description} placement="top">
 					<img style={styles.questionMark} src="questionMark.png" />
 				</Tooltip>
@@ -73,10 +84,10 @@ export default class extends Component {
 					<div style={styles.ruleSwitchContainer}>
 						<Switch
 							style={styles.ruleSwitch}
-							checked={this.state.checked}
-							onChange={() =>
-								this.setState({ checked: !this.state.checked })
-							}
+							checked={checked}
+							// onChange={() =>
+							// 	this.setState({ checked: !this.state.checked })
+							// }
 						/>
 					</div>
 				)}

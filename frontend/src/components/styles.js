@@ -91,7 +91,8 @@ export default {
 		margin: 10,
 		marginBottom: 15,
 		cursor: "pointer",
-		borderRadius: 0
+		borderRadius: 0,
+		position: "relative"
 	},
 	ruleCardContainerMarginRight: {
 		background: "white",
@@ -100,12 +101,12 @@ export default {
 		justifyContent: "space-around",
 		alignItems: "center",
 		height: 230,
-		width: 200,
+		width: 230,
 		margin: 0,
 		marginBottom: 15,
 		marginRight: 20,
-		cursor: "pointer",
-		borderRadius: 0
+		borderRadius: 0,
+		position: "relative"
 	},
 	ruleIcon: {
 		height: 65,
@@ -138,9 +139,25 @@ export default {
 	questionMark: {
 		width: 20,
 		height: "auto",
-		position: "relative",
-		top: 1,
-		marginRight: -165
+		position: "absolute",
+		top: 5,
+		right: 5
+	},
+	closeXButton: {
+		width: 15,
+		height: "auto",
+		position: "absolute",
+		top: 10,
+		left: 10,
+		cursor: "pointer"
+	},
+	closeXImage: {
+		width: 15,
+		height: "auto",
+		position: "absolute",
+		top: 10,
+		left: 10,
+		cursor: "pointer"
 	},
 	ruleSwitchContainer: {
 		width: "100%",
@@ -149,7 +166,7 @@ export default {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		marginBottom: -3
+		marginBottom: -10
 	},
 	emptyRuleCardContainer: {
 		// background: "white",

@@ -55,7 +55,7 @@ class AccountInfo extends Component {
 		const cpuUsage = accountInfo
 			? (accountInfo.cpu_limit.used / accountInfo.cpu_limit.max) * 100
 			: 0;
-		console.log(cpuUsage);
+
 		return (
 			<div style={styles.infoContent}>
 				<div style={styles.rightWrapper}>
