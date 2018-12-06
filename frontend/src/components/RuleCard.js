@@ -70,13 +70,15 @@ export default class extends Component {
 					<div style={styles.ruleText}>{text}</div>
 				)}
 				{modifyButton && (
-					<Switch
-						style={styles.ruleSwitch}
-						checked={this.state.checked}
-						onChange={() =>
-							this.setState({ checked: !this.state.checked })
-						}
-					/>
+					<div style={styles.ruleSwitchContainer}>
+						<Switch
+							style={styles.ruleSwitch}
+							checked={this.state.checked}
+							onChange={() =>
+								this.setState({ checked: !this.state.checked })
+							}
+						/>
+					</div>
 				)}
 			</Card>
 		);

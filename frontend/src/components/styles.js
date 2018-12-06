@@ -80,7 +80,7 @@ export default {
 
 	//Rule Card
 	ruleCardContainer: {
-		background: tealLight,
+		background: "white",
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-around",
@@ -88,19 +88,18 @@ export default {
 		height: 200,
 		padding: 15,
 		width: 200,
-		margin: 0,
+		margin: 10,
 		marginBottom: 15,
 		cursor: "pointer",
 		borderRadius: 0
 	},
 	ruleCardContainerMarginRight: {
-		background: tealLight,
+		background: "white",
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-around",
 		alignItems: "center",
-		height: 200,
-		padding: 15,
+		height: 230,
 		width: 200,
 		margin: 0,
 		marginBottom: 15,
@@ -141,9 +140,17 @@ export default {
 		height: "auto",
 		position: "relative",
 		top: 1,
-		marginRight: -145
+		marginRight: -165
 	},
-	// ruleSwitch: { width: "100%" },
+	ruleSwitchContainer: {
+		width: "100%",
+		height: "20%",
+		background: tealLight,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		marginBottom: -3
+	},
 	emptyRuleCardContainer: {
 		// background: "white",
 		display: "flex",
