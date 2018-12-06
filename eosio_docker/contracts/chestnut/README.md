@@ -13,8 +13,9 @@ blacklists, ect.
 
 
 ## Multi-sig account example (not needed)
+
 This will give the active permission of *chestnutdemo* to both *dantestaccnt* and *jacktestacnt*
----
+
 ```bash
 cleos set account permission chestnutdemo active '{"threshold": 1, "accounts": [{"permission": {"actor":"dantestaccnt","permission":"active"},"weight":1},{"permission":{"actor":"jacktestacnt","permission":"active"},"weight":1}]}' -p chestnutdemo@active
 ```
@@ -366,3 +367,4 @@ cleos push action smartaccount lockblacklst '["smartaccount","0"]' -p smartaccou
     "key_types": []
 }
 ```
+
