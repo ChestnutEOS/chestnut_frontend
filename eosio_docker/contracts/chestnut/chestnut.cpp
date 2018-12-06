@@ -80,9 +80,7 @@ CONTRACT chestnut : public eosio::contract {
       whitelist_index whitelist_table( _self, from.value );
       auto whitelisted = whitelist_table.find( to.value );
 
-      eosio_assert( whitelisted != whitelist_table.end(),
-                    "no accounts added to whitelist. blocking all out-going transfers" );
-      eosio_assert( whitelisted->account == to,
+      eosio_assert( ( whitelisted->account == to ) || whitelisted == whitelist_table.end(),
                     "receiptent is not on the whitelist. blocking transfer");
     }
 
@@ -384,7 +382,7 @@ CONTRACT chestnut : public eosio::contract {
       eoslimit_index eoslimit_table( _self, user.value );
       auto eos_limit = eoslimit_table.find( id );
 
-      eosio_assert( eos_limit != eoslimit_table.end() , "cannot find txlimit id");
+      eosio_assert( eos_limit != eoslimit_table.end() , "cannot find eoslimit id");
 
       eoslimit_table.erase( eos_limit );
     }
@@ -467,11 +465,20 @@ CONTRACT chestnut : public eosio::contract {
     ACTION addwhitelist( name user, name account_to_whitelist ) {
       print("!!addwhitelist!! - Chestnut\n");
       require_auth( _self );
-      whitelist_index whitelist_table( _self, user.value );
       eosio_assert( is_account( account_to_whitelist ), "account does not exist");
+      bool lock_me = 0;
+
+      whitelist_index whitelist_table( _self, user.value );
+
+      auto whitelisted = whitelist_table.begin();
+
+      if ( whitelisted != whitelist_table.end() /* first item in list */ ) {
+        lock_me = whitelisted->is_locked;
+      }
 
       whitelist_table.emplace( user, [&]( auto& w ) {
-        w.account = account_to_whitelist;
+        w.account   = account_to_whitelist;
+        w.is_locked = lock_me;
       });
     }
 
@@ -508,11 +515,19 @@ CONTRACT chestnut : public eosio::contract {
     ACTION addblacklist( name user, name account_to_blacklist ) {
       print("!!addblacklist!! - Chestnut\n");
       require_auth( _self );
-      blacklist_index blacklist_table( _self, user.value );
       eosio_assert( is_account( account_to_blacklist ), "account does not exist");
+      bool lock_me = 0;
 
-      blacklist_table.emplace( user, [&]( auto& w ) {
-        w.account = account_to_blacklist;
+      blacklist_index blacklist_table( _self, user.value );
+      auto blacklisted = blacklist_table.begin();
+
+     if ( blacklisted != blacklist_table.end() /* first item in list */ ) {
+        lock_me = blacklisted->is_locked;
+      }
+
+      blacklist_table.emplace( user, [&]( auto& b ) {
+        b.account   = account_to_blacklist;
+        b.is_locked = lock_me;
       });
     }
 
