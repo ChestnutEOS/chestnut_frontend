@@ -285,6 +285,7 @@ class Dashboard extends Component {
                   } EOS / month`}
                   icon={ruleOptions[0].icon}
                   description={ruleOptions[0].description}
+                  modifyButton
                   checked={true}
                 />
               )}
@@ -299,6 +300,7 @@ class Dashboard extends Component {
                     .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")} Tx / month`}
                   icon={ruleOptions[1].icon}
                   description={ruleOptions[1].description}
+                  modifyButton
                   checked={true}
                 />
               )}
@@ -311,6 +313,7 @@ class Dashboard extends Component {
                   ruleInput={`${whitelist ? whitelist.length : 0} Accounts`}
                   icon={ruleOptions[2].icon}
                   description={ruleOptions[2].description}
+                  modifyButton
                   checked={false}
                 />
               )}
@@ -323,6 +326,7 @@ class Dashboard extends Component {
                   ruleInput={`${blacklist ? blacklist.length : 0} Accounts`}
                   icon={ruleOptions[3].icon}
                   description={ruleOptions[3].description}
+                  modifyButton
                   checked={false}
                 />
               )}
