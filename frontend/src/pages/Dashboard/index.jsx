@@ -152,6 +152,31 @@ class Dashboard extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  onDelete = async index => {
+    const { eosio, account } = this.props;
+    const { txlimits, eoslimits, whitelist, blacklist } = this.state;
+
+    let data = {};
+    data.user = account.name;
+
+    if (index === 0 || index === 1) data[ruleOptions[index].removeParam] = 0;
+    if (index === 2)
+      data[ruleOptions[index].removeParam] = whitelist[0].account;
+    if (index === 3)
+      data[ruleOptions[index].removeParam] = blacklist[0].account;
+    if (index === 4) data[ruleOptions[index].removeParam] = "EOS";
+
+    const result = await eosio.chestnutTransaction(
+      ruleOptions[index].remove,
+      data
+    );
+
+    if (index === 0) this.getTable(account, "txlimits");
+    if (index === 2) this.getTable(account, "whitelist");
+    if (index === 3) this.getTable(account, "blacklist");
+    if (index === 4) this.getTable(account, "eoslimits");
+  };
+
   render() {
     const {
       prefTable,
@@ -286,7 +311,9 @@ class Dashboard extends Component {
                   icon={ruleOptions[0].icon}
                   description={ruleOptions[0].description}
                   modifyButton
-                  checked={true}
+                  checked={!eoslimits[0].is_locked}
+                  delete
+                  onDelete={() => this.onDelete(0)}
                 />
               )}
               {/*} Tx Limit (over time) */}
@@ -301,7 +328,9 @@ class Dashboard extends Component {
                   icon={ruleOptions[1].icon}
                   description={ruleOptions[1].description}
                   modifyButton
-                  checked={true}
+                  checked={txlimits[0].is_locked}
+                  delete
+                  onDelete={() => this.onDelete(1)}
                 />
               )}
               {/* Whitelist */}
@@ -314,7 +343,9 @@ class Dashboard extends Component {
                   icon={ruleOptions[2].icon}
                   description={ruleOptions[2].description}
                   modifyButton
-                  checked={false}
+                  checked={whitelist[0].is_locked}
+                  delete
+                  onDelete={() => this.onDelete(2)}
                 />
               )}
               {/* Blacklist */}
@@ -327,7 +358,9 @@ class Dashboard extends Component {
                   icon={ruleOptions[3].icon}
                   description={ruleOptions[3].description}
                   modifyButton
-                  checked={false}
+                  checked={blacklist[0].is_locked}
+                  delete
+                  onDelete={() => this.onDelete(3)}
                 />
               )}
               <RuleCard empty addRuleClicked={this.props.addRuleClicked} />
