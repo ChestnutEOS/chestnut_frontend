@@ -1,8 +1,30 @@
 import React, { Component } from "react";
 import styles from "./styles";
 
-import { Typography, Paper, LinearProgress } from "@material-ui/core";
+import {
+	Typography,
+	Paper,
+	CircularProgress,
+	LinearProgress
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
+
+// const CpuPercent = styled(Typography)`
+// 	position: absolute;
+// 	width: 50%;
+// 	top: 20%;
+// 	left: 20%;
+// 	color: #a3cec3;
+// 	fontsize: 40px;
+// `;
+
+const RamPercent = styled.div`
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	color: #a3cec3;
+`;
 
 class AccountInfo extends Component {
 	constructor(props) {
@@ -33,180 +55,87 @@ class AccountInfo extends Component {
 		const cpuUsage = accountInfo
 			? (accountInfo.cpu_limit.used / accountInfo.cpu_limit.max) * 100
 			: 0;
+		console.log(cpuUsage);
 		return (
 			<div style={styles.infoContent}>
-				<div style={styles.leftWrapper}>
-					<div style={styles.leftItemWrapper}>
-						<Typography variant="subheading" component="h2">
-							Available:
-						</Typography>
-						<Typography variant="subheading" component="h2">
-							{accountInfo.core_liquid_balance}
-						</Typography>
-					</div>
-					<div style={styles.leftItemWrapper}>
-						<Typography variant="subheading" component="h2">
-							CPU Staked:
-						</Typography>
-						<Typography variant="subheading" component="h2">
-							{(accountInfo.cpu_weight / 10000).toFixed(4)} EOS
-						</Typography>
-					</div>
-					<div style={styles.leftItemWrapper}>
-						<Typography variant="subheading" component="h2">
-							Net Staked:
-						</Typography>
-						<Typography variant="subheading" component="h2">
-							{(accountInfo.net_weight / 10000).toFixed(4)} EOS
-						</Typography>
-					</div>
-					<div style={styles.leftSummaryWrapper}>
-						<Typography variant="subheading" component="h2">
-							Total:
-						</Typography>
-						<Typography variant="subheading" component="h2">
-							{total}
-						</Typography>
-					</div>
-				</div>
 				<div style={styles.rightWrapper}>
-					<div style={styles.rightItemWrapper}>
-						<Typography variant="body2" component="h2">
-							RAM
-						</Typography>
+					<div style={styles.ramStorageWrapper}>
 						<div
 							style={{
-								height: 25,
 								width: 300,
 								position: "relative"
 							}}
 						>
-							<LinearProgress
+							<CircularProgress
 								value={ramUsage}
-								variant="determinate"
-								label="Hi"
-								style={{
-									width: "100%",
-									height: "100%"
-								}}
+								style={{ width: "95%", height: "auto" }}
+								thickness={10}
+								variant="static"
 							/>
-
-							<Typography
-								variant="body2"
-								component="h2"
-								style={{
-									position: "absolute",
-									left: ramUsage * 3 + 5,
-									top: 4
-								}}
-							>
+							<Typography style={styles.ramText}>
 								{ramUsage.toFixed(0)}%
 							</Typography>
 						</div>
-						<Typography
-							variant="body2"
-							component="h2"
-							style={{
-								textAlign: "center",
-								fontWeight: 600
-							}}
-						>
-							RAM used -{" "}
-							{(accountInfo.ram_usage / 1000).toFixed(2)} Kb /{" "}
-							{(accountInfo.ram_quota / 1000).toFixed(2)} Kb
-						</Typography>
-					</div>
-					<div style={styles.rightItemWrapper}>
-						<Typography variant="body2" component="h2">
-							NET
-						</Typography>
-						<div
-							style={{
-								height: 25,
-								width: 300,
-								position: "relative"
-							}}
-						>
-							<LinearProgress
-								value={netUsage}
-								variant="determinate"
-								label="Hi"
-								style={{
-									width: "100%",
-									height: "100%"
-								}}
-							/>
-
+						<div style={styles.resourcesTextWrapper}>
 							<Typography
 								variant="body2"
 								component="h2"
-								style={{
-									position: "absolute",
-									left: netUsage * 3 + 5,
-									top: 4
-								}}
+								style={styles.resourcesHeader}
 							>
-								{netUsage.toFixed(0)}%
+								RAM (Storage)
+							</Typography>
+							<Typography
+								variant="body2"
+								component="p"
+								style={styles.resourcesText}
+							>
+								RAM is used to store application state in
+								memory. RAM pricing fluctuates with market
+								supply/demand.
 							</Typography>
 						</div>
-						<Typography
-							variant="body2"
-							component="h2"
-							style={{
-								textAlign: "center",
-								fontWeight: 600
-							}}
-						>
-							NET used -{" "}
-							{(accountInfo.net_limit.used / 1000).toFixed(2)} Kb
-							/ {(accountInfo.net_limit.max / 1000).toFixed(2)} Kb
-						</Typography>
 					</div>
-					<div style={styles.rightItemWrapper}>
-						<Typography variant="body2" component="h2">
-							CPU
-						</Typography>
+
+					<div style={styles.bandwidthWrapper}>
 						<div
 							style={{
-								height: 25,
 								width: 300,
+								height: 80,
 								position: "relative"
 							}}
 						>
 							<LinearProgress
 								value={cpuUsage}
 								variant="determinate"
-								label="Hi"
 								style={{
 									width: "100%",
 									height: "100%"
 								}}
 							/>
-
+						</div>
+						<Typography style={styles.cpuText}>
+							{cpuUsage.toFixed(0)}%
+						</Typography>
+						<div style={styles.resourcesTextWrapper}>
 							<Typography
 								variant="body2"
 								component="h2"
-								style={{
-									position: "absolute",
-									left: cpuUsage * 3 + 5,
-									top: 4
-								}}
+								style={styles.resourcesHeader}
 							>
-								{cpuUsage.toFixed(0)}%
+								Bandwidth
+							</Typography>
+							<Typography
+								variant="body2"
+								component="p"
+								style={styles.resourcesText}
+							>
+								Stake EOS tokens for bandwidth. Unstaking
+								returns these tokens to your available balance.
+								Bandwidth 'pays' for the amount of time a
+								transaction takes and for utilization of network
+								capacity. Bandwidth regenerates over time.
 							</Typography>
 						</div>
-						<Typography
-							variant="body2"
-							component="h2"
-							style={{
-								textAlign: "center",
-								fontWeight: 600
-							}}
-						>
-							CPU used -{" "}
-							{(accountInfo.cpu_limit.used / 1000).toFixed(2)} µs
-							/ {(accountInfo.cpu_limit.max / 1000).toFixed(2)} µs
-						</Typography>
 					</div>
 				</div>
 			</div>

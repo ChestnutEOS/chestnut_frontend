@@ -1,6 +1,9 @@
 const fontFamily = "Proxima Nova Lt";
 const nexa = "Nexa";
 const fontFamilyHeavy = "NexaHeavy";
+const tealLight = "#AEDFD4";
+const tealDark = "#A3CEC3";
+const orangeColor = "#FF5B3F";
 
 // export default {
 // 	formContainer: {
@@ -153,5 +156,68 @@ export default {
 	},
 	resourcesWrapper: {
 		width: "85%"
-	}
+	},
+	loginScatterText: {
+		color: tealDark,
+		fontWeight: 600
+	},
+	loginWrapper: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: "20%"
+	},
+	orangeButton: {
+		borderRadius: 0,
+		margin: 0,
+		padding: 15
+	},
+	ramStorageWrapper: {
+		display: "flex",
+		justifyContent: "flex-start",
+		alignItems: "center",
+		width: "100%",
+		height: "250px"
+	},
+	bandwidthWrapper: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginTop: 70,
+		width: "100%",
+		position: "relative"
+	},
+	rightWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		height: "100%",
+		padding: 15
+	},
+	ramText: {
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		color: "#AEDFD4",
+		transform: "translate(-50%, -50%)",
+		fontSize: 40
+	},
+	cpuText: {
+		position: "absolute",
+		top: "-5%",
+		left: "25%",
+		color: "#AEDFD4",
+		transform: "translate(-50%, 0%)",
+		fontSize: 40
+	},
+	resourcesTextWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		marginLeft: 20,
+		width: "50%"
+	},
+	resourcesHeader: {
+		fontSize: 18
+	},
+	resourcesText: {}
 };

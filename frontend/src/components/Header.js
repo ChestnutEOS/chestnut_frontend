@@ -49,7 +49,7 @@ class Header extends Component {
 									style={styles.attachAccount}
 									onClick={attachAccount}
 								>
-									Attach Existing Account
+									Login with Scatter
 								</Button>
 							</div>
 						)}

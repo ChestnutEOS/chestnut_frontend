@@ -36,10 +36,7 @@ export default class extends Component {
 			account: null
 		};
 
-		// this.eosio = null;
-		// this.eosio = { account: { name: "" } };
 		this.eosio = new EOSIOClient("Chestnut");
-		// this.eosio.login();
 	}
 
 	// Key generator https://ipfs.io/ipfs/QmW4XxaEg8cWsYisfjnjqLFi1MbHMYjt7nbCh8ZHwgg9c2
@@ -368,6 +365,7 @@ export default class extends Component {
 						addRuleClicked={() => this.goTo(1)}
 						account={account}
 						eosio={this.eosio}
+						attachAccount={this.attachAccount}
 					/>
 				)}
 				{pageView === 5 && (

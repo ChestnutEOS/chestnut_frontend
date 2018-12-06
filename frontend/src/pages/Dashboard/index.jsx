@@ -32,6 +32,9 @@ import AccountInfo from "./AccountInfo";
 import ruleOptions from "../../options/ruleOptions";
 
 const ruleMapping = { eoslimits: 0, txlimits: 1, whitelist: 2, blacklist: 3 }; // Only need this until turn ruleOptions into object of objects.
+const tealLight = "#AEDFD4";
+const tealDark = "#A3CEC3";
+const orangeColor = "#FF5B3F";
 
 const ContentTitleWrapper = styled.div`
   display: flex;
@@ -47,6 +50,12 @@ const BottomContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+`;
+
+const LoginButton = styled.div`
+  fontcolor: tealDark;
+  padding: 2px;
+  cursor: pointer;
 `;
 
 class Dashboard extends Component {
@@ -129,18 +138,14 @@ class Dashboard extends Component {
     if (!account) return;
     let accountName = account.name;
 
-    // Only pull last 50 transactions
     this.eosioHistory.history_get_actions(accountName, -1, -50).then(result => {
-      console.log(result);
+      // Only pulls last 50 transactions
       let actions = result.actions.sort((a, b) => {
         return b.account_action_seq - a.account_action_seq;
       });
 
       this.setState({ actions });
     });
-    // eosio.eos.history_get_actions(accountName).then(result => {
-    //   console.log(result);
-    // });
   };
 
   valueChange = event => {
@@ -161,7 +166,24 @@ class Dashboard extends Component {
       accountInfo
     } = this.state;
 
+    const { attachAccount } = this.props;
+
     let activitySanitizer = {};
+
+    if (!accountInfo)
+      return (
+        <div style={styles.loginWrapper}>
+          <Button
+            color="secondary"
+            variant="contained"
+            size="large"
+            style={styles.orangeButton}
+            onClick={attachAccount}
+          >
+            Connect Scatter
+          </Button>
+        </div>
+      );
 
     return (
       <div style={styles.dashboardContainer}>
@@ -174,13 +196,25 @@ class Dashboard extends Component {
             >
               Account Name
             </Typography>
-            <Typography
-              variant="subheading"
-              style={styles.balanceText}
-              component="h2"
-            >
-              {tokenBalance}
-            </Typography>
+            {!accountInfo ? (
+              <LoginButton onClick={attachAccount}>
+                <Typography
+                  variant="subheading"
+                  style={styles.loginScatterText}
+                  component="h2"
+                >
+                  Login with Scatter
+                </Typography>
+              </LoginButton>
+            ) : (
+              <Typography
+                variant="subheading"
+                style={styles.balanceText}
+                component="h2"
+              >
+                {accountInfo.account_name}
+              </Typography>
+            )}
           </div>
           <div style={styles.balanceWrapper}>
             <Typography
@@ -332,7 +366,7 @@ class Dashboard extends Component {
                 component="h1"
                 style={styles.resourcesTitle}
               >
-                Network Resources
+                Network Resource Utilization
               </Typography>
               {!accountInfo && <CircularProgress color="secondary" />}
               {accountInfo && <AccountInfo accountInfo={accountInfo} />}
