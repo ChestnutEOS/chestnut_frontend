@@ -169,6 +169,14 @@ export default class extends Component {
 		// this.setState({ eosio: new EOSIOClient("chestnut") });
 	};
 
+	makeSmartAccount = (account) => {
+		// console.log("hi");
+		this.eosio.makeSmartAccount(account, smartAccount => {
+			this.setState({ account: smartAccount });
+		});
+		// this.setState({ eosio: new EOSIOClient("chestnut") });
+	};
+
 	render() {
 		const {
 			pageView,
@@ -366,6 +374,7 @@ export default class extends Component {
 						account={account}
 						eosio={this.eosio}
 						attachAccount={this.attachAccount}
+						makeSmartAccount={this.makeSmartAccount}
 					/>
 				)}
 				{pageView === 5 && (

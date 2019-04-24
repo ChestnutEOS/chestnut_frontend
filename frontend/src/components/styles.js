@@ -174,7 +174,7 @@ export default {
 		flexDirection: "column",
 		justifyContent: "space-around",
 		alignItems: "center",
-		height: 200,
+		height: 196,
 		padding: 15,
 		width: 200,
 		margin: 0,

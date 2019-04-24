@@ -111,26 +111,92 @@ class EOSIOClient extends React.Component {
 		);
 	};
 
-	tokenTransfer = async data => {
+	// tokenTransfer = async data => {
+	// 	console.log(this.account)
+	// 	const result = await this.eos.transact(
+	// 		{
+	// 			actions: [
+	// 				{
+	// 					account: "eosio.token",
+	// 					name: "transfer",
+	// 					authorization: [
+	// 						{
+	// 							actor: this.account.name,
+	// 							permission: this.account.authority
+	// 						}
+	// 					]
+	// 				}
+	// 			]
+	// 		},
+	// 		{
+	// 			blocksBehind: 3,
+	// 			expireSeconds: 30
+	// 		}
+	// 	);
+	// 	return result;
+	// };
+
+	makeSmartAccount = async (data) => {
 		const result = await this.eos.transact(
 			{
 				actions: [
+				// Create @chestnut permission for account
 					{
-						account: "eosio.token",
-						name: "transfer",
+						account: this.account.name,
+						name: 'updateauth',
 						authorization: [
 							{
 								actor: this.account.name,
-								permission: this.account.authority
+								permission: 'owner'
 							}
 						],
 						data: {
-							from: this.account.name,
-							to: data.to,
-							quantity: data.quantity,
-							memo: data.memo
+						    "account": this.account.name,
+						    "permission": "chestnut",
+						    "parent": "owner",
+						    "auth": {
+						        "threshold": 1,
+						        "keys": [
+						            {
+						                "key": this.account.publicKey,
+						                "weight": 1
+						            }
+						        ],
+						        "accounts": [],
+						        "waits": []
+						    }
 						}
-					}
+					},
+					// Create the multisig active permission with `chestnutmsig@security` and `account@chestnut`
+					{
+						account: this.account.name,
+						name: 'updateauth',
+						authorization: [
+							{
+								actor: this.account.name,
+								permission: 'owner'
+							}
+						],
+						data: {
+						    "account": this.account.name,
+						    "permission": "active",
+						    "parent": "owner",
+						    "auth": {
+						        "threshold": 2,
+						        "keys": [
+						            {
+						                "key": this.account.publicKey,
+						                "weight": 1
+						            }
+						        ],
+						        "accounts": :[
+							        {"permission":{"actor":"chestnutmsig","permission":"security"},"weight":1},
+							        {"permission":{"actor":this.account.name,"permission":"chestnut"},"weight":1}
+						        ],
+						        "waits": []
+						    }
+						}
+					},
 				]
 			},
 			{

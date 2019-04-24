@@ -40,6 +40,13 @@ export default class extends Component {
 		const { item } = this.props;
 		const actionTrace = item.action_trace;
 		const info = actionTrace.act;
+		let amountText;
+		if (info.data.quantity) amountText = info.data.quantity;
+		if (info.data.account_to_whitelist)
+			amountText = info.data.account_to_whitelist;
+		if (info.data.account_to_remove)
+			amountText = info.data.account_to_remove;
+
 		return (
 			<div style={styles.activityContainer}>
 				<div style={styles.leftWrapper}>
@@ -67,7 +74,7 @@ export default class extends Component {
 						style={styles.amountText}
 						component="h2"
 					>
-						{info.data.quantity}
+						{amountText}
 					</Typography>
 
 					<Typography

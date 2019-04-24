@@ -140,7 +140,7 @@ class Dashboard extends Component {
     if (!account) return;
     let accountName = account.name;
 
-    this.eosioHistory.history_get_actions(accountName, -1, -50).then(result => {
+    this.eosioHistory.history_get_actions(accountName, -1, -15).then(result => {
       // Only pulls last 50 transactions
       let actions = result.actions.sort((a, b) => {
         return b.account_action_seq - a.account_action_seq;
@@ -196,7 +196,7 @@ class Dashboard extends Component {
       accountInfo
     } = this.state;
 
-    const { attachAccount } = this.props;
+    const { attachAccount, makeSmartAccount } = this.props;
 
     let activitySanitizer = {};
 
@@ -211,6 +211,20 @@ class Dashboard extends Component {
             onClick={attachAccount}
           >
             Connect Scatter
+          </Button>
+        </div>
+      );
+
+      return (
+        <div style={styles.loginWrapper}>
+          <Button
+            color="secondary"
+            variant="contained"
+            size="large"
+            style={styles.orangeButton}
+            onClick={makeSmartAccount}
+          >
+            Make {accountInfo.account_name} Smart
           </Button>
         </div>
       );
@@ -289,7 +303,7 @@ class Dashboard extends Component {
             </Tooltip>
             <ContentTitleWrapper>
               <div style={styles.contentTitle}>Account Rules</div>
-              <div style={styles.freezeWrapper}>
+              {/*<div style={styles.freezeWrapper}>
                 <Tooltip title="Temporarily freeze your account and prevent any transactions from happening!">
                   <img style={styles.questionMark} src="questionMark.png" />
                 </Tooltip>
@@ -301,7 +315,7 @@ class Dashboard extends Component {
                   freeze account
                 </Typography>
                 <Switch />
-              </div>
+              </div>*/}
             </ContentTitleWrapper>
             <div style={styles.ruleCardContainer}>
               {/*} EOS Limit (over time) */}

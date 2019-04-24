@@ -10,9 +10,9 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "^1.1.5",
-    "scatter-js": "^2.5.2",
-    "scatterjs-core": "^2.3.8",
-    "scatterjs-plugin-eosjs2": "^1.1.6",
+    "scatter-js": "*",
+    "scatterjs-core": "^2.7.17",
+    "scatterjs-plugin-eosjs2": "^1.5.0",
     "styled-components": "^4.1.2"
   },
   "scripts": {
