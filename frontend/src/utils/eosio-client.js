@@ -1,4 +1,6 @@
 import React from "react";
+// import { initAccessContext } from "wal-eos";
+// import scatter from "wal-eos-scatter-provider";
 import { Api, JsonRpc, JsSignatureProvider } from "eosjs";
 import ScatterJS from "scatterjs-core";
 import ScatterEOS from "scatterjs-plugin-eosjs2"; // Use eosjs2 if your version of eosjs is > 16
@@ -136,76 +138,247 @@ class EOSIOClient extends React.Component {
 	// 	return result;
 	// };
 
-	makeSmartAccount = async (data) => {
+	makeSmartAccount = async () => {
+		console.log(this.account);
+		const { name, publicKey } = this.account;
+		const permission = this.account.authority;
+		console.log(name, publicKey, permission);
 		const result = await this.eos.transact(
 			{
 				actions: [
-				// Create @chestnut permission for account
+					// Create @chestnut permission for account
 					{
-						account: this.account.name,
-						name: 'updateauth',
+						account: "eosio",
+						name: "updateauth",
 						authorization: [
 							{
-								actor: this.account.name,
-								permission: 'owner'
+								actor: name,
+								permission: permission
 							}
 						],
 						data: {
-						    "account": this.account.name,
-						    "permission": "chestnut",
-						    "parent": "owner",
-						    "auth": {
-						        "threshold": 1,
-						        "keys": [
-						            {
-						                "key": this.account.publicKey,
-						                "weight": 1
-						            }
-						        ],
-						        "accounts": [],
-						        "waits": []
-						    }
+							account: name,
+							permission: "chestnut",
+							parent: "owner",
+							auth: {
+								threshold: 1,
+								keys: [
+									{
+										key: publicKey,
+										weight: 1
+									}
+								],
+								accounts: [],
+								waits: []
+							}
 						}
 					},
 					// Create the multisig active permission with `chestnutmsig@security` and `account@chestnut`
 					{
-						account: this.account.name,
-						name: 'updateauth',
+						account: "eosio",
+						name: "updateauth",
 						authorization: [
 							{
-								actor: this.account.name,
-								permission: 'owner'
+								actor: name,
+								permission: permission
 							}
 						],
 						data: {
-						    "account": this.account.name,
-						    "permission": "active",
-						    "parent": "owner",
-						    "auth": {
-						        "threshold": 2,
-						        "keys": [
-						            {
-						                "key": this.account.publicKey,
-						                "weight": 1
-						            }
-						        ],
-						        "accounts": :[
-							        {"permission":{"actor":"chestnutmsig","permission":"security"},"weight":1},
-							        {"permission":{"actor":this.account.name,"permission":"chestnut"},"weight":1}
-						        ],
-						        "waits": []
-						    }
+							account: name,
+							permission: "active",
+							parent: "owner",
+							auth: {
+								threshold: 2,
+								keys: [],
+								accounts: [
+									{
+										permission: {
+											actor: "chestnutmsig",
+											permission: "security"
+										},
+										weight: 1
+									},
+									{
+										permission: {
+											actor: name,
+											permission: "chestnut"
+										},
+										weight: 1
+									}
+								],
+								waits: []
+							}
 						}
 					},
+					// # linkauth of the @chestnut permisssion to `eosio.msig`
+					{
+						account: "eosio",
+						name: "linkauth",
+						authorization: [
+							{
+								actor: name,
+								permission: permission
+							}
+						],
+						data: {
+							account: name,
+							code: "eosio.msig",
+							type: "propose",
+							requirement: "chestnut"
+						}
+					},
+					// # linkauth of the @chestnut permission to `eosio.msig` part 2
+					{
+						account: "eosio",
+						name: "linkauth",
+						authorization: [
+							{
+								actor: name,
+								permission: permission
+							}
+						],
+						data: {
+							account: name,
+							code: "eosio.msig",
+							type: "approve",
+							requirement: "chestnut"
+						}
+					},
+					// # linkauth of the @chestnut permission to the actions on our smart contract
+					{
+						account: "eosio",
+						name: "linkauth",
+						authorization: [
+							{
+								actor: name,
+								permission: permission
+							}
+						],
+						data: {
+							account: name,
+							code: "chestnutmsig",
+							type: "",
+							requirement: "chestnut"
+						}
+					},
+					// # update @owner permission with no trusted recovery with friends
+					{
+						account: "eosio",
+						name: "updateauth",
+						authorization: [
+							{
+								actor: name,
+								permission: permission
+							}
+						],
+						data: {
+							account: name,
+							permission: "owner",
+							parent: "",
+							auth: {
+								threshold: 2,
+								keys: [],
+								accounts: [
+									{
+										permission: {
+											actor: "chestnutmsig",
+											permission: "security"
+										},
+										weight: 1
+									},
+									{
+										permission: {
+											actor: name,
+											permission: "chestnut"
+										},
+										weight: 1
+									}
+								],
+								waits: []
+							}
+						}
+					}
 				]
 			},
 			{
 				blocksBehind: 3,
-				expireSeconds: 30
+				expireSeconds: 30,
+				broadcast: true
 			}
 		);
 		return result;
 	};
+
+	// makeSmartAccount = async () => {
+	// 	const result = await this.eos.transact(
+	// 		{
+	// 			actions: [
+	// 			// Create @chestnut permission for account
+	// 				{
+	// 					account: this.account.name,
+	// 					name: 'updateauth',
+	// 					authorization: [
+	// 						{
+	// 							actor: this.account.name,
+	// 							permission: 'owner'
+	// 						}
+	// 					],
+	// 					data: {
+	// 					    account: this.account.name,
+	// 					    permission: "chestnut",
+	// 					    parent: "owner",
+	// 					    auth: {
+	// 					        threshold: 1,
+	// 					        keys: [
+	// 					            {
+	// 					                key: this.account.publicKey,
+	// 					                weight: 1
+	// 					            }
+	// 					        ],
+	// 					        accounts: [],
+	// 					        waits: []
+	// 					    }
+	// 					}
+	// 				},
+	// 				// Create the multisig active permission with `chestnutmsig@security` and `account@chestnut`
+	// 				{
+	// 					account: this.account.name,
+	// 					name: 'updateauth',
+	// 					authorization: [
+	// 						{
+	// 							actor: this.account.name,
+	// 							permission: 'owner'
+	// 						}
+	// 					],
+	// 					data: {
+	// 					    account: this.account.name,
+	// 					    permission: "active",
+	// 					    parent: "owner",
+	// 					    auth: {
+	// 					        threshold: 2,
+	// 					        keys: [
+	// 					            {
+	// 					                key: this.account.publicKey,
+	// 					                weight: 1
+	// 					            }
+	// 					        ],
+	// 					        accounts: [
+	// 						        {permission:{actor:"chestnutmsig",permission:"security"},weight:1},
+	// 						        {permission:{actor:this.account.name,permission:"chestnut"},weight:1}
+	// 					        ],
+	// 					        waits: []
+	// 					    }
+	// 					}
+	// 				},
+	// 			]
+	// 		},
+	// 		{
+	// 			blocksBehind: 3,
+	// 			expireSeconds: 30
+	// 		}
+	// 	);
+	// 	return result;
+	// };
 
 	getTable = async data => {
 		console.log(this.eos);

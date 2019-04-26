@@ -77,7 +77,7 @@ class Dashboard extends Component {
       this.getBalance();
       this.getAccountInfo();
       this.getActions();
-      this.getTables();
+      // this.getTables();
     }
   }
 
@@ -85,7 +85,7 @@ class Dashboard extends Component {
     this.getBalance();
     this.getAccountInfo();
     this.getActions();
-    this.getTables();
+    // this.getTables();
   }
 
   getTable = async (account, table) => {
@@ -196,11 +196,11 @@ class Dashboard extends Component {
       accountInfo
     } = this.state;
 
-    const { attachAccount, makeSmartAccount } = this.props;
+    const { attachAccount, makeSmartAccount, account } = this.props;
 
     let activitySanitizer = {};
 
-    if (!accountInfo)
+    if (!account)
       return (
         <div style={styles.loginWrapper}>
           <Button
@@ -224,7 +224,7 @@ class Dashboard extends Component {
             style={styles.orangeButton}
             onClick={makeSmartAccount}
           >
-            Make {accountInfo.account_name} Smart
+            Make {account.account_name} Smart
           </Button>
         </div>
       );

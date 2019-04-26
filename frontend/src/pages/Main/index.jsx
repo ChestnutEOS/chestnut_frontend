@@ -169,7 +169,9 @@ export default class extends Component {
 		// this.setState({ eosio: new EOSIOClient("chestnut") });
 	};
 
-	makeSmartAccount = (account) => {
+	makeSmartAccount = () => {
+		const { account } = this.state;
+		// console.log(account)
 		// console.log("hi");
 		this.eosio.makeSmartAccount(account, smartAccount => {
 			this.setState({ account: smartAccount });
@@ -241,53 +243,50 @@ export default class extends Component {
 					attachAccount={this.attachAccount}
 					pageView={pageView}
 				/>
-				{pageView < 4 &&
-					pageView > 1 && (
-						<Button style={styles.backButton} onClick={this.goBack}>
-							<ArrowLeft />
-							<div style={styles.backText}>Back</div>
+				{pageView < 4 && pageView > 1 && (
+					<Button style={styles.backButton} onClick={this.goBack}>
+						<ArrowLeft />
+						<div style={styles.backText}>Back</div>
+					</Button>
+				)}
+				{pageView === 0 && account && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>
+							Ready to create your first rule?
+						</div>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							style={styles.orangeButton}
+							onClick={this.goForward}
+						>
+							Get Started
 						</Button>
-					)}
-				{pageView === 0 &&
-					account && (
-						<div style={styles.contentContainer}>
-							<div style={styles.contentTitle}>
-								Ready to create your first rule?
-							</div>
-							<Button
-								color="secondary"
-								variant="contained"
-								size="large"
-								style={styles.orangeButton}
-								onClick={this.goForward}
-							>
-								Get Started
-							</Button>
-							<Typography
-								color="secondary"
-								variant="body1"
-								component="h2"
-							>
-								what is a rule?
-							</Typography>
-						</div>
-					)}
+						<Typography
+							color="secondary"
+							variant="body1"
+							component="h2"
+						>
+							what is a rule?
+						</Typography>
+					</div>
+				)}
 
-				{pageView === 0 &&
-					!account && (
-						<div style={styles.contentContainer}>
-							<div style={styles.contentTitle}>Register</div>
-							<Button
-								color="secondary"
-								variant="contained"
-								size="large"
-								style={styles.orangeButton}
-								onClick={this.attachAccount}
-							>
-								Connect Scatter
-							</Button>
-						</div>
-					)}
+				{pageView === 0 && !account && (
+					<div style={styles.contentContainer}>
+						<div style={styles.contentTitle}>Register</div>
+						<Button
+							color="secondary"
+							variant="contained"
+							size="large"
+							style={styles.orangeButton}
+							onClick={this.attachAccount}
+						>
+							Connect Scatter
+						</Button>
+					</div>
+				)}
 
 				{pageView === 1 && (
 					<div style={styles.contentContainer}>
